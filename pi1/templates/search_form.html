@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="lv" lang="lv">
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<title>Search form template</title>
+</head>
+<body>
+	<div id="short-search-form"">
+		<form action="" method="POST">	<!-- map: tag, action -->
+			<input type="text" name="tx_mnogosearch_pi1[q]" value="" />	<!-- map: value -->
+			<input type="submit" name="tx_mnogosearch_pi1[submit]" value="Search" />
+			<input type="hidden" name="tx_mnogosearch_pi1[ps]" value="" /> <!-- map: value -->
+		</form>
+	</div>
+
+	<div id="long-search-form"">
+		<form action="" method="POST" name="">	<!-- map: action, name -->
+			<table>
+				<tr><td>
+					Search for:
+				</td><td>
+					<input type="text" name="tx_mnogosearch_pi1[q]" value="" />	<!-- map: value -->
+				</td></tr>
+				<tr><td>
+					Order by:
+				</td><td>
+					<select name="tx_mnogosearch_pi1[ps]">
+						<option value="R">Score</option>
+						<option value="P">Popularity</option>
+						<option value="D">Modification</option>
+						<option value="U">Address</option>
+					</select>
+					<input type="checkbox" name="tx_mnogosearch_pi1[ps_I]" />
+					Inverted order
+				</td></tr>
+				<tr><td>
+				</td><td>
+					<input type="submit" name="tx_mnogosearch_pi1[submit]" value="Search" />
+				</td></tr>
+			</table>
+			<input type="hidden" name="ps_default" value="" /> <!-- map: value -->
+			<input type="hidden" name="ps_I_default" value="" /> <!-- map: value -->
+		</form>
+	</div>
+</body>
+</html>

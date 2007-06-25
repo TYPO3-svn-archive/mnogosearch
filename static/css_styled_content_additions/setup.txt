@@ -1,0 +1,6 @@
+
+# Disables indexing for elements with "Index" flag cleared
+tt_content.stdWrap.stdWrap.setContentToCurrent = 1
+tt_content.stdWrap.stdWrap.override.current = 1
+tt_content.stdWrap.stdWrap.override.wrap = <!--UdmComment-->|<!--/UdmComment-->
+tt_content.stdWrap.stdWrap.override.if.isFalse.field = sectionIndex

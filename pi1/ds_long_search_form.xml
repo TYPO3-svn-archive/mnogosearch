@@ -1,0 +1,28 @@
+<T3DataStructure>
+	<ROOT>
+		<tx_templavoila>
+			<title>LONG SEARCH FORM</title>
+			<description>Select the HTML element which is the container of the long search form:</description>
+			<tags>div:inner</tags>
+		</tx_templavoila>
+		<type>array</type>
+		<el>
+			<field_action>
+				<type>attr</type>
+				<tx_templavoila>
+					<title>Submit URL</title>
+					<description>Form's action field</description>
+					<tags>form:attr:action</tags>
+				</tx_templavoila>
+			</field_action>
+			<field_input>
+				<type>attr</type>
+				<tx_templavoila>
+					<title>Input box</title>
+					<description>Query input box</description>
+					<tags>input:attr:value</tags>
+				</tx_templavoila>
+			</field_input>
+		</el>
+	</ROOT>
+</T3DataStructure>

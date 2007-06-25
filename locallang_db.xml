@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>database</type>
+		<description>Language labels for database tables/fields belonging to extension 'mnogosearch'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="tt_content.list_type_pi1">mnoGoSearch</label>
+			<label index="tx_mnogosearch_indexconfig">Indexing configuration</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_type">Configuration type:</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_type.server">Server</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_type.realm">Realm</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_url">Indexing path:</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_method">Indexing method:</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_method.allow">Allow</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_method.disallow">Disallow</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_method.href_only">HrefOnly</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_method.check_only">CheckOnly</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_method.skip">Skip</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_subsection">Subsection type:</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_subsection.path">Path</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_subsection.site">Site</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_subsection.world">World</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_subsection.page">Page</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_cmpoptions">Comparison options:</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_cmpoptions.case">Case-sensitive</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_cmpoptions.match">No match</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_cmptype">Comparison type:</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_cmptype.string">String</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_cmptype.regexp">Regular expression</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_period">Indexing period (in hours):</label>
+			<label index="tx_mnogosearch_urllog">Pages to index</label>
+			<label index="tx_mnogosearch_urllog.tx_mnogosearch_url">Page address:</label>
+			<label index="tx_mnogosearch_urllog.tx_mnogosearch_pid">Page:</label>
+			<label index="ds_short_search_form">[mnoGoSearch] Short search form</label>
+			<label index="ds_long_search_form">[mnoGoSearch] Long search form</label>
+			<label index="ds_search_results">[mnoGoSearch] Search results</label>
+		</languageKey>
+	</data>
+</T3locallang>

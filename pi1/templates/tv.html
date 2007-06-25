@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="lv" lang="lv">
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="tv.css" />
+<title>Search form template</title>
+</head>
+<body>
+	<div>
+		<div id="short-search-form"">
+			<form action="" method="POST">	<!-- map: tag, action -->
+				<input type="text" name="tx_mnogosearch_pi1[q]" value="" />	<!-- map: value -->
+				<input type="submit" name="tx_mnogosearch_pi1[submit]" value="Search" />
+			</form>
+		</div>
+	</div>
+
+	<hr size="1" />
+
+	<div>
+		<div id="long-search-form">
+			<form id="" class="tx-mnogosearch-long-form" action="" method="POST" name="">	<!-- map: action, name, id -->
+				<input type="hidden" name="tx_mnogosearch_pi1[wm]" value="wrd" />
+				<input type="hidden" name="tx_mnogosearch_pi1[o]" value="0" />
+				<input type="hidden" name="tx_mnogosearch_pi1[lang]" value="" />
+				<input type="hidden" name="tx_mnogosearch_pi1[wf]" value="2221" />
+
+				<table>
+					<tr><td>
+						Search for:
+					</td><td colspan="3">
+						<input size="50" type="text" name="tx_mnogosearch_pi1[q]" value="" />	<!-- map: value -->
+					</td></tr>
+					<tr><td>
+					</td><td>
+						<input type="submit" name="tx_mnogosearch_pi1[submit]" value="Search now!" />
+						<input type="reset" name="reset" value="Reset form" />
+					</td></tr>
+				</table>
+			</form>
+		</div>
+	</div>
+
+	<hr size="1" />
+
+	<div>
+		<div id="search-results">
+			<div class="tx-mnogosearch-pi1-summary">
+
+				<span class="tx-mnogosearch-pi1-summary-title">Search for:</span> <span class="tx-mnogosearch-pi1-summary-value">justo &amp; elit</span>.
+				<span class="tx-mnogosearch-pi1-summary-title">Search results:</span> <span class="tx-mnogosearch-pi1-summary-value">justo: 5/100, elit: 6/200</span>.
+				Search took <b>2</b> seconds.
+				<br />
+				<span class="tx-mnogosearch-pi1-summary-results">Results <b>1</b>-<b>10</b>
+				of <b>20</b>, page <b>1</b> of <b>2</b></span>
+			</div>
+			<div class="tx-mnogosearch-pi1-results">
+				<div class="tx-mnogosearch-pi1-result">
+					<strong>1</strong><strong>.</strong>
+					<a class="tx-mnogosearch-pi1-result-url" href="">Article title goes here</a> <span class="tx-mnogosearch-pi1-result-relevancy">[<span>20</span>%]</span>
+					<div class="tx-mnogosearch-pi1-result-excerpt">
+					..consectetuer adipiscing elit. Mauris porta. Nam non <span class="tx-mnogosearch-pi1-result-excerpt-selection">justo</span> eget diam egestas ornare. Nam a felis non metus pulvinar mollis. Proin pellentesque <span class="tx-mnogosearch-pi1-result-excerpt-selection">elit</span> vulputate est. Nulla facilisi...
+					</div>
+					<ul class="tx-mnogosearch-pi1-results-links">
+						<li><a href="http://whatever/">http://whatever/</a></li>
+					</ul>
+				</div>
+			</div>
+			<hr size="1" />
+			<div class="tx-mnogosearch-pi1-page-list">
+				<span><a href="">Prev</a></span>
+				<span><span class="tx-mnogosearch-pi1-pagelink"><a href="">1</a></span></span>
+				<span><a href="">Next</a></span>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

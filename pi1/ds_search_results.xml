@@ -1,0 +1,278 @@
+<T3DataStructure>
+	<ROOT>
+		<tx_templavoila>
+			<title>SEARCH RESULTS</title>
+			<description>Select the HTML element which is the container of the search results</description>
+			<tags>div:inner</tags>
+		</tx_templavoila>
+		<type>array</type>
+		<el>
+			<field_squery>
+				<tx_templavoila>
+					<title>Summary: query</title>
+					<description>Query text is printed here</description>
+					<tags>*:inner</tags>
+				</tx_templavoila>
+			</field_squery>
+			<field_swords>
+				<tx_templavoila>
+					<title>Summary: word stats</title>
+					<description>Word statistcis are printed here</description>
+					<tags>*:inner</tags>
+				</tx_templavoila>
+			</field_swords>
+			<field_sresults1>
+				<tx_templavoila>
+					<title>Summary: first result</title>
+					<description>First result number</description>
+					<tags>*:inner</tags>
+				</tx_templavoila>
+			</field_sresults1>
+			<field_sresultsN>
+				<tx_templavoila>
+					<title>Summary: Nth result</title>
+					<description>Nth result number</description>
+					<tags>*:inner</tags>
+				</tx_templavoila>
+			</field_sresultsN>
+			<field_sresultsNum>
+				<tx_templavoila>
+					<title>Summary: count</title>
+					<description>Number of results</description>
+					<tags>*:inner</tags>
+				</tx_templavoila>
+			</field_sresultsNum>
+			<field_sresultsTime>
+				<tx_templavoila>
+					<title>Summary: time</title>
+					<description>Time taken by search</description>
+					<tags>*:inner</tags>
+				</tx_templavoila>
+			</field_sresultsTime>
+			<field_pnum>
+				<tx_templavoila>
+					<title>Summary: page number</title>
+					<description>Current page number</description>
+					<tags>*:inner</tags>
+				</tx_templavoila>
+			</field_pnum>
+			<field_ptotal>
+				<tx_templavoila>
+					<title>Summary: number of pages</title>
+					<description>Total number of pages</description>
+					<tags>*:inner</tags>
+				</tx_templavoila>
+			</field_ptotal>
+
+			<field_rcontainersect>
+				<type>array</type>
+				<section>1</section>
+				<tx_templavoila>
+					<title>Result container (section)</title>
+					<description></description>
+					<tags>*:inner</tags>
+				</tx_templavoila>
+				<el>
+					<field_rcontainer>
+						<type>array</type>
+						<tx_templavoila>
+							<title>Result container</title>
+							<description></description>
+							<tags>*:outer</tags>
+						</tx_templavoila>
+						<el>
+							<field_number>
+								<tx_templavoila>
+									<title>Result number</title>
+									<description>Found result number</description>
+									<tags>*:inner</tags>
+									<sample_data>
+										<n0>5</n0>
+									</sample_data>
+								</tx_templavoila>
+							</field_number>
+							<field_link>
+								<type>attr</type>
+								<tx_templavoila>
+									<title>Result link</title>
+									<description>Link to a found web page</description>
+									<tags>a:attr:href</tags>
+									<sample_data>
+										<n0>javascript:alert('You click this link!');</n0>
+									</sample_data>
+								</tx_templavoila>
+							</field_link>
+							<field_title>
+								<tx_templavoila>
+									<title>Result title</title>
+									<description>Title of the found web page</description>
+									<tags>*:inner</tags>
+									<sample_data>
+										<n0>This is a title of the found page</n0>
+									</sample_data>
+								</tx_templavoila>
+							</field_title>
+							<field_rel>
+								<tx_templavoila>
+									<title>Relevancy</title>
+									<description>Relevancy counter for this page</description>
+									<tags>*:inner</tags>
+									<sample_data>
+										<n0>20</n0>
+									</sample_data>
+								</tx_templavoila>
+							</field_rel>
+							<field_excerpt>
+								<tx_templavoila>
+									<title>Excerpt</title>
+									<description>Page excerpt</description>
+									<tags>*:inner</tags>
+									<sample_data>
+										<n0>..consectetuer adipiscing elit. Mauris porta. Nam non..</n0>
+									</sample_data>
+								</tx_templavoila>
+							</field_excerpt>
+							<field_excerpt>
+								<tx_templavoila>
+									<title>Excerpt</title>
+									<description>Page excerpt</description>
+									<tags>*:inner</tags>
+									<sample_data>
+										<n0>..consectetuer adipiscing elit. Mauris porta. Nam non..</n0>
+									</sample_data>
+								</tx_templavoila>
+							</field_excerpt>
+
+							<field_lcontainersect>
+								<type>array</type>
+								<section>1</section>
+								<tx_templavoila>
+									<title>Link container (main and additional links) (section)</title>
+									<description></description>
+									<tags>*:inner</tags>
+								</tx_templavoila>
+								<el>
+									<field_lcontainer>
+										<type>array</type>
+										<tx_templavoila>
+											<title>Link container</title>
+											<description></description>
+											<tags>*:outer</tags>
+										</tx_templavoila>
+										<el>
+											<field_link>
+												<type>attr</type>
+												<tx_templavoila>
+													<title>Link</title>
+													<description>Link to a found web page</description>
+													<tags>a:attr:href</tags>
+													<sample_data>
+														<n0>javascript:alert('You click this link!');</n0>
+													</sample_data>
+												</tx_templavoila>
+											</field_link>
+											<field_title>
+												<tx_templavoila>
+													<title>Result title</title>
+													<description>Title of the found web page</description>
+													<tags>*:inner</tags>
+													<sample_data>
+														<n0>This is a title of the found page</n0>
+													</sample_data>
+												</tx_templavoila>
+											</field_title>
+										</el>
+									</field_lcontainer>
+								</el>
+							</field_lcontainersect>
+						</el>
+					</field_rcontainer>
+				</el>
+			</field_rcontainersect>
+			<field_prevco>
+				<type>array</type>
+				<tx_templavoila>
+					<title>Prev Link (container)</title>
+					<description>Container for link to previous page</description>
+					<tags>*:outer</tags>
+				</tx_templavoila>
+				<el>
+					<field_link>
+						<type>attr</type>
+						<tx_templavoila>
+							<title>Prev link</title>
+							<description>Link to previous page</description>
+							<tags>a:attr:href</tags>
+							<sample_data>
+								<n0>javascript:alert('You click this link!');</n0>
+							</sample_data>
+						</tx_templavoila>
+					</field_link>
+				</el>
+			</field_prevco>
+			<field_pcontainersect>
+				<type>array</type>
+				<section>1</section>
+				<tx_templavoila>
+					<title>Page links container (section)</title>
+					<description></description>
+					<tags>*:inner</tags>
+				</tx_templavoila>
+				<el>
+					<field_pcontainer>
+						<type>array</type>
+						<tx_templavoila>
+							<title>Page links container</title>
+							<description></description>
+							<tags>*:outer</tags>
+						</tx_templavoila>
+						<el>
+							<field_link>
+								<type>attr</type>
+								<tx_templavoila>
+									<title>Page link</title>
+									<description>Link to page</description>
+									<tags>a:attr:href</tags>
+									<sample_data>
+										<n0>javascript:alert('You click this link!');</n0>
+									</sample_data>
+								</tx_templavoila>
+							</field_link>
+							<field_pagenum>
+								<tx_templavoila>
+									<title>Page number</title>
+									<description>Page number</description>
+									<tags>*:inner</tags>
+									<sample_data>
+										<n0>javascript:alert('You click this link!');</n0>
+									</sample_data>
+								</tx_templavoila>
+							</field_pagenum>
+						</el>
+					</field_pcontainer>
+				</el>
+			</field_pcontainersect>
+			<field_nextco>
+				<type>array</type>
+				<tx_templavoila>
+					<title>Next Link (container)</title>
+					<description>Container for link to next page</description>
+					<tags>*:outer</tags>
+				</tx_templavoila>
+				<el>
+					<field_link>
+						<type>attr</type>
+						<tx_templavoila>
+							<title>Next link</title>
+							<description>Link to next page</description>
+							<tags>a:attr:href</tags>
+							<sample_data>
+								<n0>javascript:alert('You click this link!');</n0>
+							</sample_data>
+						</tx_templavoila>
+					</field_link>
+				</el>
+			</field_nextco>
+		</el>
+	</ROOT>
+</T3DataStructure>

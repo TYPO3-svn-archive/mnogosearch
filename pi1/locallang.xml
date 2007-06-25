@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for plugin &quot;tx_mnogosearch_pi1&quot;</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="list_mode_1">Mode 1</label>
+			<label index="list_mode_2">Mode 2</label>
+			<label index="list_mode_3">Mode 3</label>
+			<label index="back">Back</label>
+			<label index="submit_button_label">Click here to submit value</label>
+
+			<label index="sheet.basic">Mode</label>
+			<label index="sheet.template">Template</label>
+			<label index="sheet.settings">Search settings</label>
+			<label index="mode.label">Display:</label>
+			<label index="mode.short-form">Short search form</label>
+			<label index="mode.long-form">Long search form</label>
+			<label index="mode.results">Search results</label>
+			<label index="results_per_page">Results per page:</label>
+			<label index="results_page">Page with search results:</label>
+			<label index="templatemode.label">Template mode:</label>
+			<label index="templatemode.markers">Traditional (markers)</label>
+			<label index="templatemode.templavoila">TemplaVoila</label>
+			<label index="template_object">Template object:</label>
+			<label index="template_file">Template file:</label>
+			<label index="search_modes">How to search:</label>
+			<label index="search_modes.track">Track queries</label>
+			<label index="search_modes.cache">Cache queries</label>
+			<label index="search_modes.spell">Load spell data (if available)</label>
+			<label index="search_modes.crosswords">Crosswords</label>
+			<label index="search_modes.group">Group by site</label>
+			<label index="search_modes.clones">Detect clones (slower!)</label>
+			<label index="search_modes.phrase">Enable phrase search</label>
+			<label index="search_modes.suggest">Suggest mode</label>
+			<label index="min_word_len">Minimum word length:</label>
+			<label index="max_word_len">Maximum word length:</label>
+			<label index="excerpt_size">Excerpt size:</label>
+			<label index="excerpt_padding">Excerpt padding:</label>
+			<label index="sorting">Sort results by:</label>
+			<label index="sorting.RPD">Relevancy, page rank, date</label>
+			<label index="sorting.DRP">Date, relevancy, page rank</label>
+
+			<label index="renderer.not.implemented">Function '%s' is empty in default renderer and must be overwritten in implementation!</label>
+			<label index="cannot.create.renderer">[mnoGoSearch] Cannot instantiate renderer!</label>
+
+			<label index="no.mnogosearch">Error: mnoGoSearch PHP extension is not installed.</label>
+			<label index="mnogosearch.too.old">Error: mnoGoSearch PHP extension version is too old (at least 3.02.04 is required!)</label>
+			<label index="agent.alloc.failure">Error: unable to allocate mnoGoSearch agent</label>
+			<label index="bad.local.charset">Error: local character set "%s" is not known to mnoGoSearch</label>
+			<label index="bad.browser.charset">Error: browser character set "%s" is not known to mnoGoSearch</label>
+			<label index="mnogosearch.error">mnoGoSearch error %d: "%s"</label>
+		</languageKey>
+	</data>
+</T3locallang>

@@ -1,0 +1,215 @@
+#! /usr/bin/php -q
+<?php
+
+// *****************************************
+// Standard initialization of a CLI module:
+// *****************************************
+
+	// Defining circumstances for CLI mode:
+define('TYPO3_cliMode', TRUE);
+
+	// Defining PATH_thisScript here: Must be the ABSOLUTE path of this script in the right context:
+	// This will work as long as the script is called by it's absolute path!
+define('PATH_thisScript', __FILE__);
+
+	// Include configuration file:
+require(dirname(PATH_thisScript).'/conf.php');
+
+	// Include init file:
+require(dirname(PATH_thisScript).'/'.$BACK_PATH.'init.php');
+
+// *****************************************
+// Run indexer as requested by configuration
+// *****************************************
+
+define(SILENCE_OPTION, '-v 5');	// -l
+
+// PHP4 fallback
+if (!is_callable('file_put_contents')) {
+    function file_put_contents($fname, $str) {
+		$fd = fopen($fname, 'w');
+		fwrite($fd, $str);
+		fclose($fd);
+    }
+
+    function file_get_contents($fname) {
+		$fd = fopen($fname, 'r');
+		$str = fread($fd, filesize($fname));
+		fclose($fd);
+		return $str;
+    }
+}
+
+function getServers(&$sysconf) {
+	global $TYPO3_DB;
+
+	$methods = array(1 => 'Disallow', 2 => 'HrefOnly', 3 => 'CheckOnly ', 4 => 'Skip');
+	$subsection = array(1 => 'site', 2 => 'world', 3 => 'page');
+	$content = '';
+	$rows = $TYPO3_DB->exec_SELECTgetRows('*', 'tx_mnogosearch_indexconfig',
+				'1=1' . t3lib_BEfunc::deleteClause('tx_mnogosearch_indexconfig') /*. t3lib_BEfunc::BEenableFields('tx_mnogosearch_indexconfig')*/,
+				'', 'sorting');
+
+	$hasPeriod = true;
+	foreach ($rows as $row) {
+		$content .= '# uid=' . $row['uid'] . chr(10);
+		if ($row['tx_mnogosearch_period'] != 0) {
+			$content .= 'Period ' . ($row['tx_mnogosearch_period']*60*60) . 'h' . chr(10);
+			$hasPeriod = true;
+		}
+		elseif ($hasPeriod) {
+			$content .= 'Period 1m-6h' . chr(10);
+			$hasPeriod = false;
+		}
+		switch ($row['tx_mnogosearch_type']) {
+			case 0:
+				// Server
+				$content .= 'Server ';
+				$content .= isset($methods[$row['tx_mnogosearch_method']]) ? $methods[$row['tx_mnogosearch_method']] . ' ' : '';
+				$content .= isset($subsection[$row['tx_mnogosearch_subsection']]) ? $subsection[$row['tx_mnogosearch_subsection']] . ' ' : '';
+				break;
+			case 1:
+				// Realm
+				$content .= 'Realm ';
+				$content .= isset($methods[$row['tx_mnogosearch_method']]) ? $methods[$row['tx_mnogosearch_method']] . ' ' : '';
+				if ($row['tx_mnogosearch_cmptype'] > 0 || ($row['tx_mnogosearch_cmpoptions'] & 1)) {
+					$content .= ($row['tx_mnogosearch_cmpoptions'] & 1) ? 'case ' : 'nocase ';
+				}
+				if ($row['tx_mnogosearch_cmpoptions'] & 2) {
+					$content .= 'NoMatch ';
+				}
+				if ($row['tx_mnogosearch_cmptype'] > 0 || ($row['tx_mnogosearch_cmpoptions'] & 1)) {
+					$content .= ($row['tx_mnogosearch_cmptype'] == 1) ? 'Regex ' : 'String ';
+				}
+				break;
+		}
+		$content .= $row['tx_mnogosearch_url'] . chr(10);
+	}
+	return $content;
+}
+
+function createIndexerConfig(&$sysconf) {
+	$content = 'DBAddr ' . $sysconf['dbaddr'] . '
+VarDir ' . $sysconf['mnoGoSearchPath'] . '/var' . '
+Section body 1 256
+Section title 2 128
+Section meta.keywords 3 64
+Section meta.description 4 64
+LocalCharset ' . ($sysconf['LocalCharset'] ? $sysconf['LocalCharset'] : 'UTF-8') . '
+BrowserCharset ' . ($sysconf['BrowserCharset'] ? $sysconf['BrowserCharset'] : 'UTF-8') . '
+Allow .htm .html .php* .txt */
+Disallow *
+HoldBadHrefs 2d
+DetectClones yes
+';
+	if ($sysconf['IncludeFile']) {
+		$content .= 'Include ' . $sysconf['IncludeFile'] . chr(10);
+	}
+	$content .= getServers($sysconf);
+	$dir = is_callable('sys_get_temp_dir') ? sys_get_temp_dir() : '/tmp';
+	$name = tempnam($dir, 'mnogosearch-');
+	file_put_contents($name, $content);
+	return $name;
+}
+
+function createNewUrlList(&$sysconf) {
+	$content = '';
+	$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', 'tx_mnogosearch_urllog',
+				'1=1' . t3lib_BEfunc::deleteClause('tx_mnogosearch_urllog') /*. t3lib_BEfunc::BEenableFields('tx_mnogosearch_urllog')*/);
+	foreach ($rows as $row) {
+		$content .= $row['tx_mnogosearch_url'] . chr(10);
+	}
+	if ($content) {
+		$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mnogosearch_urllog', '');
+
+		$dir = is_callable('sys_get_temp_dir') ? sys_get_temp_dir() : '/tmp';
+		$name = tempnam($dir, 'mnogosearch-');
+		file_put_contents($name, $content);
+		return $name;
+	}
+	return '';
+}
+
+function executeIndexer(&$sysconf, $configFile, $newUrlFile) {
+	$dryRun = in_array('--dry-run', $GLOBALS['argv']);
+
+	set_time_limit(6*60*60);
+	$cmdLine = $sysconf['mnoGoSearchPath'] . '/sbin/indexer ' . SILENCE_OPTION . ' -r -N 2 -w -d ' . $configFile;
+	if ($dryRun) {
+		echo 'Using configuration file ' . $configFile . ':
+-------------------------
+' .
+file_get_contents($configFile) . '
+-------------------------
+';
+		echo 'Executing: ' . $cmdLine . chr(10);
+	}
+	else {
+		@exec($cmdLine);
+	}
+	if ($newUrlFile && filesize($newUrlFile)) {
+		$cmdLine = $sysconf['mnoGoSearchPath'] . '/sbin/indexer ' . SILENCE_OPTION . ' -a -i -r -N 2 -w -d ' . $configFile . ' -f ' . $newUrlFile;
+		if ($dryRun) {
+			echo 'Using URL configuration file ' . $configFile . ':
+-------------------------
+' .
+file_get_contents($newUrlFile) . '
+-------------------------
+';
+			echo 'Executing: ' . $cmdLine . chr(10);
+			echo 'Removing ' . $newUrlFile . chr(10);
+		}
+		else {
+			@exec($cmdLine);
+		}
+		@unlink($newUrlFile);
+	}
+	elseif ($dryRun) {
+		echo 'No new URLs or -n is not specified, not executing update for new URLs' . chr(10);
+	}
+	if (stristr($sysconf['DBAddr'], 'dbmode=blob')) {
+		$cmdLine = $sysconf['mnoGoSearchPath'] . '/sbin/indexer ' . SILENCE_OPTION . ' -Eblob -d ' . $configFile;
+		if ($dryRun) {
+			echo 'Executing: ' . $cmdLine . chr(10);
+		}
+		else {
+			@exec($cmdLine);
+		}
+	}
+	if (in_array('-w', $GLOBALS['argv'])) {
+		$cmdLine = $sysconf['mnoGoSearchPath'] . '/sbin/indexer ' . SILENCE_OPTION . ' -d ' . $configFile . ' -Ewordstat';
+		if ($dryRun) {
+			echo 'Executing: ' . $cmdLine . chr(10);
+		}
+		else {
+			@exec($cmdLine);
+		}
+	}
+	if ($dryRun) {
+		echo 'Removing ' . $configFile . chr(10);
+	}
+	@unlink($configFile);
+}
+
+if ($argc > 0 && ($argv[1] == '-h' || $argv[1] == '--help' || $argv[1] == '-?')) {
+	echo 'Usage: cli_mnogosearch.phpsh [-n] [-w]
+
+This script reindexes TYPO3 web sites as defined by current TYPO3 configuration.
+It accepts the following options:
+
+  -n                Force reindexing of new URLs (normally should be set)
+  -w                Create statistic for misspelled words. Useful only if
+                    Ispell dictionaries are included to mnoGoSearch
+                    configuration (see mnoGoSearch documentation)
+  --dry-run         Show what will be done
+  -h, --help, -?    Display this help message
+';
+	exit;
+}
+
+$sysconf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mnogosearch']);
+$configFile = createIndexerConfig($sysconf);
+$newUrlFile = (in_array('-n', $argv) ? createNewUrlList($sysconf) : '');
+executeIndexer($sysconf, $configFile, $newUrlFile);
+
+?>

@@ -1,0 +1,22 @@
+config.tx_mnogosearch_enable = 1
+
+plugin.tx_mnogosearch_pi1 = USER_INT
+plugin.tx_mnogosearch_pi1 {
+	userFunc = tx_mnogosearch_pi1->main
+
+	# Hightlight for found words
+	excerptHighlight = <span class="tx-mnogosearch-pi1-result-excerpt-selection">|</span>
+}
+
+mnogopage = PAGE
+mnogopage.typeNum = 231
+mnogopage.config.no_cache = 1
+mnogopage.config.disableAllHeaderCode = 1
+mnogopage.config.tx_mnogosearch_enable = 0
+mnogopage.config.additionalHeaders = Content-type: text/plain
+mnogopage.5 = TEXT
+mnogopage.5.data = global : TSFE | config | config | baseURL
+mnogopage.5.ifEmpty.dataWrap = http://{global : _SERVER | HTTP_HOST}/
+mnogopage.10 = TEXT
+mnogopage.10.typolink.parameter.data = TSFE:id
+mnogopage.10.typolink.returnLast = url
