@@ -89,7 +89,7 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 				break;
 			case 2:
 				$content = '';
-				if ($this->piVars['submit']) {
+				if ($this->piVars['q']) {
 					$result = $this->search();
 					if (is_string($result)) {
 						$content = $result;

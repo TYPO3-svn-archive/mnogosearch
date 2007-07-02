@@ -2,6 +2,7 @@
 
 	* Fix: CLI script did not postprocess blob fields
 	* Added verbose option (-v) to CLI script
+	* Changed pi1/class.tx_mnogosearch_pi1.php to use 'q' instead of 'submit' to check if search results should be displayed
 
 31-05-2007	Dmitry Dulepov	<dmitry@typo3.org>
 
