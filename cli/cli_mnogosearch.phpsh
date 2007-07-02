@@ -22,7 +22,7 @@ require(dirname(PATH_thisScript).'/'.$BACK_PATH.'init.php');
 // Run indexer as requested by configuration
 // *****************************************
 
-define(SILENCE_OPTION, '-v 5');	// -l
+define(SILENCE_OPTION, (in_array('-v', $GLOBALS['argv']) ? '-v 5' : '-l'));
 
 // PHP4 fallback
 if (!is_callable('file_put_contents')) {
@@ -167,7 +167,7 @@ file_get_contents($newUrlFile) . '
 	elseif ($dryRun) {
 		echo 'No new URLs or -n is not specified, not executing update for new URLs' . chr(10);
 	}
-	if (stristr($sysconf['DBAddr'], 'dbmode=blob')) {
+	if (stristr($sysconf['dbaddr'], 'dbmode=blob')) {
 		$cmdLine = $sysconf['mnoGoSearchPath'] . '/sbin/indexer ' . SILENCE_OPTION . ' -Eblob -d ' . $configFile;
 		if ($dryRun) {
 			echo 'Executing: ' . $cmdLine . chr(10);
@@ -203,6 +203,7 @@ It accepts the following options:
                     configuration (see mnoGoSearch documentation)
   --dry-run         Show what will be done
   -h, --help, -?    Display this help message
+  -v                Be verbose
 ';
 	exit;
 }

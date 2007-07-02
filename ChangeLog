@@ -1,5 +1,8 @@
-(add new changes on top of this file)
+02-07-2007	Dmitry Dulepov	<dmitry@typo3.org>
 
-07-05-31 Dmitry Dulepov  <dmitry@typo3.org>
+	* Fix: CLI script did not postprocess blob fields
+	* Added verbose option (-v) to CLI script
+
+31-05-2007	Dmitry Dulepov	<dmitry@typo3.org>
 
 	* Initial release
