@@ -70,9 +70,9 @@ class tx_mnogosearch_results {
 			}
 			Udm_Make_Excerpt($udmAgent, $res, $i);
 
-			$result->url = Udm_Get_Res_Field($res, $j, UDM_FIELD_URL);
-    		$result->contentType = Udm_Get_Res_Field($res, $j, UDM_FIELD_CONTENT);
-			$result->documentSize = Udm_Get_Res_Field($res, $j, UDM_FIELD_SIZE);
+			$result->url = Udm_Get_Res_Field($res, $i, UDM_FIELD_URL);
+    		$result->contentType = Udm_Get_Res_Field($res, $i, UDM_FIELD_CONTENT);
+			$result->documentSize = Udm_Get_Res_Field($res, $i, UDM_FIELD_SIZE);
 			//$ndoc=Udm_Get_Res_Field($res,$i,UDM_FIELD_ORDER);
 			$result->rating = Udm_Get_Res_Field($res, $i, UDM_FIELD_RATING);
         	$result->title = Udm_Get_Res_Field($res, $i, UDM_FIELD_TITLE);

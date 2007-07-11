@@ -1,3 +1,7 @@
+11-07-2007	Dmitry Dulepov	<dmitry@typo3.org>
+
+	* Fix: same link is displayed below excerpt for all results
+
 02-07-2007	Dmitry Dulepov	<dmitry@typo3.org>
 
 	* Fix: CLI script did not postprocess blob fields
