@@ -1,3 +1,7 @@
+14-07-2007	Dmitry Dulepov	<dmitry@typo3.org>
+
+	* Small fix in the manual about compiling PHP extension. Thanks to Wolfgang Klinger
+
 11-07-2007	Dmitry Dulepov	<dmitry@typo3.org>
 
 	* Fix: same link is displayed below excerpt for all results
