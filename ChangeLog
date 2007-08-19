@@ -2,6 +2,7 @@
 
 	* Perform post processing only for typeNum=0
 	* Removed extra quotes in template files
+	* Started MTB implementation: added markers to template
 
 14-07-2007	Dmitry Dulepov	<dmitry@typo3.org>
 

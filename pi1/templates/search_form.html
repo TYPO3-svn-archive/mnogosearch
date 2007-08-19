@@ -3,44 +3,92 @@
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 <title>Search form template</title>
+<!-- ###HEAD_ADDITIONS### begin -->
+<link rel="stylesheet" href="###THIS_PATH###tv.css" />
+<!-- ###HEAD_ADDITIONS### end -->
 </head>
 <body>
+	<!-- ###SHORT_SEARCH_FORM### begin -->
 	<div id="short-search-form">
-		<form action="" method="POST">	<!-- map: tag, action -->
-			<input type="text" name="tx_mnogosearch_pi1[q]" value="" />	<!-- map: value -->
+		<form action="###SHORT_SEARCH_FORM_ACTION###" method="POST">	<!-- map: tag, action -->
+			<input type="text" name="tx_mnogosearch_pi1[q]" value="###SHORT_SEARCH_FORM_VALUE###" />	<!-- map: value -->
 			<input type="submit" name="tx_mnogosearch_pi1[submit]" value="Search" />
-			<input type="hidden" name="tx_mnogosearch_pi1[ps]" value="" /> <!-- map: value -->
 		</form>
+	</div>
+	<!-- ###SHORT_SEARCH_FORM### end -->
+
+	<hr />
+
+	<!-- ###LONG_SEARCH_FORM### begin -->
+		<div id="long-search-form">
+			<form id="" class="tx-mnogosearch-long-form" action="" method="POST" name="">	<!-- map: action, name, id -->
+				<input type="hidden" name="tx_mnogosearch_pi1[wm]" value="wrd" />
+				<input type="hidden" name="tx_mnogosearch_pi1[o]" value="0" />
+				<input type="hidden" name="tx_mnogosearch_pi1[lang]" value="" />
+				<input type="hidden" name="tx_mnogosearch_pi1[wf]" value="2221" />
+
+				<table>
+					<tr><td>
+						Search for:
+					</td><td colspan="3">
+						<input size="50" type="text" name="tx_mnogosearch_pi1[q]" value="" />	<!-- map: value -->
+					</td></tr>
+					<tr><td>
+					</td><td>
+						<input type="submit" name="tx_mnogosearch_pi1[submit]" value="Search now!" />
+						<input type="reset" name="reset" value="Reset form" />
+					</td></tr>
+				</table>
+			</form>
+		</div>
+	<!-- ###LONG_SEARCH_FORM### end -->
+
+	<hr />
+
+	<!-- ###SEARCH_RESULTS### begin -->
+
+	<div id="search-results">
+		<div class="tx-mnogosearch-pi1-summary">
+
+			<span class="tx-mnogosearch-pi1-summary-title">Search for:</span> <span class="tx-mnogosearch-pi1-summary-value">###SEARCH_RESULTS_TERMS###</span>.
+			<span class="tx-mnogosearch-pi1-summary-title">Search results:</span> <span class="tx-mnogosearch-pi1-summary-value">###SEARCH_RESULTS_STATISTICS###</span>.
+			Search took <b>###SEARCH_RESULTS_TIME###</b> seconds.
+			<br />
+			<span class="tx-mnogosearch-pi1-summary-results">Results <b>###SEARCH_RESULTS_FIRST###</b>-<b>###SEARCH_RESULTS_LAST###</b>
+			of <b>###SEARCH_RESULTS_TOTAL###</b>, page <b>###SEARCH_RESULTS_CURRENT_PAGE###</b> of <b>###SEARCH_RESULTS_PAGE_TOTAL###</b></span>
+		</div>
+		<div class="tx-mnogosearch-pi1-results">
+			<!-- ###SEARCH_RESULTS_RESULT### -->
+			<div class="tx-mnogosearch-pi1-result">
+				<strong>###SEARCH_RESULTS_RESULT_NUMBER###</strong><strong>.</strong>
+				<a class="tx-mnogosearch-pi1-result-url" href="###SEARCH_RESULTS_RESULT_URL###">###SEARCH_RESULTS_RESULT_TITLE###</a> <span class="tx-mnogosearch-pi1-result-relevancy">[<span>###SEARCH_RESULTS_RESULT_RELEVANCY###</span>%]</span>
+				<div class="tx-mnogosearch-pi1-result-excerpt">
+				###SEARCH_RESULTS_RESULT_EXCERPT###
+				TODO: <span class="tx-mnogosearch-pi1-result-excerpt-selection">justo</span>
+				</div>
+				<ul class="tx-mnogosearch-pi1-results-links">
+					<!--###SEARCH_RESULTS_RESULT_ALT_LINK###-->
+					<li><a href="http://whatever/">http://whatever/</a></li>
+					<!--###SEARCH_RESULTS_RESULT_ALT_LINK###-->
+				</ul>
+			</div>
+			<!-- ###SEARCH_RESULTS_RESULT### -->
+		</div>
+		<hr size="1" />
+		<!-- ###SEARCH_RESULTS_PAGER### -->
+		<div class="tx-mnogosearch-pi1-page-list">
+			<!-- ###SEARCH_RESULTS_PAGER_PREV### -->
+			<span><a href="SEARCH_RESULTS_PAGER_PREV_LINK">Prev</a></span>
+			<!-- ###SEARCH_RESULTS_PAGER_PREV### -->
+			<span><span class="tx-mnogosearch-pi1-pagelink">###SEARCH_RESULTS_PAGER_CURRENT_PAGE###</span></span>
+			<!-- ###SEARCH_RESULTS_PAGER_NEXT### -->
+			<span><a href="SEARCH_RESULTS_PAGER_NEXT_LINK">Next</a></span>
+			<!-- ###SEARCH_RESULTS_PAGER_NEXT### -->
+		</div>
+		<!-- ###SEARCH_RESULTS_PAGER### -->
 	</div>
 
-	<div id="long-search-form"">
-		<form action="" method="POST" name="">	<!-- map: action, name -->
-			<table>
-				<tr><td>
-					Search for:
-				</td><td>
-					<input type="text" name="tx_mnogosearch_pi1[q]" value="" />	<!-- map: value -->
-				</td></tr>
-				<tr><td>
-					Order by:
-				</td><td>
-					<select name="tx_mnogosearch_pi1[ps]">
-						<option value="R">Score</option>
-						<option value="P">Popularity</option>
-						<option value="D">Modification</option>
-						<option value="U">Address</option>
-					</select>
-					<input type="checkbox" name="tx_mnogosearch_pi1[ps_I]" />
-					Inverted order
-				</td></tr>
-				<tr><td>
-				</td><td>
-					<input type="submit" name="tx_mnogosearch_pi1[submit]" value="Search" />
-				</td></tr>
-			</table>
-			<input type="hidden" name="ps_default" value="" /> <!-- map: value -->
-			<input type="hidden" name="ps_I_default" value="" /> <!-- map: value -->
-		</form>
-	</div>
+	<!-- ###SEARCH_RESULTS### end -->
+
 </body>
 </html>
