@@ -1,3 +1,7 @@
+19-08-2007	Dmitry Dulepov	<dmitry@typo3.org>
+
+	* Perform post processing only for typeNum=0
+
 14-07-2007	Dmitry Dulepov	<dmitry@typo3.org>
 
 	* Small fix in the manual about compiling PHP extension. Thanks to Wolfgang Klinger

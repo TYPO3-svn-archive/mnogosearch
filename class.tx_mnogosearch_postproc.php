@@ -44,7 +44,7 @@ class tx_mnogosearch_postproc {
 	 * @param	object	$pObj	Reference to TSFE
 	 */
 	function contentPostProcAll(&$params, &$pObj) {
-		if (!intval($GLOBALS['TSFE']->config['config']['tx_mnogosearch_enable'])) {
+		if (!intval($GLOBALS['TSFE']->config['config']['tx_mnogosearch_enable']) || $GLOBALS['TSFE']->type != 0) {
 			return;
 		}
 		$parts = preg_split('/(<\/?body\s?[^>]*>)/ims', $pObj->content, -1, PREG_SPLIT_DELIM_CAPTURE);
@@ -64,7 +64,7 @@ class tx_mnogosearch_postproc {
 	 * @param	object	$pObj	Reference to TSFE
 	 */
 	function contentPostProcCached(&$params, &$pObj) {
-		if (!intval($GLOBALS['TSFE']->config['config']['tx_mnogosearch_enable'])) {
+		if (!intval($GLOBALS['TSFE']->config['config']['tx_mnogosearch_enable']) || $GLOBALS['TSFE']->type != 0) {
 			return;
 		}
 		// Only if no login user!
@@ -89,7 +89,7 @@ class tx_mnogosearch_postproc {
 	 * @param	object	$pObj	Reference to TSFE
 	 */
 	function contentPostProcOutput(&$params, &$pObj) {
-		if (!intval($GLOBALS['TSFE']->config['config']['tx_mnogosearch_enable'])) {
+		if (!intval($GLOBALS['TSFE']->config['config']['tx_mnogosearch_enable']) || $GLOBALS['TSFE']->type != 0) {
 			return;
 		}
 		if ($pObj->register['SYS_LASTCHANGED'] && $_SERVER['HTTP_IF_MODIFIED_SINCE']) {
@@ -108,7 +108,7 @@ class tx_mnogosearch_postproc {
 	 * @param	object	$pObj	Reference to TSFE
 	 */
 	function hook_indexContent(&$pObj) {
-		if (!intval($GLOBALS['TSFE']->config['config']['tx_mnogosearch_enable'])) {
+		if (!intval($GLOBALS['TSFE']->config['config']['tx_mnogosearch_enable']) || $GLOBALS['TSFE']->type != 0) {
 			return;
 		}
 		if (!$GLOBALS['TSFE']->config['config']['disableAllHeaderCode']) {
@@ -121,7 +121,9 @@ class tx_mnogosearch_postproc {
 				}
 				else {
 					$pos = stripos($pObj->content, '</head>');
-					$pObj->content = substr_replace($pObj->content, $metaTag . chr(10), $pos, 0);
+					if ($pos > 0) {
+						$pObj->content = substr_replace($pObj->content, $metaTag . chr(10), $pos, 0);
+					}
 				}
 				// Remove mnoGoSearch tags
 				$pObj->content = preg_replace('/<!--\/?UdmComment-->/ims', '', $pObj->content);
