@@ -1,6 +1,7 @@
 19-08-2007	Dmitry Dulepov	<dmitry@typo3.org>
 
 	* Perform post processing only for typeNum=0
+	* Removed extra quotes in template files
 
 14-07-2007	Dmitry Dulepov	<dmitry@typo3.org>
 
