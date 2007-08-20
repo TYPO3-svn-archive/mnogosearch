@@ -119,6 +119,69 @@ class tx_mnogosearch_results {
 
 		return $str;
 	}
+
+	function initTest(&$pObj) {
+		$pageSize = intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_resultsPerPage'));
+		$resultsOnTheLastPage = max(1, intval($pageSize/3));
+		$page = max(0, intval($pObj->piVars['page']) - 1);
+		$numPages = 4;
+		$foundDocs = (($page < ($numPages-1)) ? $pageSize : $resultsOnTheLastPage);
+		$excerptSize = intval($this->pi_getFFvalue($pObj->cObj->data['pi_flexform'], 'field_excerptSize'));
+
+		// fill in our own fields
+		$this->totalResults = ($numPages-1) * $pageSize + $resultsOnTheLastPage;
+		$this->numRows = (($page < ($numPages-1)) ? $pageSize : $resultsOnTheLastPage);
+		$this->wordInfo = '--found words here---';
+		$this->searchTime = '0.123';
+		$this->firstDoc = ($page-1)*$pageSize;
+		$this->lastDoc = $this->firstDoc + $foundDocs;
+
+		$lipsum = $this->getLoremIpsum();
+
+		// create fake results
+		for ($i = 0; $i < $foundDocs; $i++) {
+			$result = new tx_mnogosearch_result();
+			$result->url = '/' . uniqid(uniqid(), true);
+			$result->title = ucfirst($this->getExcerpt($lipsum, rand(7, 64)));
+			$result->contentType = 'text/html';
+			$result->documentSize = rand(1024, 32768);
+			$result->popularityRank = $this->totalResults - $this->firstDoc + 1;
+			$result->rating = 0;
+			$result->excerpt = $this->highlight(str_replace(
+						array('Lorem ipsum', 'lorem ipsum', 'sit amet', 'sed ', 'Sed '),
+						array("\2Lorem ipsum\3", "\2lorem ipsum\3", "\2sit amet\3", "\2sed\3 ", "\2Sed\3 "),
+						$this->getExcerpt($lipsum, $excerptSize)), $pObj);
+			$result->keywords = '';
+			$result->description = '--description goes here---';
+			$result->language = '';
+			$result->charset = '';
+			$result->category = '---category---';
+			$this->results[] = $result;
+		}
+	}
+
+	/**
+	 * Fetches 'Lorem Ipsum' using XML feed provided by www.lipsum.org
+	 *
+	 * @return	array	Words of text
+	 */
+	function getLoremIpsum() {
+		$content = t3lib_div::getURL('http://www.lipsum.com/feed/xml?what=words&amount=2048&start=false');
+		$array = t3lib_div::xml2array($content);
+		return is_array($array) ? explode(' ', $array['feed']['lipsum']) : array();
+	}
+
+	/**
+	 * Creates a random excerpt from Lorem Ipsum array
+	 *
+	 * @param	array	$lipsum	Words
+	 * @param	int	$size	Excerpt size
+	 * @return	string	Generated excerpt
+	 */
+	function getExcerpt(&$lipsum, $size) {
+		$offset = rand(0, count($lipsum) - $size);
+		return ($offset == 0 ? '' : '...') . implode(' ', array_slice($lipsum, $offset, $size)) . '...';
+	}
 }
 
 ?>

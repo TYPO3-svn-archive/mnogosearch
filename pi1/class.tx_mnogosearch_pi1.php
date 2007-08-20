@@ -42,6 +42,7 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 	var $renderer = false;
 	var $udmApiVersion;
 	var $highlightParts = array('', '');
+	var $sysconf;
 
 	function init() {
 		$this->pi_setPiVarDefaults();
@@ -57,6 +58,9 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 		if (($this->udmApiVersion = Udm_Api_Version()) < 30204) {
 			return $this->pi_getLL('mnogosearch.too.old');
 		}
+
+		// Get configuration
+		$this->sysconf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mnogosearch']);
 
 		$renderer = intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_templateMode', 'sTmpl'));
 		$renderer_fileref = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tx_mnogosearch/pi1/class.tx_mnogosearch_pi1']['renderers'][$renderer];
@@ -89,8 +93,8 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 				break;
 			case 2:
 				$content = '';
-				if ($this->piVars['q']) {
-					$result = $this->search();
+				if ($this->piVars['q'] || $this->sysconf['testTemplateMode']) {
+					$result = ($this->sysconf['testTemplateMode'] ? $this->getTestResults() : $this->search());
 					if (is_string($result)) {
 						$content = $result;
 					}
@@ -110,17 +114,15 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 	 * @return	mixed	Returns found records or string in case of error
 	 */
 	function search() {
-		// Get configuration
-		$sysconf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mnogosearch']);
 
 		// Allocate and setup agent
 		$udmAgent = ($this->udmApiVersion >= 30211 ?
-						Udm_Alloc_Agent_Array(array($sysconf['dbaddr'])) :
-						Udm_Alloc_Agent($sysconf['dbaddr']));
+						Udm_Alloc_Agent_Array(array($this->sysconf['dbaddr'])) :
+						Udm_Alloc_Agent($this->sysconf['dbaddr']));
 		if (!$udmAgent) {
 			return $this->pi_getLL('agent.alloc.failure');
 		}
-		if ('' != ($error = $this->setUpAgent($udmAgent, $sysconf))) {
+		if ('' != ($error = $this->setUpAgent($udmAgent))) {
 		    Udm_Free_Agent($udmAgent);
 			return $error;
 		}
@@ -146,10 +148,9 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 	 * Sets up mnoGoSearch agent
 	 *
 	 * @param	resource	$udmAgent	Agent configuration
-	 * @param	array	$sysconf	System configuration
 	 * @return	string	Empty if no error
 	 */
-	function setUpAgent(&$udmAgent, &$sysconf) {
+	function setUpAgent(&$udmAgent) {
 		$val = intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_resultsPerPage'));
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_PAGE_SIZE, $val ? $val : 20);
 		$this->piVars['page'] = max(0, intval($this->piVars['page']));
@@ -161,11 +162,11 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
         Udm_Set_Agent_Param($udmAgent, UDM_PARAM_CROSS_WORDS, ($options & 8 ? UDM_ENABLED : UDM_DISABLED));
 
 		// LocalCharset
-		if ($sysconf['LocalCharset'] != '') {
-			if (!Udm_Check_Charset($udmAgent, $sysconf['LocalCharset'])) {
-				return sprintf($this->pi_getLL('bad.local.charset'), $sysconf['LocalCharset']);
+		if ($this->sysconf['LocalCharset'] != '') {
+			if (!Udm_Check_Charset($udmAgent, $this->sysconf['LocalCharset'])) {
+				return sprintf($this->pi_getLL('bad.local.charset'), $this->sysconf['LocalCharset']);
 			}
-			Udm_Set_Agent_Param($udmAgent, UDM_PARAM_CHARSET, $sysconf['LocalCharset']);
+			Udm_Set_Agent_Param($udmAgent, UDM_PARAM_CHARSET, $this->sysconf['LocalCharset']);
 		}
 		else {
 			Udm_Set_Agent_Param($udmAgent, UDM_PARAM_CHARSET, 'utf-8');
@@ -176,7 +177,7 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 				$GLOBALS['TSFE']->config['config']['renderCharset'] :
 					($GLOBALS['TYPO3_CONF_VARS']['BE']['forceCharset'] ?
 						$GLOBALS['TYPO3_CONF_VARS']['BE']['forceCharset'] :
-							($sysconf['BrowserCharset'] ? $sysconf['BrowserCharset'] : 'utf-8'
+							($this->sysconf['BrowserCharset'] ? $this->sysconf['BrowserCharset'] : 'utf-8'
 							)
 					)
 				);
@@ -193,7 +194,7 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 				Udm_Set_Agent_Param($udmAgent, UDM_PARAM_HLEND, $this->highlightParts[1]);
 			}
 		}
-		
+
 		$q_string = '';
 		foreach ($this->piVars as $key => $val) {
 			$q_string .= '&' . $key . '=' . urlencode($val);
@@ -215,7 +216,7 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
         Udm_Set_Agent_Param($udmAgent, UDM_PARAM_MIN_WORD_LEN, $val ? $val : 3);
         $val = intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_maxWordLen'));
         Udm_Set_Agent_Param($udmAgent, UDM_PARAM_MAX_WORD_LEN, $val ? $val : 32);
-		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_VARDIR, $sysconf['mnoGoSearchPath'] . '/var');
+		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_VARDIR, $this->sysconf['mnoGoSearchPath'] . '/var');
         $val = intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_excerptSize'));
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_WEIGHT_FACTOR, 2221);
 	   	Udm_Set_Agent_Param_Ex($udmAgent, 'ExcerptSize', $val ? $val : 1024);
@@ -230,7 +231,7 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 		}
 
 		if ($options & 4) {
-			$this->loadIspellData($udmAgent, $sysconf);
+			$this->loadIspellData($udmAgent);
 		}
 		if ($this->udmApiVersion >= 30215) {
 			Udm_Parse_Query_String($udmAgent, $q_string);
@@ -243,10 +244,9 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 	 * Loads Ispell data from external files
 	 *
 	 * @param	resource	$udmAgent	Agent
-	 * @param	array	$sysconf	Extension configuration
 	 */
-	function loadIspellData(&$udmAgent, &$sysconf) {
-		$extraConfig = $this->loadExtraConfig($sysconf);
+	function loadIspellData(&$udmAgent) {
+		$extraConfig = $this->loadExtraConfig();
 
 		if (!($affix_files = $extraConfig['affix'])) {
 			return;
@@ -293,13 +293,12 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 	/**
 	 * Loads extra configuration
 	 *
-	 * @param	array	$sysconf	Extension configuration
 	 * @return	array	Key/value pair for configuration
 	 */
-	function loadExtraConfig(&$sysconf) {
+	function loadExtraConfig() {
 		$result = array();
-		if ($sysconf['IncludeFile']) {
-			$lines = @file($sysconf['IncludeFile']);
+		if ($this->sysconf['IncludeFile']) {
+			$lines = @file($this->sysconf['IncludeFile']);
 			if (is_array($lines)) {
 				foreach ($lines as $line) {
 					$line = trim($line);
@@ -319,6 +318,17 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 				}
 			}
 		}
+		return $result;
+	}
+
+	/**
+	 * Creates fake test results.
+	 *
+	 * @return	tx_mnogosearch_results	Generated results
+	 */
+	function getTestResults() {
+		$result = new tx_mnogosearch_results();
+		$result->initTest($this);
 		return $result;
 	}
 }
