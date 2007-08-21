@@ -52,18 +52,21 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 		$this->pi_initPIflexForm();
 		$this->pi_checkCHash = false;
 
-		// Check mnoGoSearch plugin
-		if (!extension_loaded('mnogosearch')) {
-			return $this->pi_getLL('no.mnogosearch');
-		}
-		if (($this->udmApiVersion = Udm_Api_Version()) < 30204) {
-			return $this->pi_getLL('mnogosearch.too.old');
+		$this->templateTestMode = intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_templateTestMode', 'sTmpl'));
+
+		if (!$this->templateTestMode) {
+			// Check mnoGoSearch plugin
+			if (!extension_loaded('mnogosearch')) {
+				return $this->pi_getLL('no.mnogosearch');
+			}
+			if (($this->udmApiVersion = Udm_Api_Version()) < 30204) {
+				return $this->pi_getLL('mnogosearch.too.old');
+			}
 		}
 
 		// Get configuration
 		$this->sysconf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mnogosearch']);
 
-		$this->templateTestMode = intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_templateTestMode', 'sTmpl');
 		$renderer = intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_templateMode', 'sTmpl'));
 		$renderer_fileref = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tx_mnogosearch/pi1/class.tx_mnogosearch_pi1']['renderers'][$renderer];
 		$this->renderer = t3lib_div::getUserObj($renderer_fileref);

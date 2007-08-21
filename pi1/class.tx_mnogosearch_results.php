@@ -57,7 +57,7 @@ class tx_mnogosearch_results {
 		$this->firstDoc = Udm_Get_Res_Param($res, UDM_PARAM_FIRST_DOC);
 		$this->lastDoc = Udm_Get_Res_Param($res, UDM_PARAM_LAST_DOC);
 		if ($this->totalResults == 0) {
-			if ($pObj->udmApiVersion >= 30233 && (intval($pObj->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_options')) & 128)) {
+			if ($pObj->udmApiVersion >= 30233 && (intval($pObj->pi_getFFvalue($pObj->cObj->data['pi_flexform'], 'field_options')) & 128)) {
 				$this->wordSuggest = Udm_Get_Agent_Param_Ex($udmAgent, 'WS');
 			}
 		}
@@ -109,7 +109,7 @@ class tx_mnogosearch_results {
 	}
 
 	function highlight($str, &$pObj) {
-		if (count($pObj->highlightParts)) {
+		if (count($pObj->highlightParts) == 2 && $pObj->highlightParts[0] != '') {
 			$str = str_replace("\2", $pObj->highlightParts[0], $str);
 			$str = str_replace("\3", $pObj->highlightParts[1], $str);
 			while (substr_count($str, $pObj->highlightParts[0]) > substr_count($str, $pObj->highlightParts[1])) {
@@ -121,20 +121,24 @@ class tx_mnogosearch_results {
 	}
 
 	function initTest(&$pObj) {
-		$pageSize = intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_resultsPerPage'));
+		$pageSize = intval($pObj->pi_getFFvalue($pObj->cObj->data['pi_flexform'], 'field_resultsPerPage'));
 		$resultsOnTheLastPage = max(1, intval($pageSize/3));
-		$page = max(0, intval($pObj->piVars['page']) - 1);
+		$page = intval($pObj->piVars['page']);
 		$numPages = 4;
 		$foundDocs = (($page < ($numPages-1)) ? $pageSize : $resultsOnTheLastPage);
-		$excerptSize = intval($this->pi_getFFvalue($pObj->cObj->data['pi_flexform'], 'field_excerptSize'));
+		$excerptSize = intval($pObj->pi_getFFvalue($pObj->cObj->data['pi_flexform'], 'field_excerptSize'));
+		if ($pObj->conf['excerptHighlight']) {
+			$pObj->highlightParts = t3lib_div::trimExplode('|', $pObj->conf['excerptHighlight']);
+		}
 
 		// fill in our own fields
 		$this->totalResults = ($numPages-1) * $pageSize + $resultsOnTheLastPage;
 		$this->numRows = (($page < ($numPages-1)) ? $pageSize : $resultsOnTheLastPage);
-		$this->wordInfo = '--found words here---';
-		$this->searchTime = '0.123';
-		$this->firstDoc = ($page-1)*$pageSize;
-		$this->lastDoc = $this->firstDoc + $foundDocs;
+		$this->wordInfo = '"Lorem ipsum": 123, "sit amet": 456, "sed": 789';
+		$this->searchTime = '0.' . sprintf('%03d', rand(1, 999));
+		$this->firstDoc = $page*$pageSize + 1;
+		$this->lastDoc = $this->firstDoc + $foundDocs + 1;
+		$pObj->piVars['q'] = '"Lorem ipsum" || "sit amet" || sed';
 
 		$lipsum = $this->getLoremIpsum();
 
@@ -142,7 +146,7 @@ class tx_mnogosearch_results {
 		for ($i = 0; $i < $foundDocs; $i++) {
 			$result = new tx_mnogosearch_result();
 			$result->url = '/' . uniqid(uniqid(), true);
-			$result->title = ucfirst($this->getExcerpt($lipsum, rand(7, 64)));
+			$result->title = ucfirst($this->getExcerpt($lipsum, rand(3, 12)));
 			$result->contentType = 'text/html';
 			$result->documentSize = rand(1024, 32768);
 			$result->popularityRank = $this->totalResults - $this->firstDoc + 1;
@@ -168,7 +172,7 @@ class tx_mnogosearch_results {
 	function getLoremIpsum() {
 		$content = t3lib_div::getURL('http://www.lipsum.com/feed/xml?what=words&amount=2048&start=false');
 		$array = t3lib_div::xml2array($content);
-		return is_array($array) ? explode(' ', $array['feed']['lipsum']) : array();
+		return is_array($array) ? explode(' ', $array['lipsum']) : array();
 	}
 
 	/**
