@@ -33,20 +33,56 @@ require_once(dirname(__FILE__) . '/class.tx_mnogosearch_renderer.php');
  */
 class tx_mnogosearch_renderer_mtb extends tx_mnogosearch_renderer {
 
+	var $templateCode;
+
 	function init(&$pObj) {
-		return parent::init($pObj);
+		if ($result = parent::init($pObj)) {
+			$templateFile = $pObj->pi_getFFvalue($pObj->cObj->data['pi_flexform'], 'field_templateFile', 'sTmpl');
+			$this->templateCode = $pObj->cObj->fileResource($templateFile);
+
+			// Add header parts if there are any
+			$headerParts = $this->pObj->cObj->getSubpart($this->templateCode, '###HEAD_ADDITIONS###');
+			if ($headerParts) {
+				$headerParts = $pObj->cObj->substituteMarker($headerParts, '###THIS_PATH###', dirname($GLOBALS['TSFE']->tmpl->getFileName($templateFile)));
+				$GLOBALS['TSFE']->additionalHeaderData['EXT:mnoGoSearch'] = $headerParts;
+			}
+		}
+		return $result;
 	}
 
 	function render_simpleSearchForm() {
-		return 'Function render_simpleSearchForm is not implemented yet';
+		$result = '';
+
+		$template = $this->pObj->cObj->getSubpart($this->templateCode, '###SHORT_SEARCH_FORM###');
+		return $result;
 	}
 
 	function render_searchForm() {
 		return 'Function render_searchForm is not implemented yet';
 	}
 
-	function render_searchResults() {
-		return 'Function render_searchResults is not implemented yet';
+	function render_searchResults(&$results) {
+		$result = '';
+
+		$template = $this->pObj->cObj->getSubpart($this->templateCode, '###SEARCH_RESULTS###');
+
+		$rpp = intval($this->pObj->pi_getFFvalue($this->pObj->cObj->data['pi_flexform'], 'field_resultsPerPage'));
+		if (!$rpp) {
+			$rpp = 20;
+		}
+		$curPage = intval($results->firstDoc/$rpp);
+
+		$result = $this->pObj->cObj->substituteMarkerArray($template, array(
+				'###SEARCH_RESULTS_TERMS###' => htmlspecialchars($this->pObj->piVars['q']),
+				'###SEARCH_RESULTS_STATISTICS###' => htmlspecialchars($results->wordInfo),
+				'###SEARCH_RESULTS_TIME###' => sprintf('%.3f', $results->searchTime),
+				'###SEARCH_RESULTS_FIRST###' => $results->firstDoc,
+				'###SEARCH_RESULTS_LAST###' => $results->lastDoc,
+				'###SEARCH_RESULTS_TOTAL###' => $result->totalResults,
+				'###SEARCH_RESULTS_CURRENT_PAGE###' => $curPage + 1,
+				'###SEARCH_RESULTS_PAGE_TOTAL###' => intval($results->totalResults/$rpp) + ($results->totalResults % $rpp ? 1 : 0),
+				));
+		return $result;
 	}
 }
 

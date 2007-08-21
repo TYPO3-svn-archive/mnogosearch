@@ -135,7 +135,7 @@ class tx_mnogosearch_results {
 		$this->totalResults = ($numPages-1) * $pageSize + $resultsOnTheLastPage;
 		$this->numRows = (($page < ($numPages-1)) ? $pageSize : $resultsOnTheLastPage);
 		$this->wordInfo = '"Lorem ipsum": 123, "sit amet": 456, "sed": 789';
-		$this->searchTime = '0.' . sprintf('%03d', rand(1, 999));
+		$this->searchTime = floatval('0.' . sprintf('%03d', rand(1, 999)));
 		$this->firstDoc = $page*$pageSize + 1;
 		$this->lastDoc = $this->firstDoc + $foundDocs + 1;
 		$pObj->piVars['q'] = '"Lorem ipsum" || "sit amet" || sed';
