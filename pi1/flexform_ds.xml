@@ -266,6 +266,21 @@
 							</config>
 						</TCEforms>
 					</field_templateFile>
+					<field_templateTestMode>
+						<TCEforms>
+							<label>LLL:EXT:mnogosearch/pi1/locallang.xml:templatetestmode.label</label>
+							<config>
+								<type>check</type>
+								<items>
+									<n0>
+										<n0>LLL:EXT:mnogosearch/pi1/locallang.xml:templatetestmode.enable</n0>
+										<n1></n1>
+									</n0>
+								</items>
+								<default>0</default>
+							</config>
+						</TCEforms>
+					</field_templateTestMode>
 				</el>
 			</ROOT>
 		</sTmpl>

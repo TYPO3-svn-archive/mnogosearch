@@ -1,3 +1,7 @@
+21-08-2007	Dmitry Dulepov	<dmitry@typo3.org>
+
+	* Added template test mode in flexform configuration for pi1
+
 19-08-2007	Dmitry Dulepov	<dmitry@typo3.org>
 
 	* Perform post processing only for typeNum=0

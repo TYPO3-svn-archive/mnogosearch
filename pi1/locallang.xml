@@ -24,6 +24,8 @@
 			<label index="templatemode.label">Template mode:</label>
 			<label index="templatemode.markers">Traditional (markers)</label>
 			<label index="templatemode.templavoila">TemplaVoila</label>
+			<label index="templatetestmode.label">Template test mode:</label>
+			<label index="templatetestmode.enable">Enable (read manual first!!!)</label>
 			<label index="template_object">Template object:</label>
 			<label index="template_file">Template file:</label>
 			<label index="search_modes">How to search:</label>

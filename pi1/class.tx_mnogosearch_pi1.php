@@ -43,6 +43,7 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 	var $udmApiVersion;
 	var $highlightParts = array('', '');
 	var $sysconf;
+	var $templateTestMode;
 
 	function init() {
 		$this->pi_setPiVarDefaults();
@@ -62,6 +63,7 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 		// Get configuration
 		$this->sysconf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mnogosearch']);
 
+		$this->templateTestMode = intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_templateTestMode', 'sTmpl');
 		$renderer = intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_templateMode', 'sTmpl'));
 		$renderer_fileref = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tx_mnogosearch/pi1/class.tx_mnogosearch_pi1']['renderers'][$renderer];
 		$this->renderer = t3lib_div::getUserObj($renderer_fileref);
@@ -93,8 +95,8 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 				break;
 			case 2:
 				$content = '';
-				if ($this->piVars['q'] || $this->sysconf['testTemplateMode']) {
-					$result = ($this->sysconf['testTemplateMode'] ? $this->getTestResults() : $this->search());
+				if ($this->piVars['q'] || $this->templateTestMode) {
+					$result = ($this->templateTestMode ? $this->getTestResults() : $this->search());
 					if (is_string($result)) {
 						$content = $result;
 					}
