@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3RecordDocument>
+	<header type="array">
+		<charset>utf-8</charset>
+		<XMLversion>1.0</XMLversion>
+		<meta type="array">
+			<title>mnoGoSearch mapping</title>
+			<description></description>
+			<notes></notes>
+			<packager_username>dima</packager_username>
+			<packager_name>Dmitry Dulepov</packager_name>
+			<packager_email>dima@calis.lv</packager_email>
+			<TYPO3_version>4.2-dev</TYPO3_version>
+			<created>Tuesday . August 2007</created>
+		</meta>
+		<static_tables index="relStaticTables" type="array">
+		</static_tables>
+		<excludeMap type="array">
+			<item index="tx_templavoila_tmplobj:13">1</item>
+			<item index="tx_templavoila_tmplobj:11">1</item>
+			<item index="tx_templavoila_tmplobj:12">1</item>
+			<item index="tx_templavoila_tmplobj:10">1</item>
+			<item index="tx_templavoila_tmplobj:9">1</item>
+			<item index="tx_templavoila_tmplobj:7">1</item>
+			<item index="tx_templavoila_tmplobj:6">1</item>
+			<item index="tx_templavoila_tmplobj:8">1</item>
+			<item index="tx_templavoila_tmplobj:3">1</item>
+			<item index="tx_templavoila_tmplobj:5">1</item>
+		</excludeMap>
+		<softrefCfg type="array">
+			<softrefExportMode index="609f898c10a20018954f4221f3a8a068" type="array">
+				<mode>exclude</mode>
+			</softrefExportMode>
+			<softrefExportMode index="08dfdf821bf8453ad66fc9df531f105d" type="array">
+				<mode>exclude</mode>
+			</softrefExportMode>
+			<softrefExportMode index="f2243681e7170508a5a1ed0522fdc73f" type="array">
+				<mode>exclude</mode>
+			</softrefExportMode>
+		</softrefCfg>
+		<extensionDependencies type="array">
+			<extkey index="0">mnogosearch</extkey>
+		</extensionDependencies>
+		<pagetree type="array">
+			<node index="2" type="array">
+				<uid>2</uid>
+			</node>
+		</pagetree>
+		<records type="array">
+			<table index="pages" type="array">
+				<rec index="2" type="array">
+					<uid>2</uid>
+					<pid>1</pid>
+					<title>General record storage</title>
+					<size>2668</size>
+					<relations index="rels" type="array">
+					</relations>
+					<softrefs type="array">
+					</softrefs>
+				</rec>
+			</table>
+			<table index="tx_templavoila_tmplobj" type="array">
+				<rec index="46" type="array">
+					<uid>46</uid>
+					<pid>2</pid>
+					<title>[mnoGoSearch] Search results [TEMPLATE]</title>
+					<size>9883</size>
+					<relations index="rels" type="array">
+					</relations>
+					<softrefs type="array">
+						<softref_element index="fileref:typolink:609f898c10a20018954f4221f3a8a068:0" type="array">
+							<field>fileref</field>
+							<spKey>typolink</spKey>
+							<matchString>EXT:mnogosearch/pi1/templates/tv.html</matchString>
+							<subst type="array">
+								<type>string</type>
+								<tokenID>609f898c10a20018954f4221f3a8a068</tokenID>
+								<tokenValue>EXT:mnogosearch/pi1/templates/tv.html</tokenValue>
+							</subst>
+						</softref_element>
+					</softrefs>
+				</rec>
+				<rec index="45" type="array">
+					<uid>45</uid>
+					<pid>2</pid>
+					<title>[mnoGoSearch] Long search form [TEMPLATE...</title>
+					<size>2681</size>
+					<relations index="rels" type="array">
+					</relations>
+					<softrefs type="array">
+						<softref_element index="fileref:typolink:08dfdf821bf8453ad66fc9df531f105d:0" type="array">
+							<field>fileref</field>
+							<spKey>typolink</spKey>
+							<matchString>EXT:mnogosearch/pi1/templates/tv.html</matchString>
+							<subst type="array">
+								<type>string</type>
+								<tokenID>08dfdf821bf8453ad66fc9df531f105d</tokenID>
+								<tokenValue>EXT:mnogosearch/pi1/templates/tv.html</tokenValue>
+							</subst>
+						</softref_element>
+					</softrefs>
+				</rec>
+				<rec index="44" type="array">
+					<uid>44</uid>
+					<pid>2</pid>
+					<title>[mnoGoSearch] Short search form [TEMPLAT...</title>
+					<size>2075</size>
+					<relations index="rels" type="array">
+					</relations>
+					<softrefs type="array">
+						<softref_element index="fileref:typolink:f2243681e7170508a5a1ed0522fdc73f:0" type="array">
+							<field>fileref</field>
+							<spKey>typolink</spKey>
+							<matchString>EXT:mnogosearch/pi1/templates/tv.html</matchString>
+							<subst type="array">
+								<type>string</type>
+								<tokenID>f2243681e7170508a5a1ed0522fdc73f</tokenID>
+								<tokenValue>EXT:mnogosearch/pi1/templates/tv.html</tokenValue>
+							</subst>
+						</softref_element>
+					</softrefs>
+				</rec>
+			</table>
+		</records>
+		<pid_lookup type="array">
+			<page_contents index="1" type="array">
+				<table index="pages" type="array">
+					<item index="2">1</item>
+				</table>
+			</page_contents>
+			<page_contents index="2" type="array">
+				<table index="tx_templavoila_tmplobj" type="array">
+					<item index="46">1</item>
+					<item index="45">1</item>
+					<item index="44">1</item>
+				</table>
+			</page_contents>
+		</pid_lookup>
+	</header>
+	<records type="array">
+		<tablerow index="pages:2" type="array">
+			<fieldlist index="data" type="array">
+				<field index="uid">2</field>
+				<field index="pid">1</field>
+				<field index="t3ver_oid">0</field>
+				<field index="t3ver_id">0</field>
+				<field index="t3ver_wsid">0</field>
+				<field index="t3ver_label"></field>
+				<field index="t3ver_state">0</field>
+				<field index="t3ver_stage">0</field>
+				<field index="t3ver_count">0</field>
+				<field index="t3ver_tstamp">0</field>
+				<field index="t3ver_swapmode">0</field>
+				<field index="t3_origuid">0</field>
+				<field index="tstamp">1150660387</field>
+				<field index="sorting">256</field>
+				<field index="deleted">0</field>
+				<field index="perms_userid">3</field>
+				<field index="perms_groupid">1</field>
+				<field index="perms_user">31</field>
+				<field index="perms_group">31</field>
+				<field index="perms_everybody">0</field>
+				<field index="editlock">0</field>
+				<field index="crdate">1150653584</field>
+				<field index="cruser_id">2</field>
+				<field index="title">General record storage</field>
+				<field index="doktype">254</field>
+				<field index="TSconfig"></field>
+				<field index="storage_pid">0</field>
+				<field index="is_siteroot">0</field>
+				<field index="php_tree_stop">0</field>
+				<field index="tx_impexp_origuid">0</field>
+				<field index="url"></field>
+				<field index="hidden">0</field>
+				<field index="starttime">0</field>
+				<field index="endtime">0</field>
+				<field index="urltype">1</field>
+				<field index="shortcut">0</field>
+				<field index="shortcut_mode">0</field>
+				<field index="no_cache">0</field>
+				<field index="fe_group"></field>
+				<field index="subtitle"></field>
+				<field index="layout">0</field>
+				<field index="target"></field>
+				<field index="media"></field>
+				<field index="lastUpdated">0</field>
+				<field index="keywords"></field>
+				<field index="cache_timeout">0</field>
+				<field index="newUntil">0</field>
+				<field index="description"></field>
+				<field index="no_search">0</field>
+				<field index="SYS_LASTCHANGED">0</field>
+				<field index="abstract"></field>
+				<field index="module"></field>
+				<field index="extendToSubpages">0</field>
+				<field index="author"></field>
+				<field index="author_email"></field>
+				<field index="nav_title"></field>
+				<field index="nav_hide">0</field>
+				<field index="content_from_pid">0</field>
+				<field index="mount_pid">0</field>
+				<field index="mount_pid_ol">0</field>
+				<field index="alias"></field>
+				<field index="l18n_cfg">0</field>
+				<field index="fe_login_mode">0</field>
+				<field index="tx_templavoila_ds">0</field>
+				<field index="tx_templavoila_to">0</field>
+				<field index="tx_templavoila_next_ds">0</field>
+				<field index="tx_templavoila_next_to">0</field>
+				<field index="tx_templavoila_flex"></field>
+				<field index="tx_realurl_pathsegment"></field>
+				<field index="workflowID">0</field>
+				<field index="workflow_recursive">0</field>
+				<field index="tx_sfextnews_topic">0</field>
+				<field index="tx_sfextnews_intranet">0</field>
+				<field index="tx_sfextnews_dmail">0</field>
+				<field index="tx_sfextnews_subject_group"></field>
+				<field index="tx_sfextnews_document_id"></field>
+				<field index="tx_sfextnews_recipients"></field>
+				<field index="tx_sfextnews_customer_needs"></field>
+				<field index="tx_sfextnews_publishing_date_start">0</field>
+				<field index="tx_sfextnews_publishing_date_end">0</field>
+				<field index="tx_sfextnews_resubmission_date">0</field>
+				<field index="tx_sfextnews_responsible_person">0</field>
+				<field index="tx_sfextnews_responsible_person_oe">0</field>
+				<field index="tx_sfextnews_processmanager">0</field>
+				<field index="tx_sfextnews_keyword_pages"></field>
+				<field index="tx_sfextnews_synonym"></field>
+				<field index="tx_sfsmanager_pagelink">0</field>
+				<field index="save_publishing_history">0</field>
+				<field index="tx_sfadvancedworkspaces_publish_date">0</field>
+				<field index="tx_diffhighlight_expiration">0</field>
+			</fieldlist>
+			<related index="rels" type="array">
+			</related>
+		</tablerow>
+		<tablerow index="tx_templavoila_tmplobj:46" type="array">
+			<fieldlist index="data" type="array">
+				<field index="uid">46</field>
+				<field index="pid">2</field>
+				<field index="t3ver_oid">0</field>
+				<field index="t3ver_id">0</field>
+				<field index="t3ver_wsid">0</field>
+				<field index="t3ver_label"></field>
+				<field index="t3ver_state">0</field>
+				<field index="t3ver_stage">0</field>
+				<field index="t3ver_count">0</field>
+				<field index="t3ver_tstamp">0</field>
+				<field index="t3_origuid">0</field>
+				<field index="tstamp">1187704094</field>
+				<field index="crdate">1187702978</field>
+				<field index="cruser_id">2</field>
+				<field index="fileref_mtime">1187541028</field>
+				<field index="deleted">0</field>
+				<field index="sorting">32</field>
+				<field index="title">[mnoGoSearch] Search results [TEMPLATE]</field>
+				<field index="datastructure">EXT:mnogosearch/pi1/ds_search_results.xml</field>
+				<field index="fileref">EXT:mnogosearch/pi1/templates/tv.html</field>
+				<field index="templatemapping">a:5:{s:16:&quot;MappingInfo_head&quot;;a:2:{s:16:&quot;headElementPaths&quot;;a:1:{i:0;s:7:&quot;link[1]&quot;;}s:10:&quot;addBodyTag&quot;;i:0;}s:11:&quot;MappingInfo&quot;;a:1:{s:4:&quot;ROOT&quot;;a:2:{s:6:&quot;MAP_EL&quot;;s:20:&quot;body[1] div[3]/INNER&quot;;s:2:&quot;el&quot;;a:12:{s:12:&quot;field_squery&quot;;a:1:{s:6:&quot;MAP_EL&quot;;s:99:&quot;div#search-results div.tx-mnogosearch-pi1-summary[1] span.tx-mnogosearch-pi1-summary-value[1]/INNER&quot;;}s:12:&quot;field_swords&quot;;a:1:{s:6:&quot;MAP_EL&quot;;s:99:&quot;div#search-results div.tx-mnogosearch-pi1-summary[1] span.tx-mnogosearch-pi1-summary-value[2]/INNER&quot;;}s:15:&quot;field_sresults1&quot;;a:1:{s:6:&quot;MAP_EL&quot;;s:106:&quot;div#search-results div.tx-mnogosearch-pi1-summary[1] span.tx-mnogosearch-pi1-summary-results[1] b[1]/INNER&quot;;}s:15:&quot;field_sresultsN&quot;;a:1:{s:6:&quot;MAP_EL&quot;;s:106:&quot;div#search-results div.tx-mnogosearch-pi1-summary[1] span.tx-mnogosearch-pi1-summary-results[1] b[2]/INNER&quot;;}s:17:&quot;field_sresultsNum&quot;;a:1:{s:6:&quot;MAP_EL&quot;;s:106:&quot;div#search-results div.tx-mnogosearch-pi1-summary[1] span.tx-mnogosearch-pi1-summary-results[1] b[3]/INNER&quot;;}s:18:&quot;field_sresultsTime&quot;;a:1:{s:6:&quot;MAP_EL&quot;;s:63:&quot;div#search-results div.tx-mnogosearch-pi1-summary[1] b[1]/INNER&quot;;}s:10:&quot;field_pnum&quot;;a:1:{s:6:&quot;MAP_EL&quot;;s:106:&quot;div#search-results div.tx-mnogosearch-pi1-summary[1] span.tx-mnogosearch-pi1-summary-results[1] b[4]/INNER&quot;;}s:12:&quot;field_ptotal&quot;;a:1:{s:6:&quot;MAP_EL&quot;;s:106:&quot;div#search-results div.tx-mnogosearch-pi1-summary[1] span.tx-mnogosearch-pi1-summary-results[1] b[5]/INNER&quot;;}s:20:&quot;field_rcontainersect&quot;;a:2:{s:6:&quot;MAP_EL&quot;;s:58:&quot;div#search-results div.tx-mnogosearch-pi1-results[1]/INNER&quot;;s:2:&quot;el&quot;;a:1:{s:16:&quot;field_rcontainer&quot;;a:2:{s:6:&quot;MAP_EL&quot;;s:32:&quot;div.tx-mnogosearch-pi1-result[1]&quot;;s:2:&quot;el&quot;;a:6:{s:12:&quot;field_number&quot;;a:1:{s:6:&quot;MAP_EL&quot;;s:48:&quot;div.tx-mnogosearch-pi1-result[1] strong[1]/INNER&quot;;}s:10:&quot;field_link&quot;;a:1:{s:6:&quot;MAP_EL&quot;;s:77:&quot;div.tx-mnogosearch-pi1-result[1] a.tx-mnogosearch-pi1-result-url[1]/ATTR:href&quot;;}s:11:&quot;field_title&quot;;a:1:{s:6:&quot;MAP_EL&quot;;s:73:&quot;div.tx-mnogosearch-pi1-result[1] a.tx-mnogosearch-pi1-result-url[1]/INNER&quot;;}s:9:&quot;field_rel&quot;;a:1:{s:6:&quot;MAP_EL&quot;;s:90:&quot;div.tx-mnogosearch-pi1-result[1] span.tx-mnogosearch-pi1-result-relevancy[1] span[1]/INNER&quot;;}s:13:&quot;field_excerpt&quot;;a:1:{s:6:&quot;MAP_EL&quot;;s:79:&quot;div.tx-mnogosearch-pi1-result[1] div.tx-mnogosearch-pi1-result-excerpt[1]/INNER&quot;;}s:20:&quot;field_lcontainersect&quot;;a:2:{s:6:&quot;MAP_EL&quot;;s:77:&quot;div.tx-mnogosearch-pi1-result[1] ul.tx-mnogosearch-pi1-results-links[1]/INNER&quot;;s:2:&quot;el&quot;;a:1:{s:16:&quot;field_lcontainer&quot;;a:2:{s:6:&quot;MAP_EL&quot;;s:5:&quot;li[1]&quot;;s:2:&quot;el&quot;;a:2:{s:10:&quot;field_link&quot;;a:1:{s:6:&quot;MAP_EL&quot;;s:20:&quot;li[1] a[1]/ATTR:href&quot;;}s:11:&quot;field_title&quot;;a:1:{s:6:&quot;MAP_EL&quot;;s:16:&quot;li[1] a[1]/INNER&quot;;}}}}}}}}}s:12:&quot;field_prevco&quot;;a:2:{s:6:&quot;MAP_EL&quot;;s:62:&quot;div#search-results div.tx-mnogosearch-pi1-page-list[1] span[1]&quot;;s:2:&quot;el&quot;;a:1:{s:10:&quot;field_link&quot;;a:1:{s:6:&quot;MAP_EL&quot;;s:22:&quot;span[1] a[1]/ATTR:href&quot;;}}}s:20:&quot;field_pcontainersect&quot;;a:2:{s:6:&quot;MAP_EL&quot;;s:68:&quot;div#search-results div.tx-mnogosearch-pi1-page-list[1] span[2]/INNER&quot;;s:2:&quot;el&quot;;a:1:{s:16:&quot;field_pcontainer&quot;;a:2:{s:6:&quot;MAP_EL&quot;;s:35:&quot;span.tx-mnogosearch-pi1-pagelink[1]&quot;;s:2:&quot;el&quot;;a:2:{s:10:&quot;field_link&quot;;a:1:{s:6:&quot;MAP_EL&quot;;s:50:&quot;span.tx-mnogosearch-pi1-pagelink[1] a[1]/ATTR:href&quot;;}s:13:&quot;field_pagenum&quot;;a:1:{s:6:&quot;MAP_EL&quot;;s:46:&quot;span.tx-mnogosearch-pi1-pagelink[1] a[1]/INNER&quot;;}}}}}s:12:&quot;field_nextco&quot;;a:2:{s:6:&quot;MAP_EL&quot;;s:62:&quot;div#search-results div.tx-mnogosearch-pi1-page-list[1] span[3]&quot;;s:2:&quot;el&quot;;a:1:{s:10:&quot;field_link&quot;;a:1:{s:6:&quot;MAP_EL&quot;;s:22:&quot;span[1] a[1]/ATTR:href&quot;;}}}}}}s:18:&quot;MappingData_cached&quot;;a:2:{s:6:&quot;cArray&quot;;a:25:{i:0;s:191:&quot;
+		&lt;div id=&quot;search-results&quot;&gt;
+			&lt;div class=&quot;tx-mnogosearch-pi1-summary&quot;&gt;
+
+				&lt;span class=&quot;tx-mnogosearch-pi1-summary-title&quot;&gt;Search for:&lt;/span&gt; &lt;span class=&quot;tx-mnogosearch-pi1-summary-value&quot;&gt;&quot;;s:12:&quot;field_squery&quot;;s:16:&quot;justo &amp;amp; elit&quot;;i:2;s:130:&quot;&lt;/span&gt;.
+				&lt;span class=&quot;tx-mnogosearch-pi1-summary-title&quot;&gt;Search results:&lt;/span&gt; &lt;span class=&quot;tx-mnogosearch-pi1-summary-value&quot;&gt;&quot;;s:12:&quot;field_swords&quot;;s:25:&quot;justo: 5/100, elit: 6/200&quot;;i:4;s:28:&quot;&lt;/span&gt;.
+				Search took &lt;b&gt;&quot;;s:18:&quot;field_sresultsTime&quot;;s:1:&quot;2&quot;;i:6;s:89:&quot;&lt;/b&gt; seconds.
+				&lt;br /&gt;
+				&lt;span class=&quot;tx-mnogosearch-pi1-summary-results&quot;&gt;Results &lt;b&gt;&quot;;s:15:&quot;field_sresults1&quot;;s:1:&quot;1&quot;;i:8;s:8:&quot;&lt;/b&gt;-&lt;b&gt;&quot;;s:15:&quot;field_sresultsN&quot;;s:2:&quot;10&quot;;i:10;s:15:&quot;&lt;/b&gt;
+				of &lt;b&gt;&quot;;s:17:&quot;field_sresultsNum&quot;;s:2:&quot;20&quot;;i:12;s:14:&quot;&lt;/b&gt;, page &lt;b&gt;&quot;;s:10:&quot;field_pnum&quot;;s:1:&quot;1&quot;;i:14;s:11:&quot;&lt;/b&gt; of &lt;b&gt;&quot;;s:12:&quot;field_ptotal&quot;;s:1:&quot;2&quot;;i:16;s:65:&quot;&lt;/b&gt;&lt;/span&gt;
+			&lt;/div&gt;
+			&lt;div class=&quot;tx-mnogosearch-pi1-results&quot;&gt;&quot;;s:20:&quot;field_rcontainersect&quot;;s:766:&quot;
+				&lt;div class=&quot;tx-mnogosearch-pi1-result&quot;&gt;
+					&lt;strong&gt;1&lt;/strong&gt;&lt;strong&gt;.&lt;/strong&gt;
+					&lt;a class=&quot;tx-mnogosearch-pi1-result-url&quot; href=&quot;&quot;&gt;Article title goes here&lt;/a&gt; &lt;span class=&quot;tx-mnogosearch-pi1-result-relevancy&quot;&gt;[&lt;span&gt;20&lt;/span&gt;%]&lt;/span&gt;
+					&lt;div class=&quot;tx-mnogosearch-pi1-result-excerpt&quot;&gt;
+					..consectetuer adipiscing elit. Mauris porta. Nam non &lt;span class=&quot;tx-mnogosearch-pi1-result-excerpt-selection&quot;&gt;justo&lt;/span&gt; eget diam egestas ornare. Nam a felis non metus pulvinar mollis. Proin pellentesque &lt;span class=&quot;tx-mnogosearch-pi1-result-excerpt-selection&quot;&gt;elit&lt;/span&gt; vulputate est. Nulla facilisi...
+					&lt;/div&gt;
+					&lt;ul class=&quot;tx-mnogosearch-pi1-results-links&quot;&gt;
+						&lt;li&gt;&lt;a href=&quot;http://whatever/&quot;&gt;http://whatever/&lt;/a&gt;&lt;/li&gt;
+					&lt;/ul&gt;
+				&lt;/div&gt;
+			&quot;;i:18;s:76:&quot;&lt;/div&gt;
+			&lt;hr size=&quot;1&quot; /&gt;
+			&lt;div class=&quot;tx-mnogosearch-pi1-page-list&quot;&gt;
+				&quot;;s:12:&quot;field_prevco&quot;;s:32:&quot;&lt;span&gt;&lt;a href=&quot;&quot;&gt;Prev&lt;/a&gt;&lt;/span&gt;&quot;;i:20;s:11:&quot;
+				&lt;span&gt;&quot;;s:20:&quot;field_pcontainersect&quot;;s:65:&quot;&lt;span class=&quot;tx-mnogosearch-pi1-pagelink&quot;&gt;&lt;a href=&quot;&quot;&gt;1&lt;/a&gt;&lt;/span&gt;&quot;;i:22;s:12:&quot;&lt;/span&gt;
+				&quot;;s:12:&quot;field_nextco&quot;;s:32:&quot;&lt;span&gt;&lt;a href=&quot;&quot;&gt;Next&lt;/a&gt;&lt;/span&gt;&quot;;i:24;s:21:&quot;
+			&lt;/div&gt;
+		&lt;/div&gt;
+	&quot;;}s:3:&quot;sub&quot;;a:4:{s:20:&quot;field_rcontainersect&quot;;a:2:{s:6:&quot;cArray&quot;;a:3:{i:0;s:5:&quot;
+				&quot;;s:16:&quot;field_rcontainer&quot;;s:757:&quot;&lt;div class=&quot;tx-mnogosearch-pi1-result&quot;&gt;
+					&lt;strong&gt;1&lt;/strong&gt;&lt;strong&gt;.&lt;/strong&gt;
+					&lt;a class=&quot;tx-mnogosearch-pi1-result-url&quot; href=&quot;&quot;&gt;Article title goes here&lt;/a&gt; &lt;span class=&quot;tx-mnogosearch-pi1-result-relevancy&quot;&gt;[&lt;span&gt;20&lt;/span&gt;%]&lt;/span&gt;
+					&lt;div class=&quot;tx-mnogosearch-pi1-result-excerpt&quot;&gt;
+					..consectetuer adipiscing elit. Mauris porta. Nam non &lt;span class=&quot;tx-mnogosearch-pi1-result-excerpt-selection&quot;&gt;justo&lt;/span&gt; eget diam egestas ornare. Nam a felis non metus pulvinar mollis. Proin pellentesque &lt;span class=&quot;tx-mnogosearch-pi1-result-excerpt-selection&quot;&gt;elit&lt;/span&gt; vulputate est. Nulla facilisi...
+					&lt;/div&gt;
+					&lt;ul class=&quot;tx-mnogosearch-pi1-results-links&quot;&gt;
+						&lt;li&gt;&lt;a href=&quot;http://whatever/&quot;&gt;http://whatever/&lt;/a&gt;&lt;/li&gt;
+					&lt;/ul&gt;
+				&lt;/div&gt;&quot;;i:2;s:4:&quot;
+			&quot;;}s:3:&quot;sub&quot;;a:1:{s:16:&quot;field_rcontainer&quot;;a:2:{s:6:&quot;cArray&quot;;a:13:{i:0;s:53:&quot;&lt;div class=&quot;tx-mnogosearch-pi1-result&quot;&gt;
+					&lt;strong&gt;&quot;;s:12:&quot;field_number&quot;;s:1:&quot;1&quot;;i:2;s:80:&quot;&lt;/strong&gt;&lt;strong&gt;.&lt;/strong&gt;
+					&lt;a class=&quot;tx-mnogosearch-pi1-result-url&quot; href=&quot;&quot;;s:10:&quot;field_link&quot;;s:0:&quot;&quot;;i:4;s:2:&quot;&quot;&gt;&quot;;s:11:&quot;field_title&quot;;s:23:&quot;Article title goes here&quot;;i:6;s:62:&quot;&lt;/a&gt; &lt;span class=&quot;tx-mnogosearch-pi1-result-relevancy&quot;&gt;[&lt;span&gt;&quot;;s:9:&quot;field_rel&quot;;s:2:&quot;20&quot;;i:8;s:69:&quot;&lt;/span&gt;%]&lt;/span&gt;
+					&lt;div class=&quot;tx-mnogosearch-pi1-result-excerpt&quot;&gt;&quot;;s:13:&quot;field_excerpt&quot;;s:323:&quot;
+					..consectetuer adipiscing elit. Mauris porta. Nam non &lt;span class=&quot;tx-mnogosearch-pi1-result-excerpt-selection&quot;&gt;justo&lt;/span&gt; eget diam egestas ornare. Nam a felis non metus pulvinar mollis. Proin pellentesque &lt;span class=&quot;tx-mnogosearch-pi1-result-excerpt-selection&quot;&gt;elit&lt;/span&gt; vulputate est. Nulla facilisi...
+					&quot;;i:10;s:57:&quot;&lt;/div&gt;
+					&lt;ul class=&quot;tx-mnogosearch-pi1-results-links&quot;&gt;&quot;;s:20:&quot;field_lcontainersect&quot;;s:69:&quot;
+						&lt;li&gt;&lt;a href=&quot;http://whatever/&quot;&gt;http://whatever/&lt;/a&gt;&lt;/li&gt;
+					&quot;;i:12;s:16:&quot;&lt;/ul&gt;
+				&lt;/div&gt;&quot;;}s:3:&quot;sub&quot;;a:1:{s:20:&quot;field_lcontainersect&quot;;a:2:{s:6:&quot;cArray&quot;;a:3:{i:0;s:7:&quot;
+						&quot;;s:16:&quot;field_lcontainer&quot;;s:56:&quot;&lt;li&gt;&lt;a href=&quot;http://whatever/&quot;&gt;http://whatever/&lt;/a&gt;&lt;/li&gt;&quot;;i:2;s:6:&quot;
+					&quot;;}s:3:&quot;sub&quot;;a:1:{s:16:&quot;field_lcontainer&quot;;a:2:{s:6:&quot;cArray&quot;;a:5:{i:0;s:13:&quot;&lt;li&gt;&lt;a href=&quot;&quot;;s:10:&quot;field_link&quot;;s:16:&quot;http://whatever/&quot;;i:2;s:2:&quot;&quot;&gt;&quot;;s:11:&quot;field_title&quot;;s:16:&quot;http://whatever/&quot;;i:4;s:9:&quot;&lt;/a&gt;&lt;/li&gt;&quot;;}s:3:&quot;sub&quot;;a:0:{}}}}}}}}s:12:&quot;field_prevco&quot;;a:2:{s:6:&quot;cArray&quot;;a:3:{i:0;s:15:&quot;&lt;span&gt;&lt;a href=&quot;&quot;;s:10:&quot;field_link&quot;;s:0:&quot;&quot;;i:2;s:17:&quot;&quot;&gt;Prev&lt;/a&gt;&lt;/span&gt;&quot;;}s:3:&quot;sub&quot;;a:0:{}}s:20:&quot;field_pcontainersect&quot;;a:2:{s:6:&quot;cArray&quot;;a:3:{i:0;s:0:&quot;&quot;;s:16:&quot;field_pcontainer&quot;;s:65:&quot;&lt;span class=&quot;tx-mnogosearch-pi1-pagelink&quot;&gt;&lt;a href=&quot;&quot;&gt;1&lt;/a&gt;&lt;/span&gt;&quot;;i:2;s:0:&quot;&quot;;}s:3:&quot;sub&quot;;a:1:{s:16:&quot;field_pcontainer&quot;;a:2:{s:6:&quot;cArray&quot;;a:5:{i:0;s:51:&quot;&lt;span class=&quot;tx-mnogosearch-pi1-pagelink&quot;&gt;&lt;a href=&quot;&quot;;s:10:&quot;field_link&quot;;s:0:&quot;&quot;;i:2;s:2:&quot;&quot;&gt;&quot;;s:13:&quot;field_pagenum&quot;;s:1:&quot;1&quot;;i:4;s:11:&quot;&lt;/a&gt;&lt;/span&gt;&quot;;}s:3:&quot;sub&quot;;a:0:{}}}}s:12:&quot;field_nextco&quot;;a:2:{s:6:&quot;cArray&quot;;a:3:{i:0;s:15:&quot;&lt;span&gt;&lt;a href=&quot;&quot;;s:10:&quot;field_link&quot;;s:0:&quot;&quot;;i:2;s:17:&quot;&quot;&gt;Next&lt;/a&gt;&lt;/span&gt;&quot;;}s:3:&quot;sub&quot;;a:0:{}}}}s:23:&quot;MappingData_head_cached&quot;;a:2:{s:6:&quot;cArray&quot;;a:3:{i:0;s:71:&quot;
+&lt;meta http-equiv=&quot;Content-type&quot; content=&quot;text/html; charset=utf-8&quot; /&gt;
+&quot;;s:4:&quot;el_0&quot;;s:79:&quot;&lt;link rel=&quot;stylesheet&quot; href=&quot;typo3conf/ext/mnogosearch/pi1/templates/tv.css&quot; /&gt;&quot;;i:2;s:37:&quot;
+&lt;title&gt;Search form template&lt;/title&gt;
+&quot;;}s:3:&quot;sub&quot;;a:0:{}}s:14:&quot;BodyTag_cached&quot;;s:0:&quot;&quot;;}</field>
+				<field index="previewicon"></field>
+				<field index="description"></field>
+				<field index="rendertype"></field>
+				<field index="sys_language_uid">0</field>
+				<field index="parent">0</field>
+				<field index="rendertype_ref">0</field>
+				<field index="localprocessing"></field>
+				<field index="fileref_md5">fe315c5b59ce6b6b29fce544d9feda4d</field>
+			</fieldlist>
+			<related index="rels" type="array">
+				<field index="fileref" type="array">
+					<softrefs type="array">
+						<keys type="array">
+							<softref_key index="typolink" type="array">
+								<softref_element index="609f898c10a20018954f4221f3a8a068:0" type="array">
+									<matchString>EXT:mnogosearch/pi1/templates/tv.html</matchString>
+									<subst type="array">
+										<type>string</type>
+										<tokenID>609f898c10a20018954f4221f3a8a068</tokenID>
+										<tokenValue>EXT:mnogosearch/pi1/templates/tv.html</tokenValue>
+									</subst>
+								</softref_element>
+							</softref_key>
+						</keys>
+						<tokenizedContent>{softref:609f898c10a20018954f4221f3a8a068}</tokenizedContent>
+					</softrefs>
+				</field>
+			</related>
+		</tablerow>
+		<tablerow index="tx_templavoila_tmplobj:45" type="array">
+			<fieldlist index="data" type="array">
+				<field index="uid">45</field>
+				<field index="pid">2</field>
+				<field index="t3ver_oid">0</field>
+				<field index="t3ver_id">0</field>
+				<field index="t3ver_wsid">0</field>
+				<field index="t3ver_label"></field>
+				<field index="t3ver_state">0</field>
+				<field index="t3ver_stage">0</field>
+				<field index="t3ver_count">0</field>
+				<field index="t3ver_tstamp">0</field>
+				<field index="t3_origuid">0</field>
+				<field index="tstamp">1187704759</field>
+				<field index="crdate">1182436001</field>
+				<field index="cruser_id">2</field>
+				<field index="fileref_mtime">1187541028</field>
+				<field index="deleted">0</field>
+				<field index="sorting">64</field>
+				<field index="title">[mnoGoSearch] Long search form [TEMPLATE]</field>
+				<field index="datastructure">EXT:mnogosearch/pi1/ds_long_search_form.xml</field>
+				<field index="fileref">EXT:mnogosearch/pi1/templates/tv.html</field>
+				<field index="templatemapping">a:5:{s:16:&quot;MappingInfo_head&quot;;a:2:{s:16:&quot;headElementPaths&quot;;a:1:{i:0;s:7:&quot;link[1]&quot;;}s:10:&quot;addBodyTag&quot;;i:0;}s:11:&quot;MappingInfo&quot;;a:1:{s:4:&quot;ROOT&quot;;a:2:{s:6:&quot;MAP_EL&quot;;s:20:&quot;body[1] div[2]/INNER&quot;;s:2:&quot;el&quot;;a:2:{s:12:&quot;field_action&quot;;a:1:{s:6:&quot;MAP_EL&quot;;s:65:&quot;div#long-search-form form.tx-mnogosearch-long-form[1]/ATTR:action&quot;;}s:11:&quot;field_input&quot;;a:1:{s:6:&quot;MAP_EL&quot;;s:94:&quot;div#long-search-form form.tx-mnogosearch-long-form[1] table[1] tr[1] td[2] input[1]/ATTR:value&quot;;}}}}s:18:&quot;MappingData_cached&quot;;a:2:{s:6:&quot;cArray&quot;;a:5:{i:0;s:81:&quot;
+		&lt;div id=&quot;long-search-form&quot;&gt;
+			&lt;form class=&quot;tx-mnogosearch-long-form&quot; action=&quot;&quot;;s:12:&quot;field_action&quot;;s:0:&quot;&quot;;i:2;s:468:&quot;&quot; method=&quot;POST&quot;&gt;	&lt;!-- map: action, name, id --&gt;
+				&lt;input type=&quot;hidden&quot; name=&quot;tx_mnogosearch_pi1[wm]&quot; value=&quot;wrd&quot; /&gt;
+				&lt;input type=&quot;hidden&quot; name=&quot;tx_mnogosearch_pi1[o]&quot; value=&quot;0&quot; /&gt;
+				&lt;input type=&quot;hidden&quot; name=&quot;tx_mnogosearch_pi1[lang]&quot; value=&quot;&quot; /&gt;
+				&lt;input type=&quot;hidden&quot; name=&quot;tx_mnogosearch_pi1[wf]&quot; value=&quot;2221&quot; /&gt;
+
+				&lt;table&gt;
+					&lt;tr&gt;&lt;td&gt;
+						Search for:
+					&lt;/td&gt;&lt;td colspan=&quot;3&quot;&gt;
+						&lt;input size=&quot;50&quot; type=&quot;text&quot; name=&quot;tx_mnogosearch_pi1[q]&quot; value=&quot;&quot;;s:11:&quot;field_input&quot;;s:0:&quot;&quot;;i:4;s:265:&quot;&quot; /&gt;	&lt;!-- map: value --&gt;
+					&lt;/td&gt;&lt;/tr&gt;
+					&lt;tr&gt;&lt;td&gt;
+					&lt;/td&gt;&lt;td&gt;
+						&lt;input type=&quot;submit&quot; name=&quot;tx_mnogosearch_pi1[submit]&quot; value=&quot;Search now!&quot; /&gt;
+						&lt;input type=&quot;reset&quot; name=&quot;reset&quot; value=&quot;Reset form&quot; /&gt;
+					&lt;/td&gt;&lt;/tr&gt;
+				&lt;/table&gt;
+			&lt;/form&gt;
+		&lt;/div&gt;
+	&quot;;}s:3:&quot;sub&quot;;a:0:{}}s:23:&quot;MappingData_head_cached&quot;;a:2:{s:6:&quot;cArray&quot;;a:3:{i:0;s:71:&quot;
+&lt;meta http-equiv=&quot;Content-type&quot; content=&quot;text/html; charset=utf-8&quot; /&gt;
+&quot;;s:4:&quot;el_0&quot;;s:79:&quot;&lt;link rel=&quot;stylesheet&quot; href=&quot;typo3conf/ext/mnogosearch/pi1/templates/tv.css&quot; /&gt;&quot;;i:2;s:37:&quot;
+&lt;title&gt;Search form template&lt;/title&gt;
+&quot;;}s:3:&quot;sub&quot;;a:0:{}}s:14:&quot;BodyTag_cached&quot;;s:0:&quot;&quot;;}</field>
+				<field index="previewicon"></field>
+				<field index="description"></field>
+				<field index="rendertype"></field>
+				<field index="sys_language_uid">0</field>
+				<field index="parent">0</field>
+				<field index="rendertype_ref">0</field>
+				<field index="localprocessing"></field>
+				<field index="fileref_md5">fe315c5b59ce6b6b29fce544d9feda4d</field>
+			</fieldlist>
+			<related index="rels" type="array">
+				<field index="fileref" type="array">
+					<softrefs type="array">
+						<keys type="array">
+							<softref_key index="typolink" type="array">
+								<softref_element index="08dfdf821bf8453ad66fc9df531f105d:0" type="array">
+									<matchString>EXT:mnogosearch/pi1/templates/tv.html</matchString>
+									<subst type="array">
+										<type>string</type>
+										<tokenID>08dfdf821bf8453ad66fc9df531f105d</tokenID>
+										<tokenValue>EXT:mnogosearch/pi1/templates/tv.html</tokenValue>
+									</subst>
+								</softref_element>
+							</softref_key>
+						</keys>
+						<tokenizedContent>{softref:08dfdf821bf8453ad66fc9df531f105d}</tokenizedContent>
+					</softrefs>
+				</field>
+			</related>
+		</tablerow>
+		<tablerow index="tx_templavoila_tmplobj:44" type="array">
+			<fieldlist index="data" type="array">
+				<field index="uid">44</field>
+				<field index="pid">2</field>
+				<field index="t3ver_oid">0</field>
+				<field index="t3ver_id">0</field>
+				<field index="t3ver_wsid">0</field>
+				<field index="t3ver_label"></field>
+				<field index="t3ver_state">0</field>
+				<field index="t3ver_stage">0</field>
+				<field index="t3ver_count">0</field>
+				<field index="t3ver_tstamp">0</field>
+				<field index="t3_origuid">0</field>
+				<field index="tstamp">1187704745</field>
+				<field index="crdate">1182428796</field>
+				<field index="cruser_id">2</field>
+				<field index="fileref_mtime">1187541028</field>
+				<field index="deleted">0</field>
+				<field index="sorting">128</field>
+				<field index="title">[mnoGoSearch] Short search form [TEMPLATE]</field>
+				<field index="datastructure">EXT:mnogosearch/pi1/ds_short_search_form.xml</field>
+				<field index="fileref">EXT:mnogosearch/pi1/templates/tv.html</field>
+				<field index="templatemapping">a:5:{s:16:&quot;MappingInfo_head&quot;;a:2:{s:16:&quot;headElementPaths&quot;;a:1:{i:0;s:7:&quot;link[1]&quot;;}s:10:&quot;addBodyTag&quot;;i:0;}s:11:&quot;MappingInfo&quot;;a:1:{s:4:&quot;ROOT&quot;;a:2:{s:6:&quot;MAP_EL&quot;;s:20:&quot;body[1] div[1]/INNER&quot;;s:2:&quot;el&quot;;a:2:{s:11:&quot;field_input&quot;;a:1:{s:6:&quot;MAP_EL&quot;;s:49:&quot;div#short-search-form form[1] input[1]/ATTR:value&quot;;}s:12:&quot;field_action&quot;;a:1:{s:6:&quot;MAP_EL&quot;;s:41:&quot;div#short-search-form form[1]/ATTR:action&quot;;}}}}s:18:&quot;MappingData_cached&quot;;a:2:{s:6:&quot;cArray&quot;;a:5:{i:0;s:49:&quot;
+		&lt;div id=&quot;short-search-form&quot;&gt;
+			&lt;form action=&quot;&quot;;s:12:&quot;field_action&quot;;s:0:&quot;&quot;;i:2;s:102:&quot;&quot; method=&quot;POST&quot;&gt;	&lt;!-- map: tag, action --&gt;
+				&lt;input type=&quot;text&quot; name=&quot;tx_mnogosearch_pi1[q]&quot; value=&quot;&quot;;s:11:&quot;field_input&quot;;s:0:&quot;&quot;;i:4;s:123:&quot;&quot; /&gt;	&lt;!-- map: value --&gt;
+				&lt;input type=&quot;submit&quot; name=&quot;tx_mnogosearch_pi1[submit]&quot; value=&quot;Search&quot; /&gt;
+			&lt;/form&gt;
+		&lt;/div&gt;
+	&quot;;}s:3:&quot;sub&quot;;a:0:{}}s:23:&quot;MappingData_head_cached&quot;;a:2:{s:6:&quot;cArray&quot;;a:3:{i:0;s:71:&quot;
+&lt;meta http-equiv=&quot;Content-type&quot; content=&quot;text/html; charset=utf-8&quot; /&gt;
+&quot;;s:4:&quot;el_0&quot;;s:79:&quot;&lt;link rel=&quot;stylesheet&quot; href=&quot;typo3conf/ext/mnogosearch/pi1/templates/tv.css&quot; /&gt;&quot;;i:2;s:37:&quot;
+&lt;title&gt;Search form template&lt;/title&gt;
+&quot;;}s:3:&quot;sub&quot;;a:0:{}}s:14:&quot;BodyTag_cached&quot;;s:0:&quot;&quot;;}</field>
+				<field index="previewicon"></field>
+				<field index="description"></field>
+				<field index="rendertype"></field>
+				<field index="sys_language_uid">0</field>
+				<field index="parent">0</field>
+				<field index="rendertype_ref">0</field>
+				<field index="localprocessing"></field>
+				<field index="fileref_md5">fe315c5b59ce6b6b29fce544d9feda4d</field>
+			</fieldlist>
+			<related index="rels" type="array">
+				<field index="fileref" type="array">
+					<softrefs type="array">
+						<keys type="array">
+							<softref_key index="typolink" type="array">
+								<softref_element index="f2243681e7170508a5a1ed0522fdc73f:0" type="array">
+									<matchString>EXT:mnogosearch/pi1/templates/tv.html</matchString>
+									<subst type="array">
+										<type>string</type>
+										<tokenID>f2243681e7170508a5a1ed0522fdc73f</tokenID>
+										<tokenValue>EXT:mnogosearch/pi1/templates/tv.html</tokenValue>
+									</subst>
+								</softref_element>
+							</softref_key>
+						</keys>
+						<tokenizedContent>{softref:f2243681e7170508a5a1ed0522fdc73f}</tokenizedContent>
+					</softrefs>
+				</field>
+			</related>
+		</tablerow>
+	</records>
+</T3RecordDocument>
