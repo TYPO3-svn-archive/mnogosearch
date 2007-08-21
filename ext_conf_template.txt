@@ -21,3 +21,6 @@ IncludeFile =
 
 # # cat=basic/enable; type=string; label=Indexer options:Additional indexer options (if any)
 #indexerOptions =
+
+# cat=basic/enable; type=boolean; label=Template test mode:If enabled, always displays sample test results in frontend. Useful to test your own templates.
+testTemplateMode = 0
