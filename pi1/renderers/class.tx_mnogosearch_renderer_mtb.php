@@ -41,38 +41,100 @@ class tx_mnogosearch_renderer_mtb extends tx_mnogosearch_renderer {
 			$this->templateCode = $pObj->cObj->fileResource($templateFile);
 
 			// Add header parts if there are any
-			$headerParts = $this->pObj->cObj->getSubpart($this->templateCode, '###HEAD_ADDITIONS###');
-			if ($headerParts) {
-				$headerParts = $pObj->cObj->substituteMarker($headerParts, '###THIS_PATH###', dirname($GLOBALS['TSFE']->tmpl->getFileName($templateFile)));
-				$GLOBALS['TSFE']->additionalHeaderData['EXT:mnoGoSearch'] = $headerParts;
+			if (!isset($GLOBALS['TSFE']->additionalHeaderData['EXT:mnoGoSearch'])) {
+				$headerParts = $this->pObj->cObj->getSubpart($this->templateCode, '###HEAD_ADDITIONS###');
+				if ($headerParts) {
+					$headerParts = $pObj->cObj->substituteMarker($headerParts, '###THIS_PATH###', dirname($GLOBALS['TSFE']->tmpl->getFileName($templateFile)));
+					$GLOBALS['TSFE']->additionalHeaderData['EXT:mnoGoSearch'] = $headerParts;
+				}
 			}
 		}
 		return $result;
 	}
 
 	function render_simpleSearchForm() {
-		$result = '';
-
 		$template = $this->pObj->cObj->getSubpart($this->templateCode, '###SHORT_SEARCH_FORM###');
+		$result = $this->pObj->cObj->substituteMarkerArray($template, array(
+			'###SHORT_SEARCH_FORM_ACTION###' => $this->pObj->pi_getPageLink(intval($this->pObj->pi_getFFvalue($this->pObj->cObj->data['pi_flexform'], 'field_resultsPage'))),
+			'###SHORT_SEARCH_FORM_VALUE###' => htmlspecialchars($this->pObj->piVars['q']),
+			));
 		return $result;
 	}
 
 	function render_searchForm() {
-		return 'Function render_searchForm is not implemented yet';
+		$template = $this->pObj->cObj->getSubpart($this->templateCode, '###LONG_SEARCH_FORM###');
+		$result = $this->pObj->cObj->substituteMarkerArray($template, array(
+			'###LONG_SEARCH_FORM_ACTION###' => $this->pObj->pi_getPageLink(intval($this->pObj->pi_getFFvalue($this->pObj->cObj->data['pi_flexform'], 'field_resultsPage'))),
+			'###LONG_SEARCH_FORM_VALUE###' => htmlspecialchars($this->pObj->piVars['q']),
+			));
+		return $result;
 	}
 
+	/**
+	 * @see	tx_mnogosearch_renderer::render_searchResults()
+	 *
+	 * @param	tx_mnogosearch_results	$results
+	 * @return	string	Generated content
+	 */
 	function render_searchResults(&$results) {
+		// Setup variables
 		$result = '';
-
-		$template = $this->pObj->cObj->getSubpart($this->templateCode, '###SEARCH_RESULTS###');
-
 		$rpp = intval($this->pObj->pi_getFFvalue($this->pObj->cObj->data['pi_flexform'], 'field_resultsPerPage'));
 		if (!$rpp) {
 			$rpp = 20;
 		}
-		$curPage = intval($results->firstDoc/$rpp);
+		$page = intval($results->firstDoc/$rpp);
 
-		$result = $this->pObj->cObj->substituteMarkerArray($template, array(
+		// Get template for this function
+		$template = $this->pObj->cObj->getSubpart($this->templateCode, '###SEARCH_RESULTS###');
+
+		// Results
+		$resultTemplate = $this->pObj->cObj->getSubpart($this->templateCode, '###SEARCH_RESULTS_RESULT###');
+		$linksTemplate = $this->pObj->cObj->getSubpart($resultTemplate, '###SEARCH_RESULTS_RESULT_ALT_LINK###');
+		$resultList = ''; $i = 0;
+		/** @var tx_mnogosearch_result $result */
+		foreach ($results->results as $result) {
+			// Basic fields
+			$t = $this->pObj->cObj->substituteMarkerArray($resultTemplate, array(
+					'###SEARCH_RESULTS_RESULT_NUMBER###' => $results->firstDoc + ($i++),
+					'###SEARCH_RESULTS_RESULT_URL###' => $result->url,
+					'###SEARCH_RESULTS_RESULT_TITLE###' => $result->title,	// todo: htmlspecialchars?
+					'###SEARCH_RESULTS_RESULT_RELEVANCY###' => sprintf('%.2f', $result->rating),
+					'###SEARCH_RESULTS_RESULT_EXCERPT###' => $result->excerpt,
+					));
+			// Make links
+			$links = '';
+			foreach (array_merge(array($result), $result->clones) as $r) {
+				$links .= $this->pObj->cObj->substituteMarkerArray($linksTemplate, array(
+					'###SEARCH_RESULTS_RESULT_ALT_LINK_URL###' => $r->url,
+					'###SEARCH_RESULTS_RESULT_ALT_LINK_TITLE###' => $r->url,
+					));
+			}
+			$resultList .= $this->pObj->cObj->substituteSubpart($t, '###SEARCH_RESULTS_RESULT_ALT_LINK###', $links);
+		}
+
+		// Pager
+		$pager = '';
+		if ($results->totalResults > $rpp) {
+			$pagerTemplate = $this->pObj->cObj->getSubpart($template, '###SEARCH_RESULTS_PAGER###');
+			$prevLink = $nextLink = $curPage = '';
+			if ($page > 0) {
+				$pageTemplate = $this->pObj->cObj->getSubpart($pagerTemplate, '###SEARCH_RESULTS_PAGER_PREV###');
+				$prevLink = $this->pObj->cObj->substituteMarker($pageTemplate, '###SEARCH_RESULTS_PAGER_PREV_LINK###', $this->getLink($page - 1));
+			}
+			if ($results->lastDoc < $results->totalResults) {
+				$pageTemplate = $this->pObj->cObj->getSubpart($pagerTemplate, '###SEARCH_RESULTS_PAGER_NEXT###');
+				$nextLink = $this->pObj->cObj->substituteMarker($pageTemplate, '###SEARCH_RESULTS_PAGER_NEXT_LINK###', $this->getLink($page + 1));
+			}
+			// Put all together
+			$pager = $this->pObj->cObj->substituteMarker($pagerTemplate, '###SEARCH_RESULTS_PAGER_CURRENT_PAGE###', $page + 1);
+			$pager = $this->pObj->cObj->substituteSubpart($pager, '###SEARCH_RESULTS_PAGER_PREV###', $prevLink);
+			$pager = $this->pObj->cObj->substituteSubpart($pager, '###SEARCH_RESULTS_PAGER_NEXT###', $nextLink);
+		}
+
+
+		// Put alltogether
+		$content = $this->pObj->cObj->substituteMarkerArray($template, array(
 				'###SEARCH_RESULTS_TERMS###' => htmlspecialchars($this->pObj->piVars['q']),
 				'###SEARCH_RESULTS_STATISTICS###' => htmlspecialchars($results->wordInfo),
 				'###SEARCH_RESULTS_TIME###' => sprintf('%.3f', $results->searchTime),
@@ -82,7 +144,9 @@ class tx_mnogosearch_renderer_mtb extends tx_mnogosearch_renderer {
 				'###SEARCH_RESULTS_CURRENT_PAGE###' => $curPage + 1,
 				'###SEARCH_RESULTS_PAGE_TOTAL###' => intval($results->totalResults/$rpp) + ($results->totalResults % $rpp ? 1 : 0),
 				));
-		return $result;
+		$content = $this->pObj->cObj->substituteSubpart($content, '###SEARCH_RESULTS_RESULT###', $resultList);
+		$content = $this->pObj->cObj->substituteSubpart($content, '###SEARCH_RESULTS_PAGER###', $pager);
+		return $content;
 	}
 }
 

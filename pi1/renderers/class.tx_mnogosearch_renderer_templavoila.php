@@ -187,10 +187,6 @@ class tx_mnogosearch_renderer_templavoila extends tx_mnogosearch_renderer {
 		);
 		return $content;
 	}
-
-	function getLink($page) {
-		 return $this->pObj->pi_linkTP_keepPIvars_url(array('page' => $page), 1);
-	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mnogosearch/pi1/renderers/class.tx_mnogosearch_renderer_templavoila.php'])	{

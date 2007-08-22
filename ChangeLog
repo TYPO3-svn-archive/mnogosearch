@@ -1,3 +1,7 @@
+22-08-2007	Dmitry Dulepov	<dmitry@typo3.org>
+
+	* Completed implementation of MTB renderer
+
 21-08-2007	Dmitry Dulepov	<dmitry@typo3.org>
 
 	* Added template test mode in flexform configuration for pi1

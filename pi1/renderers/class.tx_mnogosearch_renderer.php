@@ -48,6 +48,12 @@ class tx_mnogosearch_renderer {
 	function render_searchResults() {
 		return sprintf($pObj->getLL('renderer.not.implemented'), 'render_searchResults');
 	}
+
+	/* Protected */
+
+	function getLink($page) {
+		 return $this->pObj->pi_linkTP_keepPIvars_url(array('page' => $page), 1);
+	}
 }
 
 // The XCLASS below is useless but extdeveval will compain if it is not included...
