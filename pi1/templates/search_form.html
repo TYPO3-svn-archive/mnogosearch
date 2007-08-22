@@ -21,7 +21,7 @@
 
 	<!-- ###LONG_SEARCH_FORM### begin -->
 		<div id="long-search-form">
-			<form id="" class="tx-mnogosearch-long-form" action="" method="POST" name="">	<!-- map: action, name, id -->
+			<form id="" class="tx-mnogosearch-long-form" action="###LONG_SEARCH_FORM_ACTION###" method="POST">	<!-- map: action, name, id -->
 				<input type="hidden" name="tx_mnogosearch_pi1[wm]" value="wrd" />
 				<input type="hidden" name="tx_mnogosearch_pi1[o]" value="0" />
 				<input type="hidden" name="tx_mnogosearch_pi1[lang]" value="" />
@@ -31,7 +31,7 @@
 					<tr><td>
 						Search for:
 					</td><td colspan="3">
-						<input size="50" type="text" name="tx_mnogosearch_pi1[q]" value="" />	<!-- map: value -->
+						<input size="50" type="text" name="tx_mnogosearch_pi1[q]" value="###LONG_SEARCH_FORM_VALUE###" />	<!-- map: value -->
 					</td></tr>
 					<tr><td>
 					</td><td>
@@ -58,34 +58,33 @@
 			of <b>###SEARCH_RESULTS_TOTAL###</b>, page <b>###SEARCH_RESULTS_CURRENT_PAGE###</b> of <b>###SEARCH_RESULTS_PAGE_TOTAL###</b></span>
 		</div>
 		<div class="tx-mnogosearch-pi1-results">
-			<!-- ###SEARCH_RESULTS_RESULT### -->
+			<!-- ###SEARCH_RESULTS_RESULT### begin -->
 			<div class="tx-mnogosearch-pi1-result">
 				<strong>###SEARCH_RESULTS_RESULT_NUMBER###</strong><strong>.</strong>
 				<a class="tx-mnogosearch-pi1-result-url" href="###SEARCH_RESULTS_RESULT_URL###">###SEARCH_RESULTS_RESULT_TITLE###</a> <span class="tx-mnogosearch-pi1-result-relevancy">[<span>###SEARCH_RESULTS_RESULT_RELEVANCY###</span>%]</span>
 				<div class="tx-mnogosearch-pi1-result-excerpt">
-				###SEARCH_RESULTS_RESULT_EXCERPT###
-				TODO: <span class="tx-mnogosearch-pi1-result-excerpt-selection">justo</span>
+					###SEARCH_RESULTS_RESULT_EXCERPT###
 				</div>
 				<ul class="tx-mnogosearch-pi1-results-links">
 					<!--###SEARCH_RESULTS_RESULT_ALT_LINK###-->
-					<li><a href="http://whatever/">http://whatever/</a></li>
+					<li><a href="###SEARCH_RESULTS_RESULT_ALT_LINK_URL###">###SEARCH_RESULTS_RESULT_ALT_LINK_TITLE###</a></li>
 					<!--###SEARCH_RESULTS_RESULT_ALT_LINK###-->
 				</ul>
 			</div>
-			<!-- ###SEARCH_RESULTS_RESULT### -->
+			<!-- ###SEARCH_RESULTS_RESULT### end -->
 		</div>
 		<hr size="1" />
-		<!-- ###SEARCH_RESULTS_PAGER### -->
+		<!-- ###SEARCH_RESULTS_PAGER### begin -->
 		<div class="tx-mnogosearch-pi1-page-list">
-			<!-- ###SEARCH_RESULTS_PAGER_PREV### -->
-			<span><a href="SEARCH_RESULTS_PAGER_PREV_LINK">Prev</a></span>
-			<!-- ###SEARCH_RESULTS_PAGER_PREV### -->
+			<!-- ###SEARCH_RESULTS_PAGER_PREV### begin -->
+			<span><a href="###SEARCH_RESULTS_PAGER_PREV_LINK###">&laquo; Previous</a> |</span>
+			<!-- ###SEARCH_RESULTS_PAGER_PREV### end -->
 			<span><span class="tx-mnogosearch-pi1-pagelink">###SEARCH_RESULTS_PAGER_CURRENT_PAGE###</span></span>
 			<!-- ###SEARCH_RESULTS_PAGER_NEXT### -->
-			<span><a href="SEARCH_RESULTS_PAGER_NEXT_LINK">Next</a></span>
-			<!-- ###SEARCH_RESULTS_PAGER_NEXT### -->
+			<span>| <a href="###SEARCH_RESULTS_PAGER_NEXT_LINK###">Next &raquo;</a></span>
+			<!-- ###SEARCH_RESULTS_PAGER_NEXT### end -->
 		</div>
-		<!-- ###SEARCH_RESULTS_PAGER### -->
+		<!-- ###SEARCH_RESULTS_PAGER### end -->
 	</div>
 
 	<!-- ###SEARCH_RESULTS### end -->
