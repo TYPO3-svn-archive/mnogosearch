@@ -1,6 +1,7 @@
 24-08-2007	Dmitry Dulepov	<dmitry@typo3.org>
 
 	* Reindex also pages that have "clearCache" TSConfig option set
+	* Added automatic table creation before reindexing
 
 22-08-2007	Dmitry Dulepov	<dmitry@typo3.org>
 

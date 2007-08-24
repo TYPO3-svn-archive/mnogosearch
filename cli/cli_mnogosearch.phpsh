@@ -40,6 +40,32 @@ if (!is_callable('file_put_contents')) {
     }
 }
 
+function checkAndCreateDatabase($configFile, &$sysconf) {
+	$parts = parse_url($sysconf['dbaddr']);
+	$hasTables = false;
+	if ($parts['scheme'] == 'mysql') {
+		$conn = mysql_connect($parts['host'], $parts['user'], $parts['pass']);
+		if (mysql_errno() == 0) {
+			$dbname = substr($parts['path'], 1);
+			$rs = mysql_query('SHOW TABLES FROM ' . mysql_real_escape_string($dbname, $conn) . ' LIKE \'qcache\'');
+			if (mysql_errno() == 0) {
+				$hasTables = (mysql_num_rows($rs) > 0);
+			}
+			mysql_close($rs);
+		}
+	}
+	if (!$hasTables) {
+		$cmdLine = $sysconf['mnoGoSearchPath'] . '/sbin/indexer ' . SILENCE_OPTION . ' -Ecreate -d ' . $configFile;
+		if ($dryRun) {
+			echo 'Tables are missing from database, will create!';
+			echo 'Executing: ' . $cmdLine . chr(10);
+		}
+		else {
+			@exec($cmdLine);
+		}
+	}
+}
+
 function getServers(&$sysconf) {
 	global $TYPO3_DB;
 
@@ -134,7 +160,7 @@ function executeIndexer(&$sysconf, $configFile, $newUrlFile) {
 	$dryRun = in_array('--dry-run', $GLOBALS['argv']);
 
 	set_time_limit(6*60*60);
-	$cmdLine = $sysconf['mnoGoSearchPath'] . '/sbin/indexer ' . SILENCE_OPTION . ' -r -N 2 -w -d ' . $configFile;
+
 	if ($dryRun) {
 		echo 'Using configuration file ' . $configFile . ':
 -------------------------
@@ -142,6 +168,16 @@ function executeIndexer(&$sysconf, $configFile, $newUrlFile) {
 file_get_contents($configFile) . '
 -------------------------
 ';
+	}
+
+	checkAndCreateDatabase($configFile, $sysconf);
+
+	if (in_array('-c', $argv)) {
+		return;
+	}
+
+	$cmdLine = $sysconf['mnoGoSearchPath'] . '/sbin/indexer ' . SILENCE_OPTION . ' -r -N 2 -w -d ' . $configFile;
+	if ($dryRun) {
 		echo 'Executing: ' . $cmdLine . chr(10);
 	}
 	else {
@@ -197,6 +233,7 @@ if ($argc > 0 && ($argv[1] == '-h' || $argv[1] == '--help' || $argv[1] == '-?'))
 This script reindexes TYPO3 web sites as defined by current TYPO3 configuration.
 It accepts the following options:
 
+  -c                Only check and create database if necessary. Do not reindex.
   -n                Force reindexing of new URLs (normally should be set)
   -w                Create statistic for misspelled words. Useful only if
                     Ispell dictionaries are included to mnoGoSearch
