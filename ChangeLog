@@ -1,3 +1,7 @@
+24-08-2007	Dmitry Dulepov	<dmitry@typo3.org>
+
+	* Reindex also pages that have "clearCache" TSConfig option set
+
 22-08-2007	Dmitry Dulepov	<dmitry@typo3.org>
 
 	* Completed implementation of MTB renderer

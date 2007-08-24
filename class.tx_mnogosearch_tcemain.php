@@ -93,6 +93,21 @@ class tx_mnogosearch_tcemain {
 			if ($pid) {
 				$this->processPid($pid, $pObj);
 			}
+			// Process any other page that may display results. This is important for
+			// records that reside in sysfolder but shown on other pages. Normally
+			// in this case cache for displaying page is cleared automatically.
+			// So we just put such pages into list for reindexing
+			list($tscPID) = t3lib_BEfunc::getTSCpid($table,$uid,'');
+			$TSConfig = $this->getTCEMAIN_TSconfig($tscPID);
+			if ($TSConfig['clearCacheCmd'])	{
+				$pidList = array_unique(t3lib_div::trimExplode(',', $TSConfig['clearCacheCmd'], 1));
+				foreach($pidList as $pid) {
+					$pid = intval($pid);
+					if ($pid) {
+						$this->processPid($pid, $pObj);
+					}
+				}
+			}
 		}
 	}
 
