@@ -2,7 +2,7 @@
 mnoGoSearchPath = /opt/mnogosearch
 
   # cat=basic/enable; type=string; label=Database connection string:mnoGoSearch connection URL
-dbaddr = mysql://user:pass@host/dbname/?dbmode=blob&LiveUpdates=yes
+dbaddr = mysql://user:pass@host/dbname?dbmode=blob&LiveUpdates=yes
 
   # cat=basic/enable; type=string; label=Use RealURL cache:Search RealURL cache for page ID. Valid values are encode, decode, path (comma-separated)
 realUrlLookup = path,decode

@@ -47,11 +47,12 @@ function checkAndCreateDatabase($configFile, &$sysconf) {
 		$conn = mysql_connect($parts['host'], $parts['user'], $parts['pass']);
 		if (mysql_errno() == 0) {
 			$dbname = substr($parts['path'], 1);
-			$rs = mysql_query('SHOW TABLES FROM ' . mysql_real_escape_string($dbname, $conn) . ' LIKE \'qcache\'');
+			$rs = mysql_query('SHOW TABLES FROM ' . mysql_real_escape_string($dbname, $conn) . ' LIKE \'qcache\'', $conn);
 			if (mysql_errno() == 0) {
 				$hasTables = (mysql_num_rows($rs) > 0);
+				mysql_free_result($rs);
 			}
-			mysql_close($rs);
+			mysql_close($conn);
 		}
 	}
 	if (!$hasTables) {
@@ -124,7 +125,7 @@ Section meta.description 4 64
 LocalCharset ' . ($sysconf['LocalCharset'] ? $sysconf['LocalCharset'] : 'UTF-8') . '
 BrowserCharset ' . ($sysconf['BrowserCharset'] ? $sysconf['BrowserCharset'] : 'UTF-8') . '
 Allow .htm .html .php* .txt */
-Disallow *
+Disallow .rdf .xml .rss
 HoldBadHrefs 2d
 DetectClones yes
 ';
@@ -172,7 +173,7 @@ file_get_contents($configFile) . '
 
 	checkAndCreateDatabase($configFile, $sysconf);
 
-	if (in_array('-c', $argv)) {
+	if (in_array('-c', $GLOBALS['argv'])) {
 		return;
 	}
 

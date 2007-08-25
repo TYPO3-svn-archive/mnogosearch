@@ -36,6 +36,8 @@
  */
 class tx_mnogosearch_tcemain {
 
+	var $debug = false;
+
 	/**
 	 * Hooks to data change procedure to watch modified data.
 	 *
@@ -97,8 +99,8 @@ class tx_mnogosearch_tcemain {
 			// records that reside in sysfolder but shown on other pages. Normally
 			// in this case cache for displaying page is cleared automatically.
 			// So we just put such pages into list for reindexing
-			list($tscPID) = t3lib_BEfunc::getTSCpid($table,$uid,'');
-			$TSConfig = $this->getTCEMAIN_TSconfig($tscPID);
+			list($tscPID) = t3lib_BEfunc::getTSCpid($table, $id, $pid);
+			$TSConfig = $pObj->getTCEMAIN_TSconfig($tscPID);
 			if ($TSConfig['clearCacheCmd'])	{
 				$pidList = array_unique(t3lib_div::trimExplode(',', $TSConfig['clearCacheCmd'], 1));
 				foreach($pidList as $pid) {
@@ -222,6 +224,7 @@ class tx_mnogosearch_tcemain {
 					$path_field . ($rootpage_field ? ',' . $rootpage_field : '') . ',LENGTH(' . $path_field . ') AS t',
 					$table, $pid_field . '=' . $pid . ' AND ' . $path_field . '<>\'\'', '', 't', 1);
 				if (count($rows)) {
+					$this->log('findPathByRealUrl', array('$cache' => $cache, '$rows' => $rows));
 					$path = $rows[0][$path_field];
 					if ($path) {
 						$rootpage_id = ($rootpage_field ? $rows[0][$rootpage_field] : 0);
@@ -313,12 +316,13 @@ class tx_mnogosearch_tcemain {
 	 * @param	mixed	$rec	Additional data or <code>false</code> ifno data
 	 */
 	function log($msg, $rec = false) {
-		$fd = fopen(PATH_site . 'fileadmin/mnogosearch.log', 'a');
-		flock($fd, LOCK_EX);
-		fprintf($fd, '[%s] "%s"' . ($rec ? ', data: ' . chr(10) . '%s' . chr(10) : '') . chr(10), date('d-m-Y H:i:s'), $msg, print_r($rec, true));
-		flock($fd, LOCK_UN);
-		fclose($fd);
-		//t3lib_div::devLog($msg, 'mnogosearch', 0, $rec);
+		if ($this->debug) {
+			$fd = fopen(PATH_site . 'fileadmin/mnogosearch.log', 'a');
+			flock($fd, LOCK_EX);
+			fprintf($fd, '[%s] "%s"' . ($rec ? ', data: ' . chr(10) . '%s' . chr(10) : '') . chr(10), date('d-m-Y H:i:s'), $msg, print_r($rec, true));
+			flock($fd, LOCK_UN);
+			fclose($fd);
+		}
 	}
 }
 
