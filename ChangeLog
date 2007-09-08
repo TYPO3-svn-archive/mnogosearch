@@ -1,6 +1,7 @@
 08-09-2007	Dmitry Dulepov	<dmitry@typo3.org>
 
 	* Updated documentation: added section about TypoScript templates
+	* Added renderer for CMS layout (4.2 feature)
 
 24-08-2007	Dmitry Dulepov	<dmitry@typo3.org>
 
