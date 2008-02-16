@@ -36,6 +36,10 @@
 			<label index="ds_short_search_form">[mnoGoSearch] Short search form</label>
 			<label index="ds_long_search_form">[mnoGoSearch] Long search form</label>
 			<label index="ds_search_results">[mnoGoSearch] Search results</label>
+			<label index="cms_layout.mode_shortform">Mode: Short search form</label>
+			<label index="cms_layout.mode_longform">Mode: Long search form</label>
+			<label index="cms_layout.mode_searchresults">Mode: Search results</label>
+			<label index="cms_layout.mode_none">Plugin is not configured!</label>
 		</languageKey>
 	</data>
 </T3locallang>
