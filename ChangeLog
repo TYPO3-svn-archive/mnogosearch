@@ -1,6 +1,7 @@
 26-12-2007	Dmitry Dulepov	<dmitry@typo3.org>
 
 	* New implementation to obtain URL from FE
+	* Fix for plugin info in Page module
 
 26-12-2007	Dmitry Dulepov	<dmitry@typo3.org>
 

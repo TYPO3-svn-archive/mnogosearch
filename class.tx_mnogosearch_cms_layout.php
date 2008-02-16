@@ -55,7 +55,7 @@ class tx_mnogosearch_cms_layout {
 				}
 			}
 			if (!$result) {
-				$result = '<img ' . t3lib_iconWorks::skinImg('../../../', 'gfx/icon_warning2.gif', 'width="18" height="16"') . ' align="absmiddle" alt="" /> ' . $LANG->sL('LLL:EXT:mnogosearch/locallang_db.xml:cms_layout.mode_none');
+				$result = $LANG->sL('LLL:EXT:mnogosearch/locallang_db.xml:cms_layout.mode_none');
 			}
 		}
 		return $result;
