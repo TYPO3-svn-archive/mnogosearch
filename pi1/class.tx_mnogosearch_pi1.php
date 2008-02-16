@@ -140,8 +140,11 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 			return $error;
 		}
 		// Process search results
-		$results = new tx_mnogosearch_results;
+		$results = t3lib_div::makeInstance('tx_mnogosearch_results');
+		/* @var $result tx_mnogosearch_results */
 		$results->init($udmAgent, $res, $this);
+
+		Udm_Free_Res($res);
 
 		// Do not call Udm_Free_Ispell_data(), otherwise Udm_Free_Agent() will die!
 	    Udm_Free_Agent($udmAgent);
