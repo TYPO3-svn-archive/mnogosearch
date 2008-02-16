@@ -1,3 +1,6 @@
+  # cat=basic/enable; type=options[Local=0,Remote=1]; label=Operation mode:See documentation! Do not change unless you know what you are doing!
+mode = 0
+
   # cat=basic/enable; type=string; label=Path to mnoGoSearch installation:Specify path to mnoGoSearch installation directory
 mnoGoSearchPath = /opt/mnogosearch
 
