@@ -9,8 +9,7 @@ if (1 || extension_loaded('mnogosearch')) {
 
 	t3lib_extMgm::addPlugin(array('LLL:EXT:mnogosearch/locallang_db.xml:tt_content.list_type_pi1', $_EXTKEY.'_pi1'),'list_type');
 
-	t3lib_extMgm::addStaticFile($_EXTKEY,'static/mnoGoSearch/', 'mnoGoSearch: base');
-	t3lib_extMgm::addStaticFile($_EXTKEY,'static/css_styled_content_additions/', 'mnoGoSearch: respect index flag');
+	t3lib_extMgm::addStaticFile($_EXTKEY,'static/mnoGoSearch/', 'mnoGoSearch');
 }
 
 $TCA['tx_mnogosearch_indexconfig'] = array (
