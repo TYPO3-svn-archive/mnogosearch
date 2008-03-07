@@ -26,20 +26,26 @@ define(SILENCE_OPTION, (in_array('-v', $GLOBALS['argv']) ? '-v 5' : '-l'));
 
 // PHP4 fallback
 if (!is_callable('file_put_contents')) {
-    function file_put_contents($fname, $str) {
+	function file_put_contents($fname, $str) {
 		$fd = fopen($fname, 'w');
 		fwrite($fd, $str);
 		fclose($fd);
-    }
+	}
 
-    function file_get_contents($fname) {
+	function file_get_contents($fname) {
 		$fd = fopen($fname, 'r');
 		$str = fread($fd, filesize($fname));
 		fclose($fd);
 		return $str;
-    }
+	}
 }
 
+/**
+ * Cheks that mnoGoSearch database tables exist and create it if necessary.
+ *
+ * @param	string	$configFile	Config file
+ * @param	string	$sysconf	Extension configuration
+ */
 function checkAndCreateDatabase($configFile, &$sysconf) {
 	$parts = parse_url($sysconf['dbaddr']);
 	$hasTables = false;
@@ -67,6 +73,12 @@ function checkAndCreateDatabase($configFile, &$sysconf) {
 	}
 }
 
+/**
+ * Walks list of servers and generates indexer configuration for them
+ *
+ * @param	array	$sysconf	Extension configuration
+ * @return	string	Configuration text
+ */
 function getServers(&$sysconf) {
 	global $TYPO3_DB;
 
@@ -111,17 +123,28 @@ function getServers(&$sysconf) {
 				break;
 		}
 		$content .= $row['tx_mnogosearch_url'] . chr(10);
+		if ($row['tx_mnogosearch_additional_config']) {
+			$content .= 'Include ' . ($row['tx_mnogosearch_additional_config']{0} != '/' ? PATH_site : '') . $row['tx_mnogosearch_additional_config'] . chr(10);
+		}
 	}
 	return $content;
 }
 
+/**
+ * Creates indexer configuration and writes it to a temporary file.
+ *
+ * @param	array	$sysconf	System configuration
+ * @return	string	File name
+ */
 function createIndexerConfig(&$sysconf) {
-	$content = 'DBAddr ' . $sysconf['dbaddr'] . '
-VarDir ' . $sysconf['mnoGoSearchPath'] . '/var' . '
+	$content = '# Defaults
+DBAddr ' . $sysconf['dbaddr'] . '
+VarDir ' . PATH_site . 'typo3temp/mnogosearch/var
 Section body 1 256
 Section title 2 128
 Section meta.keywords 3 64
 Section meta.description 4 64
+Section meta.x-typo3-gid 5 1
 LocalCharset ' . ($sysconf['LocalCharset'] ? $sysconf['LocalCharset'] : 'UTF-8') . '
 BrowserCharset ' . ($sysconf['BrowserCharset'] ? $sysconf['BrowserCharset'] : 'UTF-8') . '
 Allow .htm .html .php* .txt */
@@ -139,16 +162,19 @@ DetectClones yes
 	return $name;
 }
 
-function createNewUrlList(&$sysconf) {
+/**
+ * Creates a list of URLs changed from last indexing and writes it to temporary file
+ *
+ * @return	string	File name with URLs or empty string if there are no URLs
+ */
+function createNewUrlList() {
 	$content = '';
-	$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', 'tx_mnogosearch_urllog',
-				'1=1' . t3lib_BEfunc::deleteClause('tx_mnogosearch_urllog') /*. t3lib_BEfunc::BEenableFields('tx_mnogosearch_urllog')*/);
+	$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('tx_mnogosearch_url', 'tx_mnogosearch_urllog', '1=1');
+	$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mnogosearch_urllog', '');
 	foreach ($rows as $row) {
 		$content .= $row['tx_mnogosearch_url'] . chr(10);
 	}
 	if ($content) {
-		$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mnogosearch_urllog', '');
-
 		$dir = is_callable('sys_get_temp_dir') ? sys_get_temp_dir() : '/tmp';
 		$name = tempnam($dir, 'mnogosearch-');
 		file_put_contents($name, $content);
@@ -157,6 +183,13 @@ function createNewUrlList(&$sysconf) {
 	return '';
 }
 
+/**
+ * Runs indexer
+ *
+ * @param	array	$sysconf	Extension configuration
+ * @param	string	$configFile	Configuration file
+ * @param	string	$newUrlFile	File with URLs to reindex
+ */
 function executeIndexer(&$sysconf, $configFile, $newUrlFile) {
 	$dryRun = in_array('--dry-run', $GLOBALS['argv']);
 
@@ -235,11 +268,12 @@ This script reindexes TYPO3 web sites as defined by current TYPO3 configuration.
 It accepts the following options:
 
   -c                Only check and create database if necessary. Do not reindex.
+  -d                Display generated indexer configuration and exit.
   -n                Force reindexing of new URLs (normally should be set)
   -w                Create statistic for misspelled words. Useful only if
-                    Ispell dictionaries are included to mnoGoSearch
-                    configuration (see mnoGoSearch documentation)
-  --dry-run         Show what will be done
+.                   Ispell dictionaries are included to mnoGoSearch
+.                   configuration (see mnoGoSearch documentation)
+  --dry-run         Show what will be done (not applicable to -d and -E)
   -h, --help, -?    Display this help message
   -v                Be verbose
 ';
@@ -248,7 +282,12 @@ It accepts the following options:
 
 $sysconf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mnogosearch']);
 $configFile = createIndexerConfig($sysconf);
-$newUrlFile = (in_array('-n', $argv) ? createNewUrlList($sysconf) : '');
+if (in_array('-d', $argv)) {
+	echo @file_get_contents($configFile);
+	@unlink($configFile);
+	exit;
+}
+$newUrlFile = (in_array('-n', $argv) ? createNewUrlList() : '');
 executeIndexer($sysconf, $configFile, $newUrlFile);
 
 ?>

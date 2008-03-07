@@ -3,6 +3,7 @@
 	* Removed one of two TS templates and merged its code into remaining
 	* Removed RealURL lookup completely, now rely only on FE check
 	* Manual updated after test installation of mnoGoSearch at TUE/Netherlands
+	* CLI: added -d option and phpDoc comments
 
 26-12-2007	Dmitry Dulepov	<dmitry@typo3.org>
 
