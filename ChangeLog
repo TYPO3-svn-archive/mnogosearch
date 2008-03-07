@@ -1,3 +1,7 @@
+07-03-2008	Dmitry Dulepov	<dmitry@typo3.org>
+
+	* Removed one of two TS templates and merged its code into remaining
+
 26-12-2007	Dmitry Dulepov	<dmitry@typo3.org>
 
 	* New implementation to obtain URL from FE

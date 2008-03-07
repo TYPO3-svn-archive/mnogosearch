@@ -1,22 +1,21 @@
+# Enable mnoGoSearcg
 config.tx_mnogosearch_enable = 1
 
+# Disables indexing for elements with "Index" flag cleared
+tt_content.stdWrap.stdWrap.setContentToCurrent = 1
+tt_content.stdWrap.stdWrap.override.current = 1
+tt_content.stdWrap.stdWrap.override.wrap = <!--UdmComment-->|<!--/UdmComment-->
+tt_content.stdWrap.stdWrap.override.if.isFalse.field = sectionIndex
+
+# Declare plugin
 plugin.tx_mnogosearch_pi1 = USER_INT
 plugin.tx_mnogosearch_pi1 {
+	includeLibs = EXT:mnogosearch/pi1/class.tx_mnogosearch_pi1.php
 	userFunc = tx_mnogosearch_pi1->main
 
 	# Hightlight for found words
-	excerptHighlight = <span class="tx-mnogosearch-pi1-result-excerpt-selection">|</span>
-}
+	excerptHighlight = {$plugin.tx_mnogosearch_pi1.excerptHighlight}
 
-#mnogopage = PAGE
-#mnogopage.typeNum = 231
-#mnogopage.config.no_cache = 1
-#mnogopage.config.disableAllHeaderCode = 1
-#mnogopage.config.tx_mnogosearch_enable = 0
-#mnogopage.config.additionalHeaders = Content-type: text/plain
-#mnogopage.5 = TEXT
-#mnogopage.5.data = global : TSFE | config | config | baseURL
-#mnogopage.5.ifEmpty.dataWrap = http://{global : _SERVER | HTTP_HOST}/
-#mnogopage.10 = TEXT
-#mnogopage.10.typolink.parameter.data = TSFE:id
-#mnogopage.10.typolink.returnLast = url
+	# Limit search to these sites
+	siteList = {$plugin.tx_mnogosearch_pi1.siteList}
+}

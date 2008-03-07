@@ -1,0 +1,8 @@
+plugin.tx_mnogosearch_pi1 {
+
+	# cat=plugin.mnoGoSearch: Basic; type=string; label=Hightlight wrap:Wraps serch words in excerpt
+	excerptHighlight = <span class="tx-mnogosearch-pi1-result-excerpt-selection">|</span>
+
+	# cat=plugin.mnoGoSearch: Basic; type=string; label=Site list:Comma-separated list of "Indexing configuration" entries. If set, it will limit search to these sites.
+	siteList =
+}
