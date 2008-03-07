@@ -128,11 +128,7 @@ class tx_mnogosearch_tcemain {
 				$sysconf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mnogosearch']);
 				$this->log('Page id=' . $pid . ', sysconf dump', $sysconf);
 				$path = '';
-				if ($sysconf['enableFEcheck'] != 1) {
-					$path = $this->findPathByRealUrl($pid);
-					$this->log('findPathByRealUrl (pid=' . $pid . ') returns \'' . $path . '\'');
-				}
-				if (!$path && $sysconf['enableFEcheck']) {
+				if ($sysconf['enableFEcheck']) {
 					$path = $this->createPathUsingFE($pid);
 					$this->log('createPathUsingFE (pid=' . $pid . ') returns \'' . $path . '\'');
 				}
@@ -178,65 +174,8 @@ class tx_mnogosearch_tcemain {
 	 * @return	boolean	<code>true</code> if page is in the table
 	 */
 	function pageAlreadyInLog($pid) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('tx_mnogosearch_pid', 'tx_mnogosearch_urllog', 'tx_mnogosearch_pid=' . intval($pid));
-		$ar = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-		$GLOBALS['TYPO3_DB']->sql_free_result($res);
-		return ($ar !== false);
-	}
-
-	/**
-	 * Attempts to find path by examining RealURL caches.
-	 *
-	 * @param	int	$pid	Page UID
-	 * @return	string	Path (empty if not found)
-	 */
-	function findPathByRealUrl($pid) {
-		$result = '';
-		if (t3lib_extMgm::isLoaded('realurl')) {
-			$sysconf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mnogosearch']);
-			$cacheList = t3lib_div::trimExplode(',', $sysconf['realUrlLookup']);
-			foreach ($cacheList as $cache) {
-				switch ($cache) {
-					case 'path':
-						$pid_field = 'page_id';
-						$rootpage_field = 'rootpage_id';
-						$path_field = 'pagepath';
-						$table = 'tx_realurl_pathcache';
-						break;
-					case 'encode':
-						$pid_field = 'page_id';
-						$rootpage_field = '';
-						$path_field = 'content';
-						$table = 'tx_realurl_urlencodecache';
-						break;
-					case 'decode':
-						$pid_field = 'page_id';
-						$rootpage_field = 'rootpage_id';
-						$path_field = 'spurl';
-						$table = 'tx_realurl_urldecodecache';
-						break;
-					default:
-						// unknown!
-						continue;
-				}
-				// Get entries
-				$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-					$path_field . ($rootpage_field ? ',' . $rootpage_field : '') . ',LENGTH(' . $path_field . ') AS t',
-					$table, $pid_field . '=' . $pid . ' AND ' . $path_field . '<>\'\'', '', 't', 1);
-				if (count($rows)) {
-					$this->log('findPathByRealUrl', array('$cache' => $cache, '$rows' => $rows));
-					$path = $rows[0][$path_field];
-					if ($path) {
-						$rootpage_id = ($rootpage_field ? $rows[0][$rootpage_field] : 0);
-					}
-					$result = $this->prefixWithDomainName($path, $pid, $rootpage_id);
-				}
-				if ($result) {
-					break;
-				}
-			}
-		}
-		return trim($result);
+		list($rec) = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('COUNT(*) AS t', 'tx_mnogosearch_urllog', 'tx_mnogosearch_pid=' . intval($pid));
+		return ($rec['t'] > 0);
 	}
 
 	/**
@@ -245,15 +184,12 @@ class tx_mnogosearch_tcemain {
 	 * @param	int	$pid	Page UID
 	 * @return	string	Path (empty if not found)
 	 */
-	function createDefaultPath($pid, $force = false) {
-		if ($force || !t3lib_extMgm::isLoaded('realurl')) {
-			$full_path = t3lib_div::getIndpEnv('TYPO3_SITE_URL');
-			$parts = parse_url($full_path);
-			$path = $this->prefixWithDomainName($parts['path'] . 'index.php?id=' . $pid, $pid);
-			$this->log('createDefaultPath', array('path' => $path, 'force' => $force));
-			return $path;
-		}
-		return '';
+	function createDefaultPath($pid) {
+		$full_path = t3lib_div::getIndpEnv('TYPO3_SITE_URL');
+		$parts = parse_url($full_path);
+		$path = $this->prefixWithDomainName($parts['path'] . 'index.php?id=' . $pid, $pid);
+		$this->log('createDefaultPath', array('path' => $path));
+		return $path;
 	}
 
 	/**

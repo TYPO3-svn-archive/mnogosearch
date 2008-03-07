@@ -1,17 +1,11 @@
-#  # cat=basic/enable; type=options[Local=0,Remote=1]; label=Operation mode:See documentation! Do not change unless you know what you are doing!
-#mode = 0
-
   # cat=basic/enable; type=string; label=Path to mnoGoSearch installation:Specify path to mnoGoSearch installation directory
 mnoGoSearchPath = /opt/mnogosearch
 
   # cat=basic/enable; type=string; label=Database connection string:mnoGoSearch connection URL
 dbaddr = mysql://user:pass@host/dbname?dbmode=blob&LiveUpdates=yes
 
-  # cat=basic/enable; type=string; label=Use RealURL cache:Search RealURL cache for page ID. Valid values are encode, decode, path (comma-separated)
-realUrlLookup = path,decode
-
-  # cat=basic/enable; type=options[Automatic=2,Force=1,Never=0]; label=Use FE to resolve page URL:mnoGoSearch module may fetch specially constructed URL that provides proper path to the page. Set to "Never" unless using simulateStatic or RealURL. Set to "Force" for simulateStatic or if RealURL caches are disabled.
-enableFEcheck = 2
+  # cat=basic/enable; type=options[Enable=1,Disable=0]; label=Use FE to resolve page URL:mnoGoSearch module may simulate FE environment to find path to page. Choose "Enable" if you use simulateStatic/RealURL/CoolURI.
+enableFEcheck = 0
 
 # cat=basic/enable; type=string; label=Charset for database:Search engine will use this character set to store data in the database.  May not be empty!
 LocalCharset = utf-8
@@ -21,6 +15,3 @@ BrowserCharset = utf-8
 
  # cat=basic/enable; type=string; label=Extra configuration:If specificed, this file will be included to indexer configuration. Must be absolute path, accessible to cron user.
 IncludeFile =
-
-# # cat=basic/enable; type=string; label=Indexer options:Additional indexer options (if any)
-#indexerOptions =

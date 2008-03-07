@@ -1,6 +1,7 @@
 07-03-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
 	* Removed one of two TS templates and merged its code into remaining
+	* Removed RealURL lookup completely, now rely only on FE check
 
 26-12-2007	Dmitry Dulepov	<dmitry@typo3.org>
 
