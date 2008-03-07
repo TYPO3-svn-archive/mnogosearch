@@ -38,15 +38,15 @@ class tx_mnogosearch_renderer {
 	}
 
 	function render_simpleSearchForm() {
-		return sprintf($pObj->getLL('renderer.not.implemented'), 'render_simpleSearchForm');
+		return sprintf($pObj->getLL('renderer_not_implemented'), 'render_simpleSearchForm');
 	}
 
 	function render_searchForm() {
-		return sprintf($pObj->getLL('renderer.not.implemented'), 'render_searchForm');
+		return sprintf($pObj->getLL('renderer_not_implemented'), 'render_searchForm');
 	}
 
 	function render_searchResults() {
-		return sprintf($pObj->getLL('renderer.not.implemented'), 'render_searchResults');
+		return sprintf($pObj->getLL('renderer_not_implemented'), 'render_searchResults');
 	}
 
 	/* Protected */

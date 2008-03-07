@@ -101,6 +101,7 @@ class tx_mnogosearch_renderer_mtb extends tx_mnogosearch_renderer {
 					'###SEARCH_RESULTS_RESULT_TITLE###' => $result->title,	// todo: htmlspecialchars?
 					'###SEARCH_RESULTS_RESULT_RELEVANCY###' => sprintf('%.2f', $result->rating),
 					'###SEARCH_RESULTS_RESULT_EXCERPT###' => $result->excerpt,
+
 					));
 			// Make links
 			$links = '';
