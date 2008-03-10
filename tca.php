@@ -90,10 +90,32 @@ $TCA['tx_mnogosearch_indexconfig'] = array (
 				'size' => 5,
 			)
 		),
+		'tx_mnogosearch_additional_config' => array(
+			'exclude' => 1,
+			'label' => 'LLL:EXT:mnogosearch/locallang_db.xml:tx_mnogosearch_indexconfig.tx_mnogosearch_additional_config',
+			'config' => Array (
+				'type' => 'input',
+				'size' => '30',
+				'eval' => 'trim',
+				'wizards' => array(
+					'_PADDING' => 2,
+					'link' => array(
+						'type' => 'popup',
+						'title' => 'Link',
+						'icon' => 'link_popup.gif',
+						'script' => 'browse_links.php?mode=wizard&act=file',
+						'params' => array(
+							'blindLinkOptions' => 'page,url,mail,spec',
+						),
+						'JSopenParams' => 'height=300,width=500,status=0,menubar=0,scrollbars=1',
+					),
+				),
+			)
+		),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'tx_mnogosearch_type;;;;1-1-1,tx_mnogosearch_url;;;;3-3-3,tx_mnogosearch_method,tx_mnogosearch_subsection;;;;4-4-4,tx_mnogosearch_period'),
-		'1' => array('showitem' => 'tx_mnogosearch_type;;;;1-1-1,tx_mnogosearch_url;;;;3-3-3,tx_mnogosearch_method,,tx_mnogosearch_period;;;;4-4-4,tx_mnogosearch_cmptype;;1;;5-5-5'),
+		'0' => array('showitem' => 'tx_mnogosearch_type;;;;1-1-1,tx_mnogosearch_url;;;;3-3-3,tx_mnogosearch_method,tx_mnogosearch_subsection;;;;4-4-4,tx_mnogosearch_period, tx_mnogosearch_additional_config'),
+		'1' => array('showitem' => 'tx_mnogosearch_type;;;;1-1-1,tx_mnogosearch_url;;;;3-3-3,tx_mnogosearch_method,,tx_mnogosearch_period;;;;4-4-4,tx_mnogosearch_cmptype;;1;;5-5-5, tx_mnogosearch_additional_config'),
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'tx_mnogosearch_cmpoptions')

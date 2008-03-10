@@ -64,18 +64,17 @@ class tx_mnogosearch_results {
 
 		// Process results
 		for ($i = 0; $i < $this->numRows; $i++) {
-			$result = new tx_mnogosearch_result;
-			if ($pObj->udmApiVersion >= 30207) {
-			   $result->popularityRank = Udm_Get_Res_Field($res, $i, UDM_FIELD_POP_RANK);
-			}
+			$result = t3lib_div::makeInstance('tx_mnogosearch_result');
+			/* @var $result tx_mnogosearch_result */
+			$result->popularityRank = Udm_Get_Res_Field($res, $i, UDM_FIELD_POP_RANK);
 			Udm_Make_Excerpt($udmAgent, $res, $i);
 
 			$result->url = Udm_Get_Res_Field($res, $i, UDM_FIELD_URL);
-    		$result->contentType = Udm_Get_Res_Field($res, $i, UDM_FIELD_CONTENT);
+			$result->contentType = Udm_Get_Res_Field($res, $i, UDM_FIELD_CONTENT);
 			$result->documentSize = Udm_Get_Res_Field($res, $i, UDM_FIELD_SIZE);
 			//$ndoc=Udm_Get_Res_Field($res,$i,UDM_FIELD_ORDER);
 			$result->rating = Udm_Get_Res_Field($res, $i, UDM_FIELD_RATING);
-        	$result->title = Udm_Get_Res_Field($res, $i, UDM_FIELD_TITLE);
+			$result->title = Udm_Get_Res_Field($res, $i, UDM_FIELD_TITLE);
   			if ($result->title == '') {
   				$result->title = basename($result->url);
   			}
@@ -88,21 +87,21 @@ class tx_mnogosearch_results {
   			$result->category = Udm_Get_Res_Field($res,$i,UDM_FIELD_CATEGORY);
 
 			// Check clones of necessary
-        	if ($pObj->udmApiVersion >= 30207 && (intval($pObj->pi_getFFvalue($pObj->cObj->data['pi_flexform'], 'field_options')) & 32)) {
+			if ((intval($pObj->pi_getFFvalue($pObj->cObj->data['pi_flexform'], 'field_options')) & 32)) {
 				if (0 == Udm_Get_Res_Field($res, $i, UDM_FIELD_ORIGINID)) {
 					$urlId = Udm_Get_Res_Field($res, $i, UDM_FIELD_URLID);
-					for ($j = 0; $j < $rows; $j++) {
+					for ($j = 0; $j < $this->numRows; $j++) {
 						if ($j != $i && $urlId == Udm_Get_Res_Field($res, $j, UDM_FIELD_ORIGINID)) {
 							$clone = new tx_mnogosearch_result;
 							$clone->url = Udm_Get_Res_Field($res, $j, UDM_FIELD_URL);
-	                		$clone->contentType = Udm_Get_Res_Field($res, $j, UDM_FIELD_CONTENT);
+							$clone->contentType = Udm_Get_Res_Field($res, $j, UDM_FIELD_CONTENT);
 	  						$clone->documentSize = Udm_Get_Res_Field($res, $j, UDM_FIELD_SIZE);
 	  						//$clone->lastModified = format_lastmod(Udm_Get_Res_Field($res,$j,UDM_FIELD_MODIFIED));
 	  						$result->clones[] = $clone;
 						}
 					}
 				}
-        	}
+			}
 			$this->results[] = $result;
 		}
 		Udm_Free_Res($res);
@@ -144,7 +143,8 @@ class tx_mnogosearch_results {
 
 		// create fake results
 		for ($i = 0; $i < $foundDocs; $i++) {
-			$result = new tx_mnogosearch_result();
+			$result = t3lib_div::makeInstance('tx_mnogosearch_result');
+			/* @var $result tx_mnogosearch_result */
 			$result->url = '/' . uniqid(uniqid(), true);
 			$result->title = ucfirst($this->getExcerpt($lipsum, rand(3, 12)));
 			$result->contentType = 'text/html';
@@ -186,6 +186,10 @@ class tx_mnogosearch_results {
 		$offset = rand(0, count($lipsum) - $size);
 		return ($offset == 0 ? '' : '...') . implode(' ', array_slice($lipsum, $offset, $size)) . '...';
 	}
+}
+
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mnogosearch/pi1/class.tx_mnogosearch_results.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mnogosearch/pi1/class.tx_mnogosearch_results.php']);
 }
 
 ?>

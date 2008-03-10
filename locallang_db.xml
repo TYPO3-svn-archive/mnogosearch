@@ -30,6 +30,7 @@
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_cmptype.string">String</label>
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_cmptype.regexp">Regular expression</label>
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_period">Indexing period (in hours):</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_additional_config">Additional indexer configuration file:</label>
 			<label index="tx_mnogosearch_urllog">Pages to index</label>
 			<label index="tx_mnogosearch_urllog.tx_mnogosearch_url">Page address:</label>
 			<label index="tx_mnogosearch_urllog.tx_mnogosearch_pid">Page:</label>

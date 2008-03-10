@@ -36,7 +36,15 @@
  */
 class tx_mnogosearch_tcemain {
 
-	var $debug = false;
+	var $sysconf = array();
+
+	function tx_mnogosearch_tcemain() {
+		$this->sysconf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mnogosearch']);
+	}
+
+	function __construct() {
+		$this->tx_mnogosearch_tcemain();
+	}
 
 	/**
 	 * Hooks to data change procedure to watch modified data.
@@ -125,10 +133,9 @@ class tx_mnogosearch_tcemain {
 			// Check that page is not hidden and regular page
 			if ($this->canIndexPage($pid)) {
 				// Attempt to find page path
-				$sysconf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mnogosearch']);
-				$this->log('Page id=' . $pid . ', sysconf dump', $sysconf);
+				$this->log('Page id=' . $pid . ', sysconf dump', $this->sysconf);
 				$path = '';
-				if ($sysconf['enableFEcheck']) {
+				if ($this->sysconf['enableFEcheck']) {
 					$path = $this->createPathUsingFE($pid);
 					$this->log('createPathUsingFE (pid=' . $pid . ') returns \'' . $path . '\'');
 				}
@@ -137,7 +144,7 @@ class tx_mnogosearch_tcemain {
 					$this->log('createDefaultPath (pid=' . $pid . ') returns \'' . $path . '\'');
 				}
 				if ($path) {
-					// TODO Check that this is one of indexed pages!
+					// Check that this is one of indexed pages!
 					$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 						'COUNT(*) AS counter', 'tx_mnogosearch_indexconfig',
 						'INSTR(' . $GLOBALS['TYPO3_DB']->fullQuoteStr($path, 'tx_mnogosearch_indexconfig') . ',tx_mnogosearch_url) > 0' .
@@ -225,6 +232,7 @@ class tx_mnogosearch_tcemain {
 		$GLOBALS['TSFE']->connectToMySQL();
 
 		// Prevent mysql debug messages from messing up the output
+		$sqlDebug = $GLOBALS['TYPO3_DB']->debugOutput;
 		$GLOBALS['TYPO3_DB']->debugOutput = false;
 
 		$GLOBALS['TSFE']->initLLVars();
@@ -237,16 +245,22 @@ class tx_mnogosearch_tcemain {
 		// If the page is not found (if the page is a sysfolder, etc), then return no URL, preventing any further processing which would result in an error page.
 		$page = $GLOBALS['TSFE']->sys_page->getPage($pid);
 
-		if (count($page) == 0)
+		if (count($page) == 0) {
+			$GLOBALS['TYPO3_DB']->debugOutput = $sqlDebug;
 			return '';
+		}
 
 		// If the page is a shortcut, look up the page to which the shortcut references, and do the same check as above.
-		if ($page['doktype']==4 && count($GLOBALS['TSFE']->getPageShortcut($page['shortcut'],$page['shortcut_mode'],$page['uid'])) == 0)
+		if ($page['doktype']==4 && count($GLOBALS['TSFE']->getPageShortcut($page['shortcut'],$page['shortcut_mode'],$page['uid'])) == 0) {
+			$GLOBALS['TYPO3_DB']->debugOutput = $sqlDebug;
 			return '';
+		}
 
 		// Spacer pages and sysfolders result in a page not found page too...
-		if ($page['doktype'] == 199 || $page['doktype'] == 254)
+		if ($page['doktype'] == 199 || $page['doktype'] == 254) {
+			$GLOBALS['TYPO3_DB']->debugOutput = $sqlDebug;
 			return '';
+		}
 
 		$GLOBALS['TSFE']->getPageAndRootline();
 		$GLOBALS['TSFE']->initTemplate();
@@ -273,9 +287,11 @@ class tx_mnogosearch_tcemain {
 		$tempcObj= t3lib_div::makeInstance('tslib_cObj');
 		/* @var $tempcObj tslib_cObj */
 		$tempcObj->start(array(),'');
-		return $GLOBALS['TSFE']->tmpl->setup['config.']['baseURL'] . $tempcObj->typoLink_URL(array(
+		$url = $GLOBALS['TSFE']->tmpl->setup['config.']['baseURL'] . $tempcObj->typoLink_URL(array(
 			'parameter' => $pid
 		));
+		$GLOBALS['TYPO3_DB']->debugOutput = $sqlDebug;
+		return $url;
 	}
 
 	/**
@@ -330,17 +346,20 @@ class tx_mnogosearch_tcemain {
 	 * @param	mixed	$rec	Additional data or <code>false</code> ifno data
 	 */
 	function log($msg, $rec = false) {
-		if ($this->debug) {
+		if ($this->sysconf['debugLog'] == 'file') {
 			$fd = fopen(PATH_site . 'fileadmin/mnogosearch.log', 'a');
 			flock($fd, LOCK_EX);
 			fprintf($fd, '[%s] "%s"' . ($rec ? ', data: ' . chr(10) . '%s' . chr(10) : '') . chr(10), date('d-m-Y H:i:s'), $msg, print_r($rec, true));
 			flock($fd, LOCK_UN);
 			fclose($fd);
 		}
+		elseif ($this->sysconf['debugLog'] == 'devlog') {
+			t3lib_div::devLog($msg, 'mnogosearch', 0, $rec);
+		}
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mnogosearch/class.tx_mnogosearch_tcemain.php'])	{
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mnogosearch/class.tx_mnogosearch_tcemain.php']) {
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mnogosearch/class.tx_mnogosearch_tcemain.php']);
 }
 

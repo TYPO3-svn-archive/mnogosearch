@@ -34,6 +34,21 @@
 							</config>
 						</TCEforms>
 					</field_mode>
+					<field_siteList>
+						<TCEforms>
+							<label>LLL:EXT:mnogosearch/pi1/locallang.xml:site_list</label>
+							<displayCond>FIELD:field_mode:=:2</displayCond>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>tx_mnogosearch_indexconfig</allowed>
+								<size>3</size>
+								<minitems>0</minitems>
+								<maxitems>100</maxitems>
+								<autoSizeMax>7</autoSizeMax>
+							</config>
+						</TCEforms>
+					</field_siteList>
 					<field_resultsPage>
 						<TCEforms>
 							<label>LLL:EXT:mnogosearch/pi1/locallang.xml:results_page</label>
@@ -58,39 +73,39 @@
 								<cols>2</cols>
 								<items>
 									<n0>
-										<n0>LLL:EXT:mnogosearch/pi1/locallang.xml:search_modes.track</n0>
+										<n0>LLL:EXT:mnogosearch/pi1/locallang.xml:search_modes.track</n0> <!-- 0 -->
 										<n1></n1>
 									</n0>
 									<n1>
-										<n0>LLL:EXT:mnogosearch/pi1/locallang.xml:search_modes.cache</n0>
+										<n0>LLL:EXT:mnogosearch/pi1/locallang.xml:search_modes.cache</n0><!-- 1 -->
 										<n1></n1>
 									</n1>
 									<n2>
-										<n0>LLL:EXT:mnogosearch/pi1/locallang.xml:search_modes.spell</n0>
+										<n0>LLL:EXT:mnogosearch/pi1/locallang.xml:search_modes.spell</n0><!-- 1 -->
 										<n1></n1>
 									</n2>
 									<n3>
-										<n0>LLL:EXT:mnogosearch/pi1/locallang.xml:search_modes.crosswords</n0>
+										<n0>LLL:EXT:mnogosearch/pi1/locallang.xml:search_modes.crosswords</n0><!-- 1 -->
 										<n1></n1>
 									</n3>
 									<n4>
-										<n0>LLL:EXT:mnogosearch/pi1/locallang.xml:search_modes.group</n0>
+										<n0>LLL:EXT:mnogosearch/pi1/locallang.xml:search_modes.group</n0><!-- 0 -->
 										<n1></n1>
 									</n4>
 									<n5>
-										<n0>LLL:EXT:mnogosearch/pi1/locallang.xml:search_modes.clones</n0>
+										<n0>LLL:EXT:mnogosearch/pi1/locallang.xml:search_modes.clones</n0><!-- 1 -->
 										<n1></n1>
 									</n5>
 									<n6>
-										<n0>LLL:EXT:mnogosearch/pi1/locallang.xml:search_modes.phrase</n0>
+										<n0>LLL:EXT:mnogosearch/pi1/locallang.xml:search_modes.phrase</n0><!-- 1 -->
 										<n1></n1>
 									</n6>
 									<n7>
-										<n0>LLL:EXT:mnogosearch/pi1/locallang.xml:search_modes.suggest</n0>
+										<n0>LLL:EXT:mnogosearch/pi1/locallang.xml:search_modes.suggest</n0><!-- 1 -->
 										<n1></n1>
 									</n7>
 								</items>
-								<default>238</default>
+								<default>238</default><!-- 11101110 -->
 							</config>
 						</TCEforms>
 					</field_options>
