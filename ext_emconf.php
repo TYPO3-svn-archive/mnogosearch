@@ -37,6 +37,7 @@ $EM_CONF[$_EXTKEY] = array(
 			'typo3' => '4.1.1-0.0.0',
 		),
 		'conflicts' => array(
+			'realurl' => '0.0.0-0.999.999',
 		),
 		'suggests' => array(
 		),
