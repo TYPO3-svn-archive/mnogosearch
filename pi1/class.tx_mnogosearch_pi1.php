@@ -83,11 +83,17 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 			return $this->pi_getLL('cannot_create_renderer');
 		}
 
+		// Add domain restrictions
 		$domainLimitList = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_siteList');
 		if (!$domainLimitList) {
 			$domainLimitList = $this->conf['siteList'];
 		}
-		$this->conf['siteList'] = implode(',', t3lib_div::intExplode(',', $domainLimitList));
+		if (is_array($this->piVars['siteList'])) {
+			$domainLimitList .= ',' . implode(',', $this->piVars['siteList']);
+		}
+		$this->conf['siteList'] = $GLOBALS['TYPO3_DB']->cleanIntList($domainLimitList);
+
+		return '';
 	}
 
 	/**

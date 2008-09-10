@@ -1,3 +1,7 @@
+10-09-2008	Dmitry Dulepov	<dmitry@typo3.org>
+
+	* Added site limiting through piVars
+
 10-03-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
 	* Lots of changes related to better search
