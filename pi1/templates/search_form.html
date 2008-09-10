@@ -10,7 +10,7 @@
 <body>
 	<!-- ###SHORT_SEARCH_FORM### begin -->
 	<div id="short-search-form">
-		<form action="###SHORT_SEARCH_FORM_ACTION###" method="POST">	<!-- map: tag, action -->
+		<form action="###SHORT_SEARCH_FORM_ACTION###" method="post">	<!-- map: tag, action -->
 			<input type="text" name="tx_mnogosearch_pi1[q]" value="###SHORT_SEARCH_FORM_VALUE###" />	<!-- map: value -->
 			<input type="submit" name="tx_mnogosearch_pi1[submit]" value="Search" />
 		</form>
@@ -21,12 +21,7 @@
 
 	<!-- ###LONG_SEARCH_FORM### begin -->
 		<div id="long-search-form">
-			<form id="" class="tx-mnogosearch-long-form" action="###LONG_SEARCH_FORM_ACTION###" method="POST">	<!-- map: action, name, id -->
-				<input type="hidden" name="tx_mnogosearch_pi1[wm]" value="wrd" />
-				<input type="hidden" name="tx_mnogosearch_pi1[o]" value="0" />
-				<input type="hidden" name="tx_mnogosearch_pi1[lang]" value="" />
-				<input type="hidden" name="tx_mnogosearch_pi1[wf]" value="2221" />
-
+			<form id="" class="tx-mnogosearch-long-form" action="###LONG_SEARCH_FORM_ACTION###" method="post">	<!-- map: action, name, id -->
 				<table>
 					<tr><td>
 						Search for:
