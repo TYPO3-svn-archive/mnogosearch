@@ -1,6 +1,7 @@
 10-09-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
 	* Added site limiting through piVars
+	* Fixed bug: number of results was never displayed
 
 10-03-2008	Dmitry Dulepov	<dmitry@typo3.org>
 

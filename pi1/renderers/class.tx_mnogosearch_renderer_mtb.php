@@ -141,7 +141,7 @@ class tx_mnogosearch_renderer_mtb extends tx_mnogosearch_renderer {
 				'###SEARCH_RESULTS_TIME###' => sprintf('%.3f', $results->searchTime),
 				'###SEARCH_RESULTS_FIRST###' => $results->firstDoc,
 				'###SEARCH_RESULTS_LAST###' => $results->lastDoc,
-				'###SEARCH_RESULTS_TOTAL###' => $result->totalResults,
+				'###SEARCH_RESULTS_TOTAL###' => $results->totalResults,
 				'###SEARCH_RESULTS_CURRENT_PAGE###' => $curPage + 1,
 				'###SEARCH_RESULTS_PAGE_TOTAL###' => intval($results->totalResults/$rpp) + ($results->totalResults % $rpp ? 1 : 0),
 				));
