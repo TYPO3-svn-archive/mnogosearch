@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Dmitry Dulepov <dmitry@typo3.org>
+*  (c) 2008 Dmitry Dulepov <dmitry@typo3.org>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -129,7 +129,7 @@ class tx_mnogosearch_tcemain {
 	 */
 	function processPid($pid, &$pObj) {
 		$this->log('Page id=' . $pid);
-		if (1 || !$this->pageAlreadyInLog($pid)) {
+		if (!$this->pageAlreadyInLog($pid)) {
 			// Check that page is not hidden and regular page
 			if ($this->canIndexPage($pid)) {
 				// Attempt to find page path

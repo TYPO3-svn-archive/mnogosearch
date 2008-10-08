@@ -1,3 +1,7 @@
+08-10-2008	Dmitry Dulepov	<dmitry@typo3.org>
+
+	* Fix: multiple copies of the same URL for indexing
+
 10-09-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
 	* Added site limiting through piVars
