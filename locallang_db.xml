@@ -7,10 +7,11 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="tt_content.list_type_pi1">mnoGoSearch</label>
-			<label index="tx_mnogosearch_indexconfig">Indexing configuration</label>
+			<label index="tx_mnogosearch_indexconfig">mnoGoSearch indexing configuration</label>
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_type">Configuration type:</label>
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_type.server">Server</label>
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_type.realm">Realm</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_type.records">Records</label>
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_url">Indexing path:</label>
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_method">Indexing method:</label>
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_method.allow">Allow</label>
@@ -30,7 +31,13 @@
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_cmptype.string">String</label>
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_cmptype.regexp">Regular expression</label>
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_period">Indexing period (in hours):</label>
-			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_additional_config">Additional indexer configuration file:</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_additional_config">Additional indexer configuration:</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_table">Table to index:</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_title_field">Title field for the record:</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_body_field">Body text fields for the record:</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_url_parameters">Single view URL parameters:</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_display_pid">Page to display these records:</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_pid_only">Limit to records at:</label>
 			<label index="tx_mnogosearch_urllog">Pages to index</label>
 			<label index="tx_mnogosearch_urllog.tx_mnogosearch_url">Page address:</label>
 			<label index="tx_mnogosearch_urllog.tx_mnogosearch_pid">Page:</label>
