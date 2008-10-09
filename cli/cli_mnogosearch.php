@@ -22,6 +22,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+/**
+ * $Id$
+ */
 if (!defined('TYPO3_cliMode')) {
 	die('This script cannot be executed directly. Use "typo3/cli_dispatch.phpsh mnogosearch help" for details.');
 }
@@ -35,35 +38,35 @@ class tx_mnogosearch_cli {
 
 	/** By default make the indexer completely silent */
 	protected $silenceOption = '-l';
-	
+
 	/**
 	 * Extension configuration
-	 * 
+	 *
 	 * @var	array
 	 */
 	protected $sysconf;
-	
+
 	/** Configuration file name. This file is in the temporary directory */
 	protected $configFileName;
-	
+
 	/** "Server" directive methods */
 	protected $server_methods = array(1 => 'Disallow', 2 => 'HrefOnly', 3 => 'CheckOnly ', 4 => 'Skip');
-	
+
 	/** "Realm" subsections */
 	protected $realm_subsections = array(1 => 'site', 2 => 'world', 3 => 'page');
 
 	/** Extra arguments to pass to the indexer */
 	protected $extraIndexerArguments = '';
-	
+
 	/**
 	 * List of aloowed Server URLs. Etries from this list are compared to the
 	 * URL log. If URL in the log does not match, it will be kept in the log.
 	 * It is useful if pid is specified.
-	 * 
+	 *
 	 * @var	array
 	 */
 	protected $allowedServerURLs = array();
-	
+
 	/**
 	 * Creates an instance of this class.
 	 *
@@ -94,12 +97,17 @@ class tx_mnogosearch_cli {
 		if (($key = array_search('-v', $GLOBALS['argv']))) {
 			if (t3lib_div::testInt($GLOBALS['argv'][$key + 1]{0})) {
 				if ($GLOBALS['argv'][$key + 1] != '0') {
-					$this->silenceOption = '-v ' . $GLOBALS['argv'][$key + 1];
+					$this->silenceOption = '-v ' . max(1, min(5, intval($GLOBALS['argv'][$key + 1])));
 				}
 			}
 		}
 	}
 
+	/**
+	 * Retrieves additional indexer argumants
+	 *
+	 * @return	void
+	 */
 	protected function getExtraIndexerArguments() {
 		if (($key = array_search('-x', $GLOBALS['argv']))) {
 			if (t3lib_div::testInt($GLOBALS['argv'][$key + 1]{0})) {
@@ -109,7 +117,7 @@ class tx_mnogosearch_cli {
 			}
 		}
 	}
-	
+
 	/**
 	 * Cheks that mnoGoSearch database tables exist and create it if necessary.
 	 *
@@ -160,8 +168,8 @@ class tx_mnogosearch_cli {
 			}
 		}
 		$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', 'tx_mnogosearch_indexconfig',
-					$pidCondition . t3lib_BEfunc::deleteClause('tx_mnogosearch_indexconfig') .
-						t3lib_BEfunc::BEenableFields('tx_mnogosearch_indexconfig'),
+					$pidCondition . t3lib_BEfunc::deleteClause('tx_mnogosearch_indexconfig') /*.
+						t3lib_BEfunc::BEenableFields('tx_mnogosearch_indexconfig')*/,
 					'', 'sorting');
 
 		$hasPeriod = true;
@@ -250,14 +258,20 @@ class tx_mnogosearch_cli {
 	 */
 	function getServersGetRecords($row) {
 		// TODO Needs setnames in the mnogosearch query string!
-		$content = 'HTDBAddr mysql://' . $GLOBALS['typo_db_username'] . ':' .
-					$GLOBALS['typo_db_password'] . '@' .
-					$GLOBALS['typo_db_host'] . '/' . $GLOBALS['typo_db'] . '/' .
-					chr(10);
+		$matches = array(); $setnames = '';
+		if (preg_match('/set\s+names\s+([a-z\-0-9]+)/i', $GLOBALS['TYPO3_CONF_VARS']['SYS']['setDBinit'], $matches)) {
+			$setnames = '?setnames=' . $matches[1];
+		}
+		$content = 'HTDBAddr mysql://' . TYPO3_db_username . ':' .
+					TYPO3_db_password . '@' .
+					TYPO3_db_host . '/' . TYPO3_db . '/' .
+					$setnames . chr(10);
 		// Make HTDBList command
-		$content .= 'HTDBList "SELECT CONCAT(\'htdb:/' . $row['uid'] .
-					'/\', uid, \'/\') FROM ' . $row['tx_mnogosearch_table'];
-		$where = '';
+		$content .= 'HTDBList "SELECT CONCAT(\'htdb:/' .
+					$row['tx_mnogosearch_table'] . '/' .
+					$row['uid'] .
+					'/\', uid) FROM ' . $row['tx_mnogosearch_table'];
+		$where = '1=1';
 		if ($row['tx_mnogosearch_pid_only']) {
 			if (t3lib_div::testInt($row['tx_mnogosearch_pid_only'])) {
 				$where = 'pid=' . $row['tx_mnogosearch_pid_only'];
@@ -271,10 +285,9 @@ class tx_mnogosearch_cli {
 		if ($where != '') {
 			$content .= ' WHERE ' . $where;
 		}
-		$content .= chr(10);
-		
-		$content .= 'HTDBLimit 4096
-';
+		$content .= '"' . chr(10);
+
+		$content .= 'HTDBLimit 4096' . chr(10);
 
 		// Create HTDBDoc query
 		$content .= 'HTDBDoc "SELECT ';
@@ -282,11 +295,11 @@ class tx_mnogosearch_cli {
 		$content .= ' AS title,';
 		$bodyFields = t3lib_div::trimExplode(',', $row['tx_mnogosearch_body_field'], true);
 		$content .= (count($bodyFields) > 1 ? 'CONCAT(' . implode(',\' \',', $bodyFields) . ')' : $bodyFields[0]);
-		$content .= ' AS body FROM ' . $row['tx_mnogosearch_table'] . ' WHERE uid=$2' . chr(10);
-		$content .= 'Server htdb:/' . chr(10);
-		return $content;		
+		$content .= ' AS body FROM ' . $row['tx_mnogosearch_table'] . ' WHERE uid=$3"' . chr(10);
+		$content .= 'Server htdb:/' . $row['tx_mnogosearch_table'] . '/' . chr(10);
+		return $content;
 	}
-	
+
 	/**
 	 * Creates indexer configuration and writes it to a temporary file.
 	 *
@@ -314,8 +327,8 @@ Disallow *.rdf *.xml *.rss *.js *.css *.jpg *.png *.gif
 HoldBadHrefs 2d
 DetectClones yes
 DefaultContentType "text/html' .
-			($GLOBALS['TYPO3_CONF_VARS']['BE']['forceCharset'] ? '; charset="' .
-				$GLOBALS['TYPO3_CONF_VARS']['BE']['forceCharset'] . '"' : '') . chr(10);
+			($GLOBALS['TYPO3_CONF_VARS']['BE']['forceCharset'] ? '; charset=' .
+				$GLOBALS['TYPO3_CONF_VARS']['BE']['forceCharset'] : '') . '"' . chr(10);
 
 		if ($GLOBALS['TYPO3_CONF_VARS']['BE']['forceCharset']) {
 			$content .= 'RemoteCharset ' . $GLOBALS['TYPO3_CONF_VARS']['BE']['forceCharset'] . chr(10);
@@ -372,7 +385,7 @@ DefaultContentType "text/html' .
 	';
 		}
 
-		checkAndCreateDatabase($this->configFileName);
+		$this->checkAndCreateDatabase($this->configFileName);
 
 		if (in_array('-c', $GLOBALS['argv'])) {
 			return;
@@ -387,7 +400,7 @@ DefaultContentType "text/html' .
 		}
 
 		// New URLs
-		$newUrlFile = (in_array('-n', $GLOBALS['argv']) ? createNewUrlList() : '');
+		$newUrlFile = (in_array('-n', $GLOBALS['argv']) ? $this->createNewUrlList() : '');
 		if ($newUrlFile && filesize($newUrlFile)) {
 			$cmdLine = $this->sysconf['mnoGoSearchPath'] . '/sbin/indexer ' . $this->silenceOption . ' -a -i -r -N 2 -w -d ' . $this->configFileName . ' -f ' . $newUrlFile . ' ' . $GLOBALS['extraOptions'];
 			if ($dryRun) {
@@ -438,24 +451,24 @@ DefaultContentType "text/html' .
 	 * @return	void
 	 */
 	function main() {
-		if ($GLOBALS['argc'] > 0 && ($GLOBALS['argv'][1] == '-h' || $GLOBALS['argv'][1] == '--help' || $GLOBALS['argv'][1] == '-?')) {
+		if ($GLOBALS['argc'] > 0 && $GLOBALS['argv'][2] == 'help') {
 			echo 'Usage: cli_mnogosearch.phpsh [-n] [-w]
 
-		This script reindexes TYPO3 web sites as defined by current TYPO3 configuration.
-		It accepts the following options:
+This script reindexes TYPO3 web sites as defined by current TYPO3 configuration.
+It accepts the following options:
 
-		  -c                Only check and create database if necessary. Do not reindex.
-		  -d                Display generated indexer configuration and exit.
-		  -n                Force reindexing of new URLs (normally should be set)
-		  -p pid            Process indexing configuration only from this pid
-		  -w                Create statistic for misspelled words. Useful only if
-		.                   Ispell dictionaries are included to mnoGoSearch
-		.                   configuration (see mnoGoSearch documentation)
-		  --dry-run         Show what will be done (not applicable to -d and -E)
-		  -h, --help, -?    Display this help message
-		  -x                Pass the argument to mnoGoSearch indexer
-		  -v [level]        Be verbose. Level is 0-10. Default is 0 (complete silence)
-		';
+  -c                Only check and create database if necessary. Do not reindex.
+  -d                Display generated indexer configuration and exit.
+  -n                Force reindexing of new URLs (normally should be set)
+  -p pid            Process indexing configuration only from this pid
+  -w                Create statistic for misspelled words. Useful only if
+.                   Ispell dictionaries are included to mnoGoSearch
+.                   configuration (see mnoGoSearch documentation)
+  --dry-run         Show what will be done (not applicable to -d and -E)
+  -h, --help, -?    Display this help message
+  -x                Pass the argument to mnoGoSearch indexer
+  -v [level]        Be verbose. Level is 0-5. Default is 0 (complete silence)
+';
 			exit;
 		}
 
