@@ -183,6 +183,7 @@ class tx_mnogosearch_cli {
 				$content .= 'Period 1m-6h' . chr(10);
 				$hasPeriod = false;
 			}
+
 			switch ($row['tx_mnogosearch_type']) {
 				case 0:
 					// Server
@@ -326,6 +327,7 @@ Allow *.htm *.html *.php *.txt */
 Disallow *.rdf *.xml *.rss *.js *.css *.jpg *.png *.gif
 HoldBadHrefs 2d
 DetectClones yes
+HTTPHeader "X-TYPO3-mnogosearch: ' . md5('mnogosearch' . $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey']) . '"
 DefaultContentType "text/html' .
 			($GLOBALS['TYPO3_CONF_VARS']['BE']['forceCharset'] ? '; charset=' .
 				$GLOBALS['TYPO3_CONF_VARS']['BE']['forceCharset'] : '') . '"' . chr(10);
@@ -467,7 +469,7 @@ It accepts the following options:
   --dry-run         Show what will be done (not applicable to -d and -E)
   -h, --help, -?    Display this help message
   -x                Pass the argument to mnoGoSearch indexer
-  -v [level]        Be verbose. Level is 0-5. Default is 0 (complete silence)
+  -v level          Be verbose. Level is 0-5. Default is 0 (complete silence)
 ';
 			exit;
 		}
