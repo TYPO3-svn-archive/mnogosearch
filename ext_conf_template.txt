@@ -2,7 +2,7 @@
 mnoGoSearchPath = /opt/mnogosearch
 
   # cat=basic/enable; type=string; label=Database connection string:mnoGoSearch connection URL
-dbaddr = mysql://user:pass@host/dbname?dbmode=blob&LiveUpdates=yes
+dbaddr = mysql://user:pass@host/dbname/?dbmode=blob&LiveUpdates=yes
 
   # cat=basic/enable; type=options[Enable=1,Disable=0]; label=Use FE to resolve page URL:mnoGoSearch module may simulate FE environment to find path to page. Choose "Enable" if you use simulateStatic/RealURL/CoolURI.
 enableFEcheck = 0
@@ -18,3 +18,6 @@ IncludeFile =
 
 # cat=basic/enable; type=options[Disable=,File (fileadmin/mnogosearch.log)=file,TYPO3 devLog=devlog]; label=Enable debug logging:Writes messages to debug log if enabled. If you select "TYPO3 devLog", make sure you install cc_devlog or rlmp_filedevlog. Disable when not needed!
 debugLog =
+
+# cat=basic/enable; type=boolean; label=Hide internal tables in List module
+hide_internal_tables = 1
