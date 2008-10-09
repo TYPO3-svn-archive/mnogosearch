@@ -378,11 +378,11 @@ DefaultContentType "text/html' .
 
 		if ($dryRun) {
 			echo 'Using configuration file ' . $this->configFileName . ':
-	-------------------------
-	' .
-	file_get_contents($this->configFileName) . '
-	-------------------------
-	';
+-------------------------
+' .
+				file_get_contents($this->configFileName) . '
+-------------------------
+';
 		}
 
 		$this->checkAndCreateDatabase($this->configFileName);
@@ -405,11 +405,11 @@ DefaultContentType "text/html' .
 			$cmdLine = $this->sysconf['mnoGoSearchPath'] . '/sbin/indexer ' . $this->silenceOption . ' -a -i -r -N 2 -w -d ' . $this->configFileName . ' -f ' . $newUrlFile . ' ' . $GLOBALS['extraOptions'];
 			if ($dryRun) {
 				echo 'Using URL configuration file ' . $newUrlFile . ':
-	-------------------------
-	' .
-	file_get_contents($newUrlFile) . '
-	-------------------------
-	';
+-------------------------
+' .
+					file_get_contents($newUrlFile) . '
+-------------------------
+';
 				echo 'Executing: ' . $cmdLine . chr(10);
 				echo 'Removing ' . $newUrlFile . chr(10);
 			}
@@ -483,7 +483,12 @@ It accepts the following options:
 
 }
 
-$indexer = new tx_mnogosearch_cli();
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mnogosearch/class.tx_mnogosearch_cli.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mnogosearch/class.tx_mnogosearch_cli.php']);
+}
+
+$indexer = t3lib_div::makeInstance('tx_mnogosearch_cli');
+/* @var $indexer tx_mnogosearch_cli */
 $indexer->main();
 
 ?>

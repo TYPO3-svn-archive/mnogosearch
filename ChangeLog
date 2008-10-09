@@ -2,6 +2,7 @@
 
 	* CLI script supports indexing database tables
 	* pi1 supports record indexing
+	* Added XCLASS to CLI script
 
 08-10-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
