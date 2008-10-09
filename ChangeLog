@@ -5,6 +5,8 @@
 	* Added XCLASS to CLI script
 	* Added new fields for record indexing
 	* Added slash to the database URL
+	* Optimized postProc to use only one function
+	* Updated manual
 
 08-10-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
