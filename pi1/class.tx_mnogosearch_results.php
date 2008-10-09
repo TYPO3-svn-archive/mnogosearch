@@ -48,7 +48,15 @@ class tx_mnogosearch_results {
 	var $wordInfo;				// Information about found words
 	var $wordSuggest = false;	// Suggestion information
 	var $results = array();		// List of results
+	var	$indexConfigCache = array();	// Cache for indexing configuration entries
 
+	/**
+	 * Initializes result collection.
+	 *
+	 * @param resource $udmAgent	mnoGoSearch agent
+	 * @param resource $res	mnoGoSearch result
+	 * @param tx_mnogosearch_pi1 $pObj	Calling onject (pi1 plugin)
+	 */
 	function init(&$udmAgent, &$res, &$pObj) {
 		$this->totalResults = Udm_Get_Res_Param($res, UDM_PARAM_FOUND);
 		$this->numRows = Udm_Get_Res_Param($res, UDM_PARAM_NUM_ROWS);
@@ -69,7 +77,7 @@ class tx_mnogosearch_results {
 			$result->popularityRank = Udm_Get_Res_Field($res, $i, UDM_FIELD_POP_RANK);
 			Udm_Make_Excerpt($udmAgent, $res, $i);
 
-			$result->url = Udm_Get_Res_Field($res, $i, UDM_FIELD_URL);
+			$result->url = $this->processURL(Udm_Get_Res_Field($res, $i, UDM_FIELD_URL), $pObj);
 			$result->contentType = Udm_Get_Res_Field($res, $i, UDM_FIELD_CONTENT);
 			$result->documentSize = Udm_Get_Res_Field($res, $i, UDM_FIELD_SIZE);
 			//$ndoc=Udm_Get_Res_Field($res,$i,UDM_FIELD_ORDER);
@@ -93,7 +101,7 @@ class tx_mnogosearch_results {
 					for ($j = 0; $j < $this->numRows; $j++) {
 						if ($j != $i && $urlId == Udm_Get_Res_Field($res, $j, UDM_FIELD_ORIGINID)) {
 							$clone = new tx_mnogosearch_result;
-							$clone->url = Udm_Get_Res_Field($res, $j, UDM_FIELD_URL);
+							$clone->url = $this->processURL(Udm_Get_Res_Field($res, $j, UDM_FIELD_URL), $pObj);
 							$clone->contentType = Udm_Get_Res_Field($res, $j, UDM_FIELD_CONTENT);
 	  						$clone->documentSize = Udm_Get_Res_Field($res, $j, UDM_FIELD_SIZE);
 	  						//$clone->lastModified = format_lastmod(Udm_Get_Res_Field($res,$j,UDM_FIELD_MODIFIED));
@@ -107,6 +115,13 @@ class tx_mnogosearch_results {
 		Udm_Free_Res($res);
 	}
 
+	/**
+	 * Highlights found search words according to configuration
+	 *
+	 * @param string $str	String to hightlight
+	 * @param tx_mnogosearch_pi1 $pObj	Calling object
+	 * @return string	Processed string
+	 */
 	function highlight($str, &$pObj) {
 		if (count($pObj->highlightParts) == 2 && $pObj->highlightParts[0] != '') {
 			$str = str_replace("\2", $pObj->highlightParts[0], $str);
@@ -185,6 +200,53 @@ class tx_mnogosearch_results {
 	function getExcerpt(&$lipsum, $size) {
 		$offset = rand(0, count($lipsum) - $size);
 		return ($offset == 0 ? '' : '...') . implode(' ', array_slice($lipsum, $offset, $size)) . '...';
+	}
+	
+	/**
+	 * Converts htdb:/ scheme into HTTP
+	 *
+	 * @param string $url	URL
+	 * @param	tx_monogosearch_pi1	$pObj	Calling object
+	 * @return string	Converted URL
+	 */
+	function processURL($url, &$pObj) {
+		/* @vat $pObj tx_monogosearch_pi1 */
+		if (substr($url, 0, 6) == 'htdb:/') {
+			$newUrl = '';
+			$parts = t3lib_div::trimExplode('/', $url, true);
+			// $parts now should contain:
+			//	- htdb:
+			//	- table_name
+			//	- uid of the indexing config
+			//	- uid of the record from table_name
+			if (count($parts) == 4) {
+				// Check if we have indexing configuration in the cache and load if not
+				if (!isset($this->indexConfigCache[$parts[2]])) {
+					list($config) = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+							'tx_mnogosearch_table,tx_mnogosearch_url_parameters,tx_mnogosearch_display_pid',
+							'tx_mnogosearch_indexconfig',
+							'uid=' . intval($parts[2])
+						);
+					$this->indexConfigCache[$parts[2]] = $config;
+				}
+				else {
+					$config = $this->indexConfigCache[$parts[2]];
+				}
+				if ($config && $config['tx_mnogosearch_table'] == $parts[1]) {
+					$typoLinkConf = array(
+						'parameter' => $config['tx_mnogosearch_display_pid'],
+					);
+					if ($config['tx_mnogosearch_url_parameters']) {
+						$typoLinkConf['useCacheHash'] = true;
+						$typoLinkConf['additionalParams'] = str_replace('{field:uid}', $parts[3], $config['tx_mnogosearch_url_parameters']);
+					}
+					$newUrl = rawurldecode($pObj->cObj->typoLink_URL($typoLinkConf));
+				}
+			}
+			
+			$url = $newUrl;
+		}
+		return $url;
 	}
 }
 

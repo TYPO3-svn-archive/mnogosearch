@@ -1,6 +1,7 @@
 09-10-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
 	* CLI script supports indexing database tables
+	* pi1 supports record indexing
 
 08-10-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
