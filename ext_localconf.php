@@ -3,11 +3,10 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 
 t3lib_extMgm::addPItoST43($_EXTKEY,'pi1/class.tx_mnogosearch_pi1.php', '_pi1', 'list_type', 0);
 
-if (TYPO3_MODE == 'FE') {
-	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-all']['mnogosearch'] = 'EXT:mnogosearch/class.tx_mnogosearch_postproc.php:tx_mnogosearch_postproc->contentPostProcAll';
-	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-cached']['mnogosearch'] = 'EXT:mnogosearch/class.tx_mnogosearch_postproc.php:tx_mnogosearch_postproc->contentPostProcCached';
+// Register hook only if our header is present
+if (TYPO3_MODE == 'FE' && t3lib_div::getIndpEnv('HTTP_X_TYPO3_MNOGOSEARCH') == md5('mnogosearch' . $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey'])) {
+echo 'hook';
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-output']['mnogosearch'] = 'EXT:mnogosearch/class.tx_mnogosearch_postproc.php:tx_mnogosearch_postproc->contentPostProcOutput';
-	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['pageIndexing']['mnogosearch'] = 'EXT:mnogosearch/class.tx_mnogosearch_postproc.php:tx_mnogosearch_postproc';
 }
 
 if (TYPO3_MODE == 'BE') {
@@ -18,8 +17,10 @@ if (TYPO3_MODE == 'BE') {
 }
 
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tx_mnogosearch/pi1/class.tx_mnogosearch_pi1']['renderers'] = array(
-	'0'=> 'EXT:mnogosearch/pi1/renderers/class.tx_mnogosearch_renderer_mtb.php:tx_mnogosearch_renderer_mtb',
-	'1'=> 'EXT:mnogosearch/pi1/renderers/class.tx_mnogosearch_renderer_templavoila.php:tx_mnogosearch_renderer_templavoila',
+	'0' => 'EXT:mnogosearch/pi1/renderers/class.tx_mnogosearch_renderer_mtb.php:tx_mnogosearch_renderer_mtb',
+	'1' => 'EXT:mnogosearch/pi1/renderers/class.tx_mnogosearch_renderer_templavoila.php:tx_mnogosearch_renderer_templavoila',
 );
+
+$TYPO3_CONF_VARS['SC_OPTIONS']['GLOBAL']['cliKeys'][$_EXTKEY] = array('EXT:' . $_EXTKEY . '/cli/cli_mnogosearch.php', '_CLI_mnogosearch');
 
 ?>

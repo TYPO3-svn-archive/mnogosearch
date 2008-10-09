@@ -7,6 +7,7 @@
 	* Added slash to the database URL
 	* Optimized postProc to use only one function
 	* Updated manual
+	* Post processing for content is now executed only if mnogosearch is running
 
 08-10-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
