@@ -5,6 +5,7 @@
 	* Fix: htdb:/ records did not show full URL in search results in certain cases
 	* Added feature to limit search on htdb:/ domains
 	* Fixed problem: TYPO3SEARCH_xxx was not working
+	* Fixed problem: indexing configuration is still not on pages
 
 09-10-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
