@@ -6,6 +6,7 @@
 	* Added feature to limit search on htdb:/ domains
 	* Fixed problem: TYPO3SEARCH_xxx was not working
 	* Fixed problem: indexing configuration is still not on pages
+	* Fixed problem: page 1 is always displayed in the results
 
 09-10-2008	Dmitry Dulepov	<dmitry@typo3.org>
 

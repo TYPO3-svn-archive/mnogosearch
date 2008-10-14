@@ -118,7 +118,7 @@ class tx_mnogosearch_renderer_mtb extends tx_mnogosearch_renderer {
 		$pager = '';
 		if ($results->totalResults > $rpp) {
 			$pagerTemplate = $this->pObj->cObj->getSubpart($template, '###SEARCH_RESULTS_PAGER###');
-			$prevLink = $nextLink = $curPage = '';
+			$prevLink = $nextLink = '';
 			if ($page > 0) {
 				$pageTemplate = $this->pObj->cObj->getSubpart($pagerTemplate, '###SEARCH_RESULTS_PAGER_PREV###');
 				$prevLink = $this->pObj->cObj->substituteMarker($pageTemplate, '###SEARCH_RESULTS_PAGER_PREV_LINK###', $this->getLink($page - 1));
@@ -142,7 +142,7 @@ class tx_mnogosearch_renderer_mtb extends tx_mnogosearch_renderer {
 				'###SEARCH_RESULTS_FIRST###' => $results->firstDoc,
 				'###SEARCH_RESULTS_LAST###' => $results->lastDoc,
 				'###SEARCH_RESULTS_TOTAL###' => $results->totalResults,
-				'###SEARCH_RESULTS_CURRENT_PAGE###' => $curPage + 1,
+				'###SEARCH_RESULTS_CURRENT_PAGE###' => $page + 1,
 				'###SEARCH_RESULTS_PAGE_TOTAL###' => intval($results->totalResults/$rpp) + ($results->totalResults % $rpp ? 1 : 0),
 				));
 		$content = $this->pObj->cObj->substituteSubpart($content, '###SEARCH_RESULTS_RESULT###', $resultList);
