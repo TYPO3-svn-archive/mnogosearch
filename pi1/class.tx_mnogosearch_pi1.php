@@ -378,12 +378,23 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 	 */
 	function addSearchRestrictions(&$udmAgent) {
 		if ($this->conf['siteList']) {
+			// Limit normal domains
 			$domainList = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('tx_mnogosearch_url',
 				'tx_mnogosearch_indexconfig',
 				'uid IN (' . $this->conf['siteList'] . ') AND tx_mnogosearch_type=0' .
 				' AND tx_mnogosearch_method<=0' . $this->cObj->enableFields('tx_mnogosearch_indexconfig'));
 			foreach ($domainList as $domain) {
 				Udm_Add_Search_Limit($udmAgent, UDM_LIMIT_URL, $domain['tx_mnogosearch_url']);
+			}
+			
+			// Limit htdb domains
+			$recordList = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('tx_mnogosearch_url',
+				'tx_mnogosearch_indexconfig',
+				'uid IN (' . $this->conf['siteList'] . ') AND tx_mnogosearch_type=11' .
+				$this->cObj->enableFields('tx_mnogosearch_indexconfig'));
+			foreach ($recordList as $recordDef) {
+				$limit = sprintf('htdb:/%s/%d/', $recordDef['tx_mnogosearch_table'], $recordDef['uid']);
+				Udm_Add_Search_Limit($udmAgent, UDM_LIMIT_URL, $limit);
 			}
 		}
 	}
