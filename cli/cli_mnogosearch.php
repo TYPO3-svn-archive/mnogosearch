@@ -184,6 +184,12 @@ class tx_mnogosearch_cli {
 				$hasPeriod = false;
 			}
 
+			// Add any extra config. This must go *before* servers!
+			if (trim($row['tx_mnogosearch_additional_config'])) {
+				$content .= $row['tx_mnogosearch_additional_config'] . chr(10);
+			}
+			
+			// Add servers
 			switch ($row['tx_mnogosearch_type']) {
 				case 0:
 					// Server
@@ -200,10 +206,6 @@ class tx_mnogosearch_cli {
 				default:
 					@unlink($this->configFileName);
 					die(sprintf('Unknown configuration type %d for configuration entry with id %d' . chr(10), $row['tx_mnogosearch_type'], $row['uid']));
-			}
-			// Add any extra config
-			if (trim($row['tx_mnogosearch_additional_config'])) {
-				$content .= $row['tx_mnogosearch_additional_config'] . chr(10);
 			}
 		}
 		if ($content == '') {
@@ -348,7 +350,7 @@ DefaultContentType "text/html' .
 	 * @return	string	File name with URLs or empty string if there are no URLs
 	 */
 	protected function createNewUrlList() {
-		$res = $GLOBALS['TYPO3_DB']->sql_query('SELECT tx_mnogosearch_url FROM tx_mnogosearch_urllog');
+		$res = $GLOBALS['TYPO3_DB']->sql_query('SELECT uid,tx_mnogosearch_url FROM tx_mnogosearch_urllog ORDER BY uid');
 		$content = '';
 		while (false !== ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))) {
 			foreach ($this->allowedServerURLs as $allowedUrl) {

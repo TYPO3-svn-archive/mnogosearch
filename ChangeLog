@@ -1,3 +1,7 @@
+14-10-2008	Dmitry Dulepov	<dmitry@typo3.org>
+
+	* Fixed problem: URL log was never emptied
+
 09-10-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
 	* CLI script supports indexing database tables
