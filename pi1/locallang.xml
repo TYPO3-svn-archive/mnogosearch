@@ -49,7 +49,7 @@
 			<label index="bad_browser_charset">Error: browser character set "%s" is not known to mnoGoSearch</label>
 			<label index="mnogosearch_error">mnoGoSearch error %d: "%s"</label>
 
-			<label index="site_list">Limit search to sites:</label>
+			<label index="site_list">Limit search to:</label>
 
 			<label index="no_ts_setup">mnoGoSearch plugin error: plugin TypoScript setup is not included into site setup. Please, include it! If you indexed your site already, you will have to reindex it because existing index data will have too much irrelevant information.</label>
 		</languageKey>
