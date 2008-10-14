@@ -42,31 +42,13 @@ class tx_mnogosearch_postproc {
 	 * @param	object	$pObj	Reference to TSFE
 	 */
 	function contentPostProcOutput(&$params, &$pObj) {
-		$a = $GLOBALS['TSFE']->config['config']['tx_mnogosearch_enable'];
-		$b = $GLOBALS['TSFE']->type;
-		if (!intval($GLOBALS['TSFE']->config['config']['tx_mnogosearch_enable']) || $GLOBALS['TSFE']->type != 0) {
+		/* @var $pObj tslib_fe */
+		if (!intval($pObj->config['config']['tx_mnogosearch_enable']) || $pObj->type != 0) {
 			return;
 		}
 
 		// Only if no login user and page is searchable!
-		if (!$GLOBALS['TSFE']->page['no_search'] && !is_array($pObj->fe_user->user) && !count($pObj->fe_user->groupData['uid'])) {
-
-			// Add our comments
-			$parts = preg_split('/(<\/?body\s?[^>]*>)/ims', $pObj->content, -1, PREG_SPLIT_DELIM_CAPTURE);
-			if (count($parts) == 5) {
-				$pObj->content = $parts[0] . $parts[1] . '<!--UdmComment-->' . $parts[2] .
-							'<!--/UdmComment-->' . $parts[3] . $parts[4];
-			}
-
-			if (strpos($pObj->content, '<!--TYPO3SEARCH_begin-->'))  {
-				// Has search tags
-				$pObj->content = str_replace('<!--TYPO3SEARCH_begin-->', '<!--/UdmComment--><!--TYPO3SEARCH_begin-->', $pObj->content);
-				$pObj->content = str_replace('<!--TYPO3SEARCH_end-->', '<!--TYPO3SEARCH_end--><!--UdmComment-->', $pObj->content);
-			}
-			else {
-				// No search tags, enable search for the whole content
-				$pObj->content = preg_replace('/<!--\/?UdmComment-->/ims', '', $pObj->content);
-			}
+		if (!$pObj->page['no_search'] && !is_array($pObj->fe_user->user) && !count($pObj->fe_user->groupData['uid'])) {
 
 			// Set last modified time
 			if ($pObj->register['SYS_LASTCHANGED']) {
@@ -79,6 +61,31 @@ class tx_mnogosearch_postproc {
 				}
 				elseif (!$pObj->config['config']['sendCacheHeaders']) {
 					header('Last-modified: ' . gmdate('D, d M Y H:i:s T', $pObj->register['SYS_LASTCHANGED']));
+				}
+			}
+
+			if ($pObj->content) {
+				// Add our comments
+				$parts = preg_split('/(<\/?body\s?[^>]*>)/ims', $pObj->content, -1, PREG_SPLIT_DELIM_CAPTURE);
+				if (count($parts) == 5) {
+					$pObj->content = $parts[0] . $parts[1] . '<!--UdmComment-->' . $parts[2] .
+								'<!--/UdmComment-->' . $parts[3] . $parts[4];
+				}
+
+				if (!$pObj->config['config']['tx_mnogosearch_keepSiteTitle']) {
+					// Remove title
+					$pObj->content = preg_replace('/<title>(.*?)<\/title>/', '<title>' . $pObj->page['title'] . '</title>', $pObj->content);
+				}
+
+				// Respect TYPO3SEARCH_xxx
+				if (strpos($pObj->content, '<!--TYPO3SEARCH_begin-->'))  {
+					// Has search tags
+					$pObj->content = str_replace('<!--TYPO3SEARCH_begin-->', '<!--/UdmComment--><!--TYPO3SEARCH_begin-->', $pObj->content);
+					$pObj->content = str_replace('<!--TYPO3SEARCH_end-->', '<!--TYPO3SEARCH_end--><!--UdmComment-->', $pObj->content);
+				}
+				else {
+					// No search tags, enable search for the whole content
+					$pObj->content = preg_replace('/<!--\/?UdmComment-->/ims', '', $pObj->content);
 				}
 			}
 		}
