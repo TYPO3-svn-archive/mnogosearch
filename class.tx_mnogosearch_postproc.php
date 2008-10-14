@@ -42,6 +42,8 @@ class tx_mnogosearch_postproc {
 	 * @param	object	$pObj	Reference to TSFE
 	 */
 	function contentPostProcOutput(&$params, &$pObj) {
+		$a = $GLOBALS['TSFE']->config['config']['tx_mnogosearch_enable'];
+		$b = $GLOBALS['TSFE']->type;
 		if (!intval($GLOBALS['TSFE']->config['config']['tx_mnogosearch_enable']) || $GLOBALS['TSFE']->type != 0) {
 			return;
 		}
@@ -58,8 +60,8 @@ class tx_mnogosearch_postproc {
 
 			if (strpos($pObj->content, '<!--TYPO3SEARCH_begin-->'))  {
 				// Has search tags
-				$pObj->content = preg_replace('/<!--TYPO3SEARCH_begin-->/ims', '<!--/UdmComment--><!--TYPO3SEARCH_begin-->', $pObj->content);
-				$pObj->content = preg_replace('/<!--TYPO3SEARCH_end-->/ims', '<!--TYPO3SEARCH_end--><!--UdmComment-->', $pObj->content);
+				$pObj->content = str_replace('<!--TYPO3SEARCH_begin-->', '<!--/UdmComment--><!--TYPO3SEARCH_begin-->', $pObj->content);
+				$pObj->content = str_replace('<!--TYPO3SEARCH_end-->', '<!--TYPO3SEARCH_end--><!--UdmComment-->', $pObj->content);
 			}
 			else {
 				// No search tags, enable search for the whole content
