@@ -241,6 +241,8 @@ class tx_mnogosearch_results {
 						$typoLinkConf['additionalParams'] = str_replace('{field:uid}', $parts[3], $config['tx_mnogosearch_url_parameters']);
 					}
 					$newUrl = rawurldecode($pObj->cObj->typoLink_URL($typoLinkConf));
+					// Ensure that URL is complete
+					$newUrl = t3lib_div::locationHeaderUrl($newUrl);
 				}
 			}
 			
