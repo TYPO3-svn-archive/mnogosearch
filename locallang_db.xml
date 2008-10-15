@@ -48,6 +48,7 @@
 			<label index="cms_layout.mode_longform">Mode: Long search form</label>
 			<label index="cms_layout.mode_searchresults">Mode: Search results</label>
 			<label index="cms_layout.mode_none">Plugin is not configured!</label>
+			<label index="table_records">Records: %s</label>
 		</languageKey>
 	</data>
 </T3locallang>

@@ -8,6 +8,7 @@
 	* Fixed problem: indexing configuration is still not on pages
 	* Fixed problem: page 1 is always displayed in the results
 	* Removed site title from search results
+	* Added better label for indexing records
 
 09-10-2008	Dmitry Dulepov	<dmitry@typo3.org>
 

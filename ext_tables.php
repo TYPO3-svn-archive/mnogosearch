@@ -12,10 +12,59 @@ t3lib_extMgm::addStaticFile($_EXTKEY,'static/mnoGoSearch/', 'mnoGoSearch');
 
 $tx_mnogosearch_sysconf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$_EXTKEY]);
 
+/**
+ * Creates a record label from record data
+ *
+ * @param	array	$params	Parameters to the hook
+ * @return	void
+ */
+function tx_mnogosearch_indexingConfig_labelFunc(array &$params) {
+	require_once(t3lib_extMgm::extPath('lang', 'lang.php'));
+	if ($GLOBALS['LANG'] instanceof language) {
+		$lang = &$GLOBALS['LANG'];
+	}
+	else {
+		$lang = t3lib_div::makeInstance('language');
+		/* @var $lang language */
+		$lang->init($GLOBALS['BE_USER']->uc['lang']);
+	}
+	if ($params['row']['tx_mnogosearch_type'] == 11) {
+		// Records
+		$row = t3lib_BEfunc::getRecord($params['table'], $params['row']['uid'], 'tx_mnogosearch_table');
+		if (isset($GLOBALS['TCA'][$row['tx_mnogosearch_table']])) {
+			$params['title'] = sprintf(
+					$lang->sL('LLL:EXT:mnogosearch/locallang_db.xml:table_records'),
+					$lang->sL($GLOBALS['TCA'][$row['tx_mnogosearch_table']]['ctrl']['title'])
+				);
+		}
+		else {
+			$params['title'] = $params['table'];
+		}
+	}
+	else {
+		// Server or Realm
+		$params['title'] = $params['row']['tx_mnogosearch_url'];
+		$row = t3lib_BEfunc::getRecord($params['table'], $params['row']['uid'], 'tx_mnogosearch_method');
+		t3lib_div::loadTCA($params['table']);
+		foreach ($GLOBALS['TCA'][$params['table']]['columns']['tx_mnogosearch_method']['config']['items'] as $item) {
+			if ($item[1] == $row['tx_mnogosearch_method']) {
+				$method = $item[0];
+				break;
+			}
+		}
+		if ($method == '') {
+			$method = 'LLL:EXT:mnogosearch/locallang_db.xml:tx_mnogosearch_indexconfig.tx_mnogosearch_method.allow';
+		}
+		$params['title'] = sprintf('%s: %s', $lang->sL($method), $params['row']['tx_mnogosearch_url']);
+	}
+}
+
+
 $TCA['tx_mnogosearch_indexconfig'] = array (
 	'ctrl' => array (
 		'title'     => 'LLL:EXT:mnogosearch/locallang_db.xml:tx_mnogosearch_indexconfig',
 		'label'     => 'tx_mnogosearch_url',
+		'label_userFunc' => 'tx_mnogosearch_indexingConfig_labelFunc',
 		'type'		=> 'tx_mnogosearch_type',
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
