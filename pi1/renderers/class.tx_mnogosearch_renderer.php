@@ -30,9 +30,15 @@
  * @subpackage	tx_mnogosearch
  */
 class tx_mnogosearch_renderer {
+
+	/**
+	 * Calling object
+	 *
+	 * @var tx_mnogosearch_pi1
+	 */
 	var $pObj;
 
-	function init(&$pObj) {
+	function init(tx_mnogosearch_pi1 &$pObj) {
 		$this->pObj = $pObj;
 		return true;
 	}
@@ -52,7 +58,7 @@ class tx_mnogosearch_renderer {
 	/* Protected */
 
 	function getLink($page) {
-		 return $this->pObj->pi_linkTP_keepPIvars_url(array('page' => $page), 1);
+		return $this->pObj->pi_linkTP_keepPIvars_url(array('page' => $page), 1);
 	}
 }
 

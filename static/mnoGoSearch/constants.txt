@@ -5,4 +5,7 @@ plugin.tx_mnogosearch_pi1 {
 
 	# cat=plugin.mnoGoSearch: Basic; type=string; label=Site list:Comma-separated list of "Indexing configuration" entries. If set, it will limit search to these sites.
 	siteList =
+
+	# cat=plugin.mnoGoSearch: Basic; type=string; label=Template file
+	templateFile = EXT:mnogosearch/res/template.html
 }

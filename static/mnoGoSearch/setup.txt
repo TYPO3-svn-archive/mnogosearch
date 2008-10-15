@@ -13,6 +13,13 @@ plugin.tx_mnogosearch_pi1 {
 	includeLibs = EXT:mnogosearch/pi1/class.tx_mnogosearch_pi1.php
 	userFunc = tx_mnogosearch_pi1->main
 
+	# Template file
+	templateFile = {$plugin.tx_mnogosearch_pi1.templateFile}
+
+	# Search options
+	searchOptions {
+	}
+
 	# Hightlight for found words
 	excerptHighlight = {$plugin.tx_mnogosearch_pi1.excerptHighlight}
 

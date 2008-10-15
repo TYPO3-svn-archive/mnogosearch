@@ -1,0 +1,14 @@
+.tx-mnogosearch-long-form TABLE TR TD { vertical-align: top; padding: 1px 3px; }
+
+.tx-mnogosearch-pi1-summary { background-color: whitesmoke; padding: 2px 3px; margin: 3px 0; }
+	.tx-mnogosearch-pi1-summary-value { font-weight: bold; }
+
+.tx-mnogosearch-pi1-results { margin: 5px 0; }
+	A.tx-mnogosearch-pi1-result-url { font-weight: bold; }
+	.tx-mnogosearch-pi1-result-relevancy { padding-left: 20px; }
+	.tx-mnogosearch-pi1-result-excerpt { margin: 3px 0 0 30px; padding: 0 0; }
+	.tx-mnogosearch-pi1-result-link { margin: 0 0 3px 30px; padding: 0 0; font-size: 90%; color: green; }
+.tx-mnogosearch-pi1-result-excerpt-selection { font-weight: bold; }
+	UL.tx-mnogosearch-pi1-results-links { display: none; margin: 0 0 0 50px; list-style-position: inside; }
+.tx-mnogosearch-pi1-page-list { text-align: center; margin: 10px 0; }
+	.tx-mnogosearch-pi1-pagelink { padding: 0 2px; }

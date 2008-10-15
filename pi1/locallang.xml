@@ -52,6 +52,15 @@
 			<label index="site_list">Limit search to:</label>
 
 			<label index="no_ts_setup">mnoGoSearch plugin error: plugin TypoScript setup is not included into site setup. Please, include it! If you indexed your site already, you will have to reindex it because existing index data will have too much irrelevant information.</label>
+
+			<label index="text_submit_short">Search</label>
+			<label index="text_submit_long">Search now!</label>
+			<label index="text_search_text">Search for:</label>
+			<label index="text_search_results">Search results:</label>
+			<label index="search_took">Search took %0.3f seconds</label>
+			<label index="result_range">Displaying results %1$d-%2$d of %3$d</label> <!-- + stdWrap for numbers! -->
+			<label index="page_range">Page %1$d of %2$d</label> <!-- + stdWrap for numbers! -->
+			<label index="text_nothing_found">The search returned no results.</label>
 		</languageKey>
 	</data>
 </T3locallang>

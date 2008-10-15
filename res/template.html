@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="lv" lang="lv">
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<title>Search form template</title>
+<!-- ###HEADER_ADDITIONS### begin -->
+<link rel="stylesheet" href="###SITE_REL_PATH###res/styles.css" />
+<!-- ###HEADER_ADDITIONS### end -->
+</head>
+<body>
+
+
+<!-- ###SHORT_SEARCH_FORM### begin -->
+<!--UdmComment-->
+<div class="tx-mnogosearch-short-search-form">
+	<form action="###SHORT_SEARCH_FORM_ACTION###" method="post">
+		<input type="text" name="tx_mnogosearch_pi1[q]" value="###SHORT_SEARCH_FORM_VALUE###" />
+		<input type="submit" name="tx_mnogosearch_pi1[submit]" value="###TEXT_SEARCH###" />
+	</form>
+</div>
+<!--/UdmComment-->
+<!-- ###SHORT_SEARCH_FORM### end -->
+
+
+
+
+
+
+
+
+<hr />
+<!-- ###LONG_SEARCH_FORM### begin -->
+<!--UdmComment-->
+<div id="long-search-form">
+	<form id="" class="tx-mnogosearch-long-form" action="###LONG_SEARCH_FORM_ACTION###" method="post">	<!-- map: action, name, id -->
+		<table>
+			<tr><td>
+				Search for:
+			</td><td colspan="3">
+				<input size="50" type="text" name="tx_mnogosearch_pi1[q]" value="###LONG_SEARCH_FORM_VALUE###" />	<!-- map: value -->
+			</td></tr>
+			<tr><td>
+			</td><td>
+				<input type="submit" name="tx_mnogosearch_pi1[submit]" value="###TEXT_SEARCH###" />
+			</td></tr>
+		</table>
+	</form>
+</div>
+<!--/UdmComment-->
+<!-- ###LONG_SEARCH_FORM### end -->
+
+
+
+
+
+
+
+<hr />
+<!-- ###SEARCH_RESULTS### begin -->
+<!--UdmComment-->
+<div class="tx-mnogosearch-search-results">
+	<div class="tx-mnogosearch-pi1-summary">
+		<!-- Search for: abc xyz -->
+		###TEXT_SEARCH_TEXT### ###SEARCH_RESULTS_TERMS###.
+		<!-- Results: abc: 5, xyz: 6 -->
+		###TEXT_SEARCH_RESULTS### ###SEARCH_RESULTS_STATISTICS###.
+		<!-- Search took: 0.001 seconds -->
+		###SEARCH_TOOK###.
+		<br />
+		<!-- Displaying results 1-10 of 100. Page 1 of 10. -->
+		###RESULT_RANGE###. ###PAGE_RANGE###.
+	</div>
+	<div class="tx-mnogosearch-pi1-results">
+
+		<!-- ###SEARCH_RESULTS_EMPTY### begin -->
+			###TEXT_NOTHING_FOUND###
+		<!-- ###SEARCH_RESULTS_EMPTY### end -->
+
+		<!-- ###SEARCH_RESULTS_CONTENT### begin -->
+			<ol class="tx-mnogosearch-pi1-result" type="1" start="###SEARCH_RESULTS_FIRST###">
+			<!-- ###SEARCH_RESULTS_RESULT### begin -->
+				<li>
+					<p class="tx-mnogosearch-pi1-result-data">
+					<a class="tx-mnogosearch-pi1-result-url" href="###SEARCH_RESULTS_RESULT_URL###">###SEARCH_RESULTS_RESULT_TITLE###</a>
+					<span class="tx-mnogosearch-pi1-result-relevancy">[<span>###SEARCH_RESULTS_RESULT_RELEVANCY###</span>%]</span>
+					</p>
+					<p class="tx-mnogosearch-pi1-result-excerpt">
+						###SEARCH_RESULTS_RESULT_EXCERPT###
+					</p>
+					<p class="tx-mnogosearch-pi1-result-link">
+					###SEARCH_RESULTS_RESULT_URL###
+					</p>
+					<!-- ###SEARCH_RESULTS_RESULT_LINKS### begin -->
+					<ul class="tx-mnogosearch-pi1-results-links">
+						<!-- ###SEARCH_RESULTS_RESULT_ALT_LINK### begin -->
+						<li>
+							<a href="###SEARCH_RESULTS_RESULT_ALT_LINK_URL###">###SEARCH_RESULTS_RESULT_ALT_LINK_TITLE###</a>
+						</li>
+						<!-- ###SEARCH_RESULTS_RESULT_ALT_LINK### end -->
+					</ul>
+					<!-- ###SEARCH_RESULTS_RESULT_LINKS### end -->
+				</li>
+			<!-- ###SEARCH_RESULTS_RESULT### end -->
+			</ol>
+		<!-- ###SEARCH_RESULTS_CONTENT### end -->
+	</div>
+
+	<hr size="1" />
+	<!-- ###SEARCH_RESULTS_PAGER### begin -->
+	<div class="tx-mnogosearch-pi1-page-list">
+		<!-- ###SEARCH_RESULTS_PAGER_PREV### begin -->
+		<span><a href="###SEARCH_RESULTS_PAGER_PREV_LINK###">&laquo; Previous</a> |</span>
+		<!-- ###SEARCH_RESULTS_PAGER_PREV### end -->
+		<span><span class="tx-mnogosearch-pi1-pagelink">###SEARCH_RESULTS_PAGER_CURRENT_PAGE###</span></span>
+		<!-- ###SEARCH_RESULTS_PAGER_NEXT### -->
+		<span>| <a href="###SEARCH_RESULTS_PAGER_NEXT_LINK###">Next &raquo;</a></span>
+		<!-- ###SEARCH_RESULTS_PAGER_NEXT### end -->
+	</div>
+	<!-- ###SEARCH_RESULTS_PAGER### end -->
+</div>
+<!--/UdmComment-->
+<!-- ###SEARCH_RESULTS### end -->
+
+</body>
+</html>
