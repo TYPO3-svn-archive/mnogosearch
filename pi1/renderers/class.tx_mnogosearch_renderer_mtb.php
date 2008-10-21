@@ -108,6 +108,7 @@ class tx_mnogosearch_renderer_mtb extends tx_mnogosearch_renderer {
 			$rpp = 20;
 		}
 		$page = intval($results->firstDoc/$rpp);
+		$numPages = ($results->totalResults/$rpp + (($results->totalResults % $rpp) == 0 ? 0 : 1));
 
 		// Get template for this function
 		$template = $this->pObj->cObj->getSubpart($this->templateCode, '###SEARCH_RESULTS###');
@@ -130,16 +131,23 @@ class tx_mnogosearch_renderer_mtb extends tx_mnogosearch_renderer {
 						'###SEARCH_RESULTS_RESULT_TITLE###' => $result->title,	// todo: htmlspecialchars?
 						'###SEARCH_RESULTS_RESULT_RELEVANCY###' => sprintf('%.2f', $result->rating),
 						'###SEARCH_RESULTS_RESULT_EXCERPT###' => $result->excerpt,
-						));
+						'###TEXT_ADDITIONAL_RESULTS###' => $this->pObj->pi_getLL('text_additional_results'),
+						'###UNIQID###' => uniqid('c'),
+					));
 				// Make links
 				$links = '';
-				foreach (array_merge(array($result), $result->clones) as $r) {
+				foreach ($result->clones as $r) {
 					$links .= $this->pObj->cObj->substituteMarkerArray($linksTemplate, array(
 						'###SEARCH_RESULTS_RESULT_ALT_LINK_URL###' => $r->url,
 						'###SEARCH_RESULTS_RESULT_ALT_LINK_TITLE###' => $r->url,
 						));
 				}
-				$resultList .= $this->pObj->cObj->substituteSubpart($t, '###SEARCH_RESULTS_RESULT_ALT_LINK###', $links);
+				if ($links != '') {
+					$resultList .= $this->pObj->cObj->substituteSubpart($t, '###SEARCH_RESULTS_RESULT_ALT_LINK###', $links);
+				}
+				else {
+					$resultList .= $this->pObj->cObj->substituteSubpart($t, '###SEARCH_RESULTS_RESULT_LINKS###', '');
+				}
 			}
 			// Wrap
 			$resultTemplate = $this->pObj->cObj->getSubpart($this->templateCode, '###SEARCH_RESULTS_CONTENT###');
@@ -168,11 +176,15 @@ class tx_mnogosearch_renderer_mtb extends tx_mnogosearch_renderer {
 
 		// Put all together
 		$totalPages = intval($results->totalResults/$rpp) + ($results->totalResults % $rpp ? 1 : 0);
+		$wordInfo = str_replace(' / ', '/', $results->wordInfo);
+		$wordInfo = str_replace(' :', ':', $wordInfo);
+		// TODO stdWrap numbers inside $wordInfo
+		$timeStr = sprintf($this->pObj->conf['time_format'], $results->searchTime);
 		$content = $this->pObj->cObj->substituteMarkerArray($template, array(
 				// Older markers (partially for compatibility)
 				'###SEARCH_RESULTS_TERMS###' => htmlspecialchars($this->pObj->piVars['q']),
-				'###SEARCH_RESULTS_STATISTICS###' => htmlspecialchars($results->wordInfo),
-				'###SEARCH_RESULTS_TIME###' => sprintf('%.3f', $results->searchTime),
+				'###SEARCH_RESULTS_STATISTICS###' => htmlspecialchars($wordInfo),
+				'###SEARCH_RESULTS_TIME###' => $timeStr,
 				'###SEARCH_RESULTS_FIRST###' => $results->firstDoc,
 				'###SEARCH_RESULTS_LAST###' => $results->lastDoc,
 				'###SEARCH_RESULTS_TOTAL###' => $results->totalResults,
@@ -182,21 +194,38 @@ class tx_mnogosearch_renderer_mtb extends tx_mnogosearch_renderer {
 				'###TEXT_SEARCH_TEXT###' => $this->pObj->pi_getLL('text_search_text'),
 				'###TEXT_SEARCH_RESULTS###' => $this->pObj->pi_getLL('text_search_results'),
 				'###SEARCH_TOOK###' => sprintf($this->pObj->pi_getLL('search_took'),
-											$this->pObj->cObj->stdWrap($results->searchTime, $pObj->conf['number_stdWrap'])),
+											$this->pObj->cObj->stdWrap($timeStr, $this->pObj->conf['number_stdWrap.'])),
+				'###SEARCH_TOOK_SHORT###' => sprintf($this->pObj->pi_getLL('search_took_short'),
+											$this->pObj->cObj->stdWrap($timeStr, $this->pObj->conf['number_stdWrap.'])),
 				'###RESULT_RANGE###' => sprintf($this->pObj->pi_getLL('result_range'),
-											$this->pObj->cObj->stdWrap($results->firstDoc, $pObj->conf['number_stdWrap']),
-											$this->pObj->cObj->stdWrap($results->lastDoc, $pObj->conf['number_stdWrap']),
-											$this->pObj->cObj->stdWrap($results->totalResults, $pObj->conf['number_stdWrap'])
+											$this->pObj->cObj->stdWrap($results->firstDoc, $this->pObj->conf['number_stdWrap.']),
+											$this->pObj->cObj->stdWrap($results->lastDoc, $this->pObj->conf['number_stdWrap.']),
+											$this->pObj->cObj->stdWrap($results->totalResults, $this->pObj->conf['number_stdWrap.'])
 											),
 				'###PAGE_RANGE###' => sprintf($this->pObj->pi_getLL('page_range'),
-											$this->pObj->cObj->stdWrap($page + 1, $pObj->conf['number_stdWrap']),
-											$this->pObj->cObj->stdWrap($totalPages, $pObj->conf['number_stdWrap'])
+											$this->pObj->cObj->stdWrap($page + 1, $this->pObj->conf['number_stdWrap.']),
+											$this->pObj->cObj->stdWrap($totalPages, $this->pObj->conf['number_stdWrap.'])
 											),
+				'###PAGE_BROWSER###' => $this->getPageBrowser($numPages),
 			));
 		$content = $this->pObj->cObj->substituteSubpart($content, '###SEARCH_RESULTS_CONTENT###', $resultList);
 		$content = $this->pObj->cObj->substituteSubpart($content, '###SEARCH_RESULTS_EMPTY###', '');
 		$content = $this->pObj->cObj->substituteSubpart($content, '###SEARCH_RESULTS_PAGER###', $pager);
 		return $content;
+	}
+
+	function getPageBrowser($numberOfPages) {
+		$pageBrowserKind = $this->pObj->conf['pageBrowser'];
+		$pageBrowserConfig = (array)$this->pObj->conf['pageBrowser.'];
+		$pageBrowserConfig += array(
+			'pageParameterName' => $this->pObj->prefixId . '|page',
+			'numberOfPages' => $numberOfPages,
+		);
+		// Get page browser
+		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		/* @var $cObj tslib_cObj */
+		$cObj->start(array(), '');
+		return $cObj->cObjGetSingle($pageBrowserKind, $pageBrowserConfig);
 	}
 }
 

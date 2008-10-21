@@ -20,9 +20,17 @@ plugin.tx_mnogosearch_pi1 {
 	searchOptions {
 	}
 
+	number_stdWrap.wrap = <b>|</b>
+	time_format = %0.3f
+
 	# Hightlight for found words
 	excerptHighlight = {$plugin.tx_mnogosearch_pi1.excerptHighlight}
 
 	# Limit search to these sites
 	siteList = {$plugin.tx_mnogosearch_pi1.siteList}
+
+	# Page browser configuration
+	pageBrowser < plugin.tx_pagebrowse_pi1
+	pageBrowser.disableCacheHash = 1
+
 }

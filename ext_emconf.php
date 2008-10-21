@@ -18,7 +18,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'author_email' => 'dmitry@typo3.org',
 	'shy' => '',
 	'dependencies' => '',
-	'conflicts' => 'realurl,tstidy',
+	'conflicts' => 'tstidy',
 	'priority' => '',
 	'module' => '',
 	'state' => 'stable',
@@ -34,9 +34,9 @@ $EM_CONF[$_EXTKEY] = array(
 		'depends' => array(
 			'typo3' => '4.1.1-0.0.0',
 			'php' => '5.1.0-0.0.0',
+			'pagebrowse' => '',
 		),
 		'conflicts' => array(
-			'realurl' => '0.0.0-0.999.999',
 			'tstidy' => '',
 		),
 		'suggests' => array(

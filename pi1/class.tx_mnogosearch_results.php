@@ -83,29 +83,32 @@ class tx_mnogosearch_results {
 			//$ndoc=Udm_Get_Res_Field($res,$i,UDM_FIELD_ORDER);
 			$result->rating = Udm_Get_Res_Field($res, $i, UDM_FIELD_RATING);
 			$result->title = Udm_Get_Res_Field($res, $i, UDM_FIELD_TITLE);
-  			if ($result->title == '') {
-  				$result->title = basename($result->url);
-  			}
-  			$result->title = $this->highlight($result->title, $pObj);
-  			$result->excerpt = $this->highlight(strip_tags(Udm_Get_Res_Field($res, $i, UDM_FIELD_TEXT)), $pObj);
-  			$result->keywords = $this->highlight(strip_tags(Udm_Get_Res_Field($res, $i, UDM_FIELD_KEYWORDS)), $pObj);
-  			$result->description = $this->highlight(strip_tags(Udm_Get_Res_Field($res, $i, UDM_FIELD_DESC)), $pObj);
-  			$result->language = Udm_Get_Res_Field($res, $i, UDM_FIELD_LANG);
-  			$result->charset = Udm_Get_Res_Field($res, $i, UDM_FIELD_CHARSET);
-  			$result->category = Udm_Get_Res_Field($res,$i,UDM_FIELD_CATEGORY);
+			if ($result->title == '') {
+				$result->title = basename($result->url);
+			}
+			$result->title = $this->highlight($result->title, $pObj);
+			$result->excerpt = $this->highlight(strip_tags(Udm_Get_Res_Field($res, $i, UDM_FIELD_TEXT)), $pObj);
+			$result->keywords = $this->highlight(strip_tags(Udm_Get_Res_Field($res, $i, UDM_FIELD_KEYWORDS)), $pObj);
+			$result->description = $this->highlight(strip_tags(Udm_Get_Res_Field($res, $i, UDM_FIELD_DESC)), $pObj);
+			$result->language = Udm_Get_Res_Field($res, $i, UDM_FIELD_LANG);
+			$result->charset = Udm_Get_Res_Field($res, $i, UDM_FIELD_CHARSET);
+			$result->category = Udm_Get_Res_Field($res,$i,UDM_FIELD_CATEGORY);
 
-			// Check clones of necessary
+			// Check clones if necessary
 			if ((intval($pObj->pi_getFFvalue($pObj->cObj->data['pi_flexform'], 'field_options')) & 32)) {
 				if (0 == Udm_Get_Res_Field($res, $i, UDM_FIELD_ORIGINID)) {
 					$urlId = Udm_Get_Res_Field($res, $i, UDM_FIELD_URLID);
 					for ($j = 0; $j < $this->numRows; $j++) {
 						if ($j != $i && $urlId == Udm_Get_Res_Field($res, $j, UDM_FIELD_ORIGINID)) {
-							$clone = new tx_mnogosearch_result;
-							$clone->url = $this->processURL(Udm_Get_Res_Field($res, $j, UDM_FIELD_URL), $pObj);
-							$clone->contentType = Udm_Get_Res_Field($res, $j, UDM_FIELD_CONTENT);
-	  						$clone->documentSize = Udm_Get_Res_Field($res, $j, UDM_FIELD_SIZE);
-	  						//$clone->lastModified = format_lastmod(Udm_Get_Res_Field($res,$j,UDM_FIELD_MODIFIED));
-	  						$result->clones[] = $clone;
+							$url = $this->processURL(Udm_Get_Res_Field($res, $j, UDM_FIELD_URL), $pObj);
+							if ($url != $result->url) {
+								$clone = new tx_mnogosearch_result;
+								$clone->url = $url;
+								$clone->contentType = Udm_Get_Res_Field($res, $j, UDM_FIELD_CONTENT);
+								$clone->documentSize = Udm_Get_Res_Field($res, $j, UDM_FIELD_SIZE);
+								//$clone->lastModified = format_lastmod(Udm_Get_Res_Field($res,$j,UDM_FIELD_MODIFIED));
+								$result->clones[] = $clone;
+							}
 						}
 					}
 				}
@@ -201,7 +204,7 @@ class tx_mnogosearch_results {
 		$offset = rand(0, count($lipsum) - $size);
 		return ($offset == 0 ? '' : '...') . implode(' ', array_slice($lipsum, $offset, $size)) . '...';
 	}
-	
+
 	/**
 	 * Converts htdb:/ scheme into HTTP
 	 *
@@ -245,7 +248,7 @@ class tx_mnogosearch_results {
 					$newUrl = t3lib_div::locationHeaderUrl($newUrl);
 				}
 			}
-			
+
 			$url = $newUrl;
 		}
 		return $url;
