@@ -2,6 +2,7 @@
 
 	* Changed template file to add more markers, look like Google, use pagebrowse extension
 	* Fixed very low page rank
+	* Fixed problem with t3lib_div::getDomainStartPage() not finding correct domain
 
 15-10-2008	Dmitry Dulepov	<dmitry@typo3.org>
 

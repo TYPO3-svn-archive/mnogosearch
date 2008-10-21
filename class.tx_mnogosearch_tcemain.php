@@ -304,8 +304,15 @@ class tx_mnogosearch_tcemain {
 		$this->log('CP17');
 		$GLOBALS['TSFE']->connectToDB();
 		$this->log('CP18');
-		// Must prevent any redirects, etc
+
+		// We have to patch $_SERVER['SCRIPT_NAME'] because t3lib_div::getDomainStartPage()
+		// will stupidly append typo3/ to the domain name and thus fail to get domain
+		$scriptName = $_SERVER['SCRIPT_NAME'];
+		$subdir = trim(dirname(dirname($scriptName)), '/');
+		$_SERVER['SCRIPT_NAME'] = ($subdir ? '/' . $subdir : '') . '/index.php';
 		$GLOBALS['TSFE']->determineId();
+		$_SERVER['SCRIPT_NAME'] = $scriptName;
+
 
 		$this->log('CP19');
 		$tempcObj= t3lib_div::makeInstance('tslib_cObj');
