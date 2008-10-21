@@ -245,12 +245,13 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_MAX_WORD_LEN, $val ? $val : 32);
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_VARDIR, PATH_site . 'typo3temp/mnogosearch/var'); //$this->sysconf['mnoGoSearchPath'] . '/var');
 		// Weight factors (0-15, which is 0-F in hex, see CLI script for sections):
-		//	body: F
-		//	title: A
-		//	keywords: A
-		//	description: 4
+		//	body: 8 (more than 8 will lower rank for title, less than 8 will lower rank for body)
+		//	title: F (title needs highest!)
+		//	keywords: 1 (minimal)
+		//	description: 1 (minimal)
 		//	fe group id: 1 (may not set to 0 but must not have any real weight!)
-		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_WEIGHT_FACTOR, 0x14AAF);
+		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_WEIGHT_FACTOR, 0x111F8);
+		Udm_Set_Agent_Param_Ex($udmAgent, 'NumSections', 5);	// Affects PageRank!!!
 		$val = intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_excerptSize'));
 		if ($val && t3lib_div::testInt($val)) {
 			Udm_Set_Agent_Param_Ex($udmAgent, 'ExcerptSize', $val);
@@ -386,7 +387,7 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 			foreach ($domainList as $domain) {
 				Udm_Add_Search_Limit($udmAgent, UDM_LIMIT_URL, $domain['tx_mnogosearch_url']);
 			}
-			
+
 			// Limit htdb domains
 			$recordList = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('tx_mnogosearch_url',
 				'tx_mnogosearch_indexconfig',

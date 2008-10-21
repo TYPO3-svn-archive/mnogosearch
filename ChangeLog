@@ -1,6 +1,7 @@
 21-10-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
 	* Changed template file to add more markers, look like Google, use pagebrowse extension
+	* Fixed very low page rank
 
 15-10-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
