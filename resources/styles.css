@@ -7,6 +7,12 @@
 	margin: 3px 0;
 }
 
+.tx-mnogosearch-page-browser {
+	xbackground-color: #e7e7e7;
+	padding: 15px 0;
+	margin: 10px 0;
+}
+
 .tx-mnogosearch-summary-value {
 	font-weight: bold;
 }
