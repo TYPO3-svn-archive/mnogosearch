@@ -4,6 +4,7 @@
 	* Renamed res/ to resources/
 	* Move some classes toward MVC model
 	* Made page browser more distinct on the page
+	* Made TCEmain hook 4.3-compatible
 
 21-10-2008	Dmitry Dulepov	<dmitry@typo3.org>
 

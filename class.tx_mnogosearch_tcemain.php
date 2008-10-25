@@ -36,14 +36,10 @@
  */
 class tx_mnogosearch_tcemain {
 
-	var $sysconf = array();
-
-	function tx_mnogosearch_tcemain() {
-		$this->sysconf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mnogosearch']);
-	}
+	protected $sysconf = array();
 
 	function __construct() {
-		$this->tx_mnogosearch_tcemain();
+		$this->sysconf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mnogosearch']);
 	}
 
 	/**
@@ -215,14 +211,36 @@ class tx_mnogosearch_tcemain {
 		require_once(PATH_site.'t3lib/class.t3lib_page.php');
 		require_once(PATH_site.'t3lib/class.t3lib_timetrack.php');
 
+		$initCache = version_compare(TYPO3_branch, '4.3', '>=');
+		if ($initCache) {
+			require_once(PATH_t3lib . 'cache/class.t3lib_cache_abstractbackend.php');
+			require_once(PATH_t3lib . 'cache/class.t3lib_cache_abstractcache.php');
+			require_once(PATH_t3lib . 'cache/class.t3lib_cache_exception.php');
+			require_once(PATH_t3lib . 'cache/class.t3lib_cache_factory.php');
+			require_once(PATH_t3lib . 'cache/class.t3lib_cache_manager.php');
+			require_once(PATH_t3lib . 'cache/class.t3lib_cache_variablecache.php');
+			require_once(PATH_t3lib . 'cache/exception/class.t3lib_cache_exception_classalreadyloaded.php');
+			require_once(PATH_t3lib . 'cache/exception/class.t3lib_cache_exception_duplicateidentifier.php');
+			require_once(PATH_t3lib . 'cache/exception/class.t3lib_cache_exception_invalidbackend.php');
+			require_once(PATH_t3lib . 'cache/exception/class.t3lib_cache_exception_invalidcache.php');
+			require_once(PATH_t3lib . 'cache/exception/class.t3lib_cache_exception_invaliddata.php');
+			require_once(PATH_t3lib . 'cache/exception/class.t3lib_cache_exception_nosuchcache.php');
+			$GLOBALS['typo3CacheManager'] = t3lib_div::makeInstance('t3lib_cache_Manager');
+			$cacheFactoryClass = t3lib_div::makeInstanceClassName('t3lib_cache_Factory');
+			$GLOBALS['typo3CacheFactory'] = new $cacheFactoryClass($GLOBALS['typo3CacheManager']);
+			unset($cacheFactoryClass);
+		}
+
 		// Finds the TSFE classname
 		$TSFEclassName = t3lib_div::makeInstanceClassName('tslib_fe');
 
 		// Create the TSFE class.
-		$this->log('CP1');
 		$TYPO3_CONF_VARS = $GLOBALS['TYPO3_CONF_VARS'];
 		unset($TYPO3_CONF_VARS['SC_OPTIONS']['tslib/class.tslib_fe.php']['checkAlternativeIdMethods-PostProc']);
 		$GLOBALS['TSFE'] = new $TSFEclassName($TYPO3_CONF_VARS, $pid, '0', 0, '','','','');
+		if ($initCache) {
+			$GLOBALS['TSFE']->initCaches();
+		}
 
 		$this->log('CP2');
 		$temp_TTclassName = t3lib_div::makeInstanceClassName('t3lib_timeTrack');
