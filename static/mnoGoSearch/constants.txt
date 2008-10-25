@@ -1,7 +1,7 @@
 plugin.tx_mnogosearch_pi1 {
 
 	# cat=plugin.mnoGoSearch: Basic; type=string; label=Template file
-	templateFile = EXT:mnogosearch/res/template.html
+	templateFile = EXT:mnogosearch/resources/template.html
 
 	# cat=plugin.mnoGoSearch: Search forms; type=int+; label=Page with results:ID of the page where search results are displayed. Empty means current page.
 	resultsPage =
