@@ -36,21 +36,21 @@ define('UDM_DISABLED', 0);
  * @subpackage	tx_mnogosearch
  */
 class tx_mnogosearch_pi1 extends tslib_pibase {
-	var $prefixId      = 'tx_mnogosearch_pi1';		// Same as class name
-	var $scriptRelPath = 'pi1/class.tx_mnogosearch_pi1.php';	// Path to this script relative to the extension dir.
-	var $extKey        = 'mnogosearch';	// The extension key.
-	var $renderer = false;
-	var $udmApiVersion;
-	var $highlightParts = array('', '');
-	var $sysconf;
-	var $templateTestMode;
+	public $prefixId      = 'tx_mnogosearch_pi1';		// Same as class name
+	public $scriptRelPath = 'pi1/class.tx_mnogosearch_pi1.php';	// Path to this script relative to the extension dir.
+	public $extKey        = 'mnogosearch';	// The extension key.
+	protected $renderer = false;
+	protected $udmApiVersion;
+	protected $highlightParts = array('', '');
+	public $sysconf;
+	public $templateTestMode;
 
 	/**
 	 * Initializes the plugin. Checks mnoGoSearch version and plugin configuration.
 	 *
 	 * @return	string	Error message (empty if successful)
 	 */
-	function init() {
+	protected function init() {
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
 		$this->pi_USER_INT_obj = 1;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
@@ -103,7 +103,7 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 	 * @param	array		$conf: The PlugIn configuration
 	 * @return	The content that is displayed on the website
 	 */
-	function main($content, $conf)	{
+	public function main($content, $conf)	{
 		$this->conf = $conf;
 
 		if ('' != ($error = $this->init())) {
@@ -142,7 +142,7 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 	 *
 	 * @return	mixed	Returns found records or string in case of error
 	 */
-	function search() {
+	protected function search() {
 
 		// Allocate and setup agent
 		$udmAgent = Udm_Alloc_Agent_Array(array($this->sysconf['dbaddr']));
@@ -178,7 +178,7 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 	 * @param	resource	$udmAgent	Agent configuration
 	 * @return	string	Empty if no error
 	 */
-	function setUpAgent(&$udmAgent) {
+	protected function setUpAgent(&$udmAgent) {
 		$val = intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_resultsPerPage'));
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_PAGE_SIZE, $val ? $val : 20);
 		$this->piVars['page'] = max(0, intval($this->piVars['page']));
@@ -284,7 +284,7 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 	 *
 	 * @param	resource	$udmAgent	Agent
 	 */
-	function loadIspellData(&$udmAgent) {
+	protected function loadIspellData(&$udmAgent) {
 		$extraConfig = $this->loadExtraConfig();
 
 		if (!($affix_files = $extraConfig['affix'])) {
@@ -323,7 +323,7 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 	 * @param	string	$data	Spell file information (see mnoGoSearch docs). Example: <code>en us-ascii /etc/ispell/english.aff</code>
 	 * @param	int	$sort	1, if sorting should happen
 	 */
-	function loadSpellFile(&$udmAgent, $fileType, $data, $sort) {
+	protected function loadSpellFile(&$udmAgent, $fileType, $data, $sort) {
 		list($file, $charset, $lang) = array_reverse(t3lib_div::trimExplode(' ', $data, 1));
 		Udm_Load_Ispell_Data($udmAgent, $fileType, $lang, $charset, $file, $sort);
 	}
@@ -333,7 +333,7 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 	 *
 	 * @return	array	Key/value pair for configuration
 	 */
-	function loadExtraConfig() {
+	protected function loadExtraConfig() {
 		$result = array();
 		if ($this->sysconf['IncludeFile']) {
 			$lines = @file($this->sysconf['IncludeFile']);
@@ -364,8 +364,8 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 	 *
 	 * @return	tx_mnogosearch_results	Generated results
 	 */
-	function getTestResults() {
-		$result = t3lib_div::makeInstance('tx_mnogosearch_results');
+	protected function getTestResults() {
+		$result = t3lib_div::makeInstanceClassName('tx_mnogosearch_results');
 		/* @var $result tx_mnogosearch_results */
 		$result->initTest($this);
 		return $result;
@@ -377,7 +377,7 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 	 * @param	resource	$udmAgent	UDM agent
 	 * @return	void
 	 */
-	function addSearchRestrictions(&$udmAgent) {
+	protected function addSearchRestrictions(&$udmAgent) {
 		if ($this->conf['siteList']) {
 			// Limit normal domains
 			$domainList = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('tx_mnogosearch_url',
