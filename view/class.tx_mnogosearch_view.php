@@ -29,7 +29,7 @@
  * @package	TYPO3
  * @subpackage	tx_mnogosearch
  */
-class tx_mnogosearch_renderer_mtb {
+class tx_mnogosearch_view {
 
 	/** Template file content */
 	protected $templateCode;
@@ -249,8 +249,8 @@ class tx_mnogosearch_renderer_mtb {
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mnogosearch/pi1/renderers/class.tx_mnogosearch_renderer_mtb.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mnogosearch/pi1/renderers/class.tx_mnogosearch_renderer_mtb.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mnogosearch/pi1/renderers/class.tx_mnogosearch_view.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mnogosearch/pi1/renderers/class.tx_mnogosearch_view.php']);
 }
 
 ?>

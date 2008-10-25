@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-class tx_mnogosearch_result {
+class tx_mnogosearch_model_result {
 	var	$url;					// URL
 	var $title = '';			// Title
 	var $contentType;			// Content type
@@ -39,7 +39,7 @@ class tx_mnogosearch_result {
 	var $clones = array();		// Clones
 }
 
-class tx_mnogosearch_results {
+class tx_mnogosearch_model_results {
 	var $numRows;				// Number of rows on current page
 	var $totalResults;			// Total found results
 	var $searchTime;			// Search time
@@ -72,8 +72,8 @@ class tx_mnogosearch_results {
 
 		// Process results
 		for ($i = 0; $i < $this->numRows; $i++) {
-			$result = t3lib_div::makeInstance('tx_mnogosearch_result');
-			/* @var $result tx_mnogosearch_result */
+			$result = t3lib_div::makeInstance('tx_mnogosearch_model_result');
+			/* @var $result tx_mnogosearch_model_results */
 			$result->popularityRank = Udm_Get_Res_Field($res, $i, UDM_FIELD_POP_RANK);
 			Udm_Make_Excerpt($udmAgent, $res, $i);
 
@@ -102,7 +102,7 @@ class tx_mnogosearch_results {
 						if ($j != $i && $urlId == Udm_Get_Res_Field($res, $j, UDM_FIELD_ORIGINID)) {
 							$url = $this->processURL(Udm_Get_Res_Field($res, $j, UDM_FIELD_URL), $pObj);
 							if ($url != $result->url) {
-								$clone = new tx_mnogosearch_result;
+								$clone = new tx_mnogosearch_model_results;
 								$clone->url = $url;
 								$clone->contentType = Udm_Get_Res_Field($res, $j, UDM_FIELD_CONTENT);
 								$clone->documentSize = Udm_Get_Res_Field($res, $j, UDM_FIELD_SIZE);
@@ -137,6 +137,12 @@ class tx_mnogosearch_results {
 		return $str;
 	}
 
+	/**
+	 * Creates results for testing template
+	 *
+	 * @param	tx_mnogosearch_pi1	$pObj	Parent object
+	 * @return	void
+	 */
 	function initTest(&$pObj) {
 		$pageSize = intval($pObj->conf['search.']['resultsPerPage']);
 		$resultsOnTheLastPage = max(1, intval($pageSize/3));
@@ -161,8 +167,8 @@ class tx_mnogosearch_results {
 
 		// create fake results
 		for ($i = 0; $i < $foundDocs; $i++) {
-			$result = t3lib_div::makeInstance('tx_mnogosearch_result');
-			/* @var $result tx_mnogosearch_result */
+			$result = t3lib_div::makeInstance('tx_mnogosearch_model_results');
+			/* @var $result tx_mnogosearch_model_results */
 			$result->url = '/' . uniqid(uniqid(), true);
 			$result->title = ucfirst($this->getExcerpt($lipsum, rand(3, 12)));
 			$result->contentType = 'text/html';
@@ -255,8 +261,8 @@ class tx_mnogosearch_results {
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mnogosearch/pi1/class.tx_mnogosearch_results.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mnogosearch/pi1/class.tx_mnogosearch_results.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mnogosearch/pi1/class.tx_mnogosearch_model_results.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mnogosearch/pi1/class.tx_mnogosearch_model_results.php']);
 }
 
 ?>

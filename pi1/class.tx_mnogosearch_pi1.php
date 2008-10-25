@@ -22,8 +22,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(PATH_tslib.'class.tslib_pibase.php');
-require_once(dirname(__FILE__) . '/class.tx_mnogosearch_results.php');
+require_once(PATH_tslib . 'class.tslib_pibase.php');
+require_once(t3lib_extMgm::extPath('mnogosearch') . 'view/class.tx_mnogosearch_view.php');
+require_once(t3lib_extMgm::extPath('mnogosearch') . 'model/class.tx_mnogosearch_model_results.php');
 
 define('UDM_ENABLED', 1);
 define('UDM_DISABLED', 0);
@@ -39,7 +40,7 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 	public $prefixId      = 'tx_mnogosearch_pi1';		// Same as class name
 	public $scriptRelPath = 'pi1/class.tx_mnogosearch_pi1.php';	// Path to this script relative to the extension dir.
 	public $extKey        = 'mnogosearch';	// The extension key.
-	protected $renderer = false;
+	protected $view = false;
 	protected $udmApiVersion;
 	public $highlightParts = array('', '');
 	public $sysconf;
@@ -83,8 +84,8 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 		}
 
 		// Init view class
-		$this->renderer = t3lib_div::makeInstance('tx_mnogosearch_renderer_mtb');
-		if (!$this->renderer->init($this)) {
+		$this->view = t3lib_div::makeInstance('tx_mnogosearch_view');
+		if (!$this->view->init($this)) {
 			return $this->pi_getLL('cannot_create_renderer');
 		}
 
@@ -123,11 +124,11 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 			switch ($mode) {
 				case 'short_form':
 					// Simple form
-					$content .= $this->renderer->render_simpleSearchForm();
+					$content .= $this->view->render_simpleSearchForm();
 					break;
 				case 'long_form':
 					// Full form
-					$content .= $this->renderer->render_searchForm();
+					$content .= $this->view->render_searchForm();
 					break;
 				case 'results':
 					// Search results
@@ -136,7 +137,7 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 					}
 					elseif ($this->piVars['q']) {
 						$result = $this->search();
-						$content .= $this->renderer->render_searchResults($result);
+						$content .= $this->view->render_searchResults($result);
 					}
 					break;
 			}
@@ -170,8 +171,8 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 			return $error;
 		}
 		// Process search results
-		$results = t3lib_div::makeInstance('tx_mnogosearch_results');
-		/* @var $result tx_mnogosearch_results */
+		$results = t3lib_div::makeInstance('tx_mnogosearch_model_results');
+		/* @var $result tx_mnogosearch_model_results */
 		$results->init($udmAgent, $res, $this);
 
 		// Do not call Udm_Free_Ispell_data(), otherwise Udm_Free_Agent() will die!
@@ -379,11 +380,11 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 	/**
 	 * Creates fake test results.
 	 *
-	 * @return	tx_mnogosearch_results	Generated results
+	 * @return	tx_mnogosearch_model_results	Generated results
 	 */
 	protected function getTestResults() {
-		$result = t3lib_div::makeInstanceClassName('tx_mnogosearch_results');
-		/* @var $result tx_mnogosearch_results */
+		$result = t3lib_div::makeInstance('tx_mnogosearch_model_results');
+		/* @var $result tx_mnogosearch_model_results */
 		$result->initTest($this);
 		return $result;
 	}
