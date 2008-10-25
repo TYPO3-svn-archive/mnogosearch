@@ -41,9 +41,9 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 	public $extKey        = 'mnogosearch';	// The extension key.
 	protected $renderer = false;
 	protected $udmApiVersion;
-	protected $highlightParts = array('', '');
+	public $highlightParts = array('', '');
 	public $sysconf;
-	public $templateTestMode;
+	protected $templateTestMode = false;
 
 	/**
 	 * Initializes the plugin. Checks mnoGoSearch version and plugin configuration.
@@ -57,12 +57,12 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 		$this->pi_initPIflexForm();
 		$this->pi_checkCHash = false;
 
-		if (!isset($this->conf['excerptHighlight'])) {
+		// Check if we have TS setup
+		if (!isset($this->conf['templateFile'])) {
 			return $this->pi_getLL('no_ts_setup');
 		}
 
-		$this->templateTestMode = intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_templateTestMode', 'sTmpl'));
-
+		// Tempate test mode (manual activation through the class attribute)
 		if (!$this->templateTestMode) {
 			// Check mnoGoSearch plugin
 			if (!extension_loaded('mnogosearch')) {
@@ -73,25 +73,33 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 			}
 		}
 
-		// Get configuration
+		// Get extension configuration
 		$this->sysconf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mnogosearch']);
 
-		$renderer = intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_templateMode', 'sTmpl'));
-		$renderer_fileref = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tx_mnogosearch/pi1/class.tx_mnogosearch_pi1']['renderers'][$renderer];
-		$this->renderer = t3lib_div::getUserObj($renderer_fileref);
+		// Mode
+		$modes = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_mode');
+		if ($modes != '') {
+			$this->conf['mode'] = $modes;
+		}
+
+		// Init view class
+		$this->renderer = t3lib_div::makeInstance('tx_mnogosearch_renderer_mtb');
 		if (!$this->renderer->init($this)) {
 			return $this->pi_getLL('cannot_create_renderer');
 		}
 
 		// Add domain restrictions
-		$domainLimitList = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_siteList');
+		$domainLimitList = $GLOBALS['TYPO3_DB']->cleanIntList($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_siteList'));
 		if (!$domainLimitList) {
-			$domainLimitList = $this->conf['siteList'];
+			$domainLimitList = $GLOBALS['TYPO3_DB']->cleanIntList($this->conf['siteList']);
 		}
+		// Combine with values from the query
 		if (is_array($this->piVars['siteList'])) {
-			$domainLimitList .= ',' . implode(',', $this->piVars['siteList']);
+			$configuredLimit = t3lib_div::trimExplode(',', $domainLimitList);
+			$receivedLimit = $GLOBALS['TYPO3_DB']->cleanIntArray($this->piVars['siteList']);
+			$domainLimitList = implode(array_intersect($configuredLimit, $receivedLimit));
 		}
-		$this->conf['siteList'] = $GLOBALS['TYPO3_DB']->cleanIntList($domainLimitList);
+		$this->conf['siteList'] = $domainLimitList;
 
 		return '';
 	}
@@ -110,28 +118,28 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 			return $this->pi_wrapInBaseClass($error);
 		}
 
-		switch (intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_mode'))) {
-			case 0:
-				// Simple form
-				$content = $this->renderer->render_simpleSearchForm();
-				break;
-			case 1:
-				// Full form
-				$content = $this->renderer->render_searchForm();
-				break;
-			case 2:
-				// Search results
-				$content = '';
-				if ($this->piVars['q'] || $this->templateTestMode) {
-					$result = ($this->templateTestMode ? $this->getTestResults() : $this->search());
-					if (is_string($result)) {
-						$content = $result;
+		$modes = t3lib_div::trimExplode(',', $this->conf['mode'], true);
+		foreach ($modes as $mode) {
+			switch ($mode) {
+				case 'short_form':
+					// Simple form
+					$content .= $this->renderer->render_simpleSearchForm();
+					break;
+				case 'long_form':
+					// Full form
+					$content .= $this->renderer->render_searchForm();
+					break;
+				case 'results':
+					// Search results
+					if ($this->templateTestMode) {
+						$content .= $this->getTestResults();
 					}
-					else {
-						$content = $this->renderer->render_searchResults($result);
+					elseif ($this->piVars['q']) {
+						$result = $this->search();
+						$content .= $this->renderer->render_searchResults($result);
 					}
-				}
-				break;
+					break;
+			}
 		}
 
 		return '<!--UdmComment-->' . $this->pi_wrapInBaseClass($content) . '<!--/UdmComment-->';
@@ -179,15 +187,21 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 	 * @return	string	Empty if no error
 	 */
 	protected function setUpAgent(&$udmAgent) {
-		$val = intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_resultsPerPage'));
-		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_PAGE_SIZE, $val ? $val : 20);
+		$page = intval($this->conf['search.']['resultsPerPage']);
+		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_PAGE_SIZE, $page ? $page : 20);
 		$this->piVars['page'] = max(0, intval($this->piVars['page']));
+
+		// Set search options
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_PAGE_NUM, $this->piVars['page']);
-		$options = intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_options'));
-		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_TRACK_MODE, ($options & 1 ? UDM_ENABLED : UDM_DISABLED));
-		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_CACHE_MODE, ($options & 2 ? UDM_ENABLED : UDM_DISABLED));
-		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_ISPELL_PREFIXES, ($options & 4 ? UDM_ENABLED : UDM_DISABLED));
-		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_CROSS_WORDS, ($options & 8 ? UDM_ENABLED : UDM_DISABLED));
+		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_TRACK_MODE, ($this->conf['search.']['options.']['track_queries'] ? UDM_ENABLED : UDM_DISABLED));
+		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_CACHE_MODE, ($this->conf['search.']['options.']['cache_queries'] ? UDM_ENABLED : UDM_DISABLED));
+		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_ISPELL_PREFIXES, ($this->conf['search.']['options.']['use_spell_data'] ? UDM_ENABLED : UDM_DISABLED));
+		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_CROSS_WORDS, ($this->conf['search.']['options.']['crosswords'] ? UDM_ENABLED : UDM_DISABLED));
+		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_DETECT_CLONES, ($this->conf['search.']['options.']['detect_clones'] ? UDM_ENABLED : UDM_DISABLED));
+		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_PHRASE_MODE, ($this->conf['search.']['options.']['phrase_search'] ? UDM_ENABLED : UDM_DISABLED));
+
+		// Popularity rank
+		Udm_Set_Agent_Param_Ex($udmAgent, 'PopRankUseShowCnt', 'yes');
 
 		// LocalCharset
 		if ($this->sysconf['LocalCharset'] != '') {
@@ -214,9 +228,17 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 		}
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_BROWSER_CHARSET, $browserCharset);
 
-		// Highlight
-		if ($this->conf['excerptHighlight']) {
-			$this->highlightParts = t3lib_div::trimExplode('|', $this->conf['excerptHighlight']);
+		// Excerpt & highlight
+		$val = intval($this->conf['search.']['excerptSize']);
+		if ($val && t3lib_div::testInt($val)) {
+			Udm_Set_Agent_Param_Ex($udmAgent, 'ExcerptSize', $val);
+		}
+		$val = intval($this->conf['search.']['excerptPadding']);
+		if ($val && t3lib_div::testInt($val)) {
+			Udm_Set_Agent_Param_Ex($udmAgent, 'ExcerptPadding', $val);
+		}
+		if ($this->conf['search.']['excerptHighlight']) {
+			$this->highlightParts = t3lib_div::trimExplode('|', $this->conf['search.']['excerptHighlight']);
 		}
 		if (count($this->highlightParts) != 2) {
 			$this->highlightParts = array('', '');
@@ -235,13 +257,11 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_REMOTE_ADDR, t3lib_div::getIndpEnv('REMOTE_ADDR'));
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_QUERY, $this->piVars['q']);
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_GROUPBYSITE, UDM_DISABLED);
-		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_DETECT_CLONES, ($options & 32 ? UDM_ENABLED : UDM_DISABLED));
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_SEARCH_MODE, UDM_MODE_BOOLEAN);
-		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_PHRASE_MODE, ($options & 64 ? UDM_ENABLED : UDM_DISABLED));
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_WORD_MATCH, UDM_MATCH_WORD);
-		$val = intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_minWordLen'));
+		$val = intval($this->conf['search.']['minimumWordLength']);
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_MIN_WORD_LEN, $val ? $val : 3);
-		$val = intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_maxWordLen'));
+		$val = intval($this->conf['search.']['maximumWordLength']);
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_MAX_WORD_LEN, $val ? $val : 32);
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_VARDIR, PATH_site . 'typo3temp/mnogosearch/var'); //$this->sysconf['mnoGoSearchPath'] . '/var');
 		// Weight factors (0-15, which is 0-F in hex, see CLI script for sections):
@@ -252,28 +272,25 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 		//	fe group id: 1 (may not set to 0 but must not have any real weight!)
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_WEIGHT_FACTOR, 0x111F8);
 		Udm_Set_Agent_Param_Ex($udmAgent, 'NumSections', 5);	// Affects PageRank!!!
-		$val = intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_excerptSize'));
-		if ($val && t3lib_div::testInt($val)) {
-			Udm_Set_Agent_Param_Ex($udmAgent, 'ExcerptSize', $val);
-		}
-		$val = intval($this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_excerptPadding'));
-		if ($val && t3lib_div::testInt($val)) {
-			Udm_Set_Agent_Param_Ex($udmAgent, 'ExcerptPadding', $val);
-		}
-		Udm_Set_Agent_Param_Ex($udmAgent, 'suggest', ($options & 128 ? 'yes' : 'no'));
-		// "sp=1" will search for all word forms
-		Udm_Set_Agent_Param_Ex($udmAgent, 'sp', '1');
 
-		$val = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'field_sortOrder');
+		$val = $this->conf['search.']['sortMode'];
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_SORT_ORDER, $val ? $val : 'RPD'); // or DRP
 
-		if ($options & 4) {
+		if ($this->conf['search.']['options.']['use_spell_data']) {
 			$this->loadIspellData($udmAgent);
+			Udm_Set_Agent_Param_Ex($udmAgent, 'suggest', ($this->conf['search.']['options.']['suggest_mode'] ? 'yes' : 'no'));
+			// "sp=1" will search for all word forms
+			Udm_Set_Agent_Param_Ex($udmAgent, 'sp', ($this->conf['search.']['options.']['search_word_forms'] ? '1' : '0'));
 		}
 
 		Udm_Parse_Query_String($udmAgent, $q_string);
 
 		$this->addSearchRestrictions($udmAgent);
+
+		// Process extended configuration
+		foreach ($this->conf['search.']['extendedConfiguration.'] as $param => $value) {
+			Udm_Set_Agent_Param_Ex($udmAgent, $param, $value);
+		}
 
 		$error = Udm_Error($udmAgent);
 		return $error ? sprintf($this->pi_getLL('mnogosearch.error'), Udm_ErrNo($udmAgent), $error) : '';

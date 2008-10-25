@@ -188,7 +188,7 @@ class tx_mnogosearch_cli {
 			if (trim($row['tx_mnogosearch_additional_config'])) {
 				$content .= $row['tx_mnogosearch_additional_config'] . chr(10);
 			}
-			
+
 			// Add servers
 			switch ($row['tx_mnogosearch_type']) {
 				case 0:
@@ -318,6 +318,10 @@ class tx_mnogosearch_cli {
 		$content = '# Defaults
 DBAddr ' . $this->sysconf['dbaddr'] . '
 VarDir ' . PATH_site . 'typo3temp/mnogosearch/var
+PopRankUseShowCnt yes
+PopRankUseTracking yes
+PopRankFeedBack yes
+PopRankSkipSameSite no
 Section body 1 8092 html
 Section title 2 256 text
 Section meta.keywords 3 64 text
@@ -461,17 +465,17 @@ DefaultContentType "text/html' .
 This script reindexes TYPO3 web sites as defined by current TYPO3 configuration.
 It accepts the following options:
 
-  -c                Only check and create database if necessary. Do not reindex.
-  -d                Display generated indexer configuration and exit.
-  -n                Force reindexing of new URLs (normally should be set)
-  -p pid            Process indexing configuration only from this pid
-  -w                Create statistic for misspelled words. Useful only if
+-c                Only check and create database if necessary. Do not reindex.
+-d                Display generated indexer configuration and exit.
+-n                Force reindexing of new URLs (normally should be set)
+-p pid            Process indexing configuration only from this pid
+-w                Create statistic for misspelled words. Useful only if
 .                   Ispell dictionaries are included to mnoGoSearch
 .                   configuration (see mnoGoSearch documentation)
-  --dry-run         Show what will be done (not applicable to -d and -E)
-  -h, --help, -?    Display this help message
-  -x                Pass the argument to mnoGoSearch indexer
-  -v level          Be verbose. Level is 0-5. Default is 0 (complete silence)
+--dry-run         Show what will be done (not applicable to -d and -E)
+-h, --help, -?    Display this help message
+-x                Pass the argument to mnoGoSearch indexer
+-v level          Be verbose. Level is 0-5. Default is 0 (complete silence)
 ';
 			exit;
 		}

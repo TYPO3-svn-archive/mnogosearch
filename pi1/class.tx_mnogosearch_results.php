@@ -138,14 +138,14 @@ class tx_mnogosearch_results {
 	}
 
 	function initTest(&$pObj) {
-		$pageSize = intval($pObj->pi_getFFvalue($pObj->cObj->data['pi_flexform'], 'field_resultsPerPage'));
+		$pageSize = intval($pObj->conf['search.']['resultsPerPage']);
 		$resultsOnTheLastPage = max(1, intval($pageSize/3));
 		$page = intval($pObj->piVars['page']);
 		$numPages = 4;
 		$foundDocs = (($page < ($numPages-1)) ? $pageSize : $resultsOnTheLastPage);
-		$excerptSize = intval($pObj->pi_getFFvalue($pObj->cObj->data['pi_flexform'], 'field_excerptSize'));
+		$excerptSize = intval($pObj->conf['search.']['excerptSize']);
 		if ($pObj->conf['excerptHighlight']) {
-			$pObj->highlightParts = t3lib_div::trimExplode('|', $pObj->conf['excerptHighlight']);
+			$pObj->highlightParts = t3lib_div::trimExplode('|', $pObj->conf['search.']['excerptHighlight']);
 		}
 
 		// fill in our own fields

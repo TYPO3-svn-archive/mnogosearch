@@ -1,3 +1,7 @@
+25-10-2008	Dmitry Dulepov	<dmitry@typo3.org>
+
+	* Major refactoring and change of classes to use TS options and simplify flexform. Dropped TV renderer.
+
 21-10-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
 	* Changed template file to add more markers, look like Google, use pagebrowse extension

@@ -6,38 +6,14 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="sheet.basic">Mode</label>
-			<label index="sheet.template">Template</label>
-			<label index="sheet.settings">Search settings</label>
 			<label index="mode.label">Display:</label>
 			<label index="mode.short-form">Short search form</label>
 			<label index="mode.long-form">Long search form</label>
 			<label index="mode.results">Search results</label>
-			<label index="results_per_page">Results per page:</label>
 			<label index="results_page">Page with search results:</label>
-			<label index="templatemode.label">Template mode:</label>
-			<label index="templatemode.markers">Traditional (markers)</label>
-			<label index="templatemode.templavoila">TemplaVoila</label>
 			<label index="templatetestmode.label">Template test mode:</label>
 			<label index="templatetestmode.enable">Enable (read manual first!!!)</label>
-			<label index="template_object">Template object:</label>
 			<label index="template_file">Template file:</label>
-			<label index="search_modes">How to search:</label>
-			<label index="search_modes.track">Track queries</label>
-			<label index="search_modes.cache">Cache queries</label>
-			<label index="search_modes.spell">Load spell data (if available)</label>
-			<label index="search_modes.crosswords">Crosswords</label>
-			<label index="search_modes.group">-- Reserved --</label>
-			<label index="search_modes.clones">Detect clones (slower!)</label>
-			<label index="search_modes.phrase">Enable phrase search</label>
-			<label index="search_modes.suggest">Suggest mode</label>
-			<label index="min_word_len">Minimum word length:</label>
-			<label index="max_word_len">Maximum word length:</label>
-			<label index="excerpt_size">Excerpt size:</label>
-			<label index="excerpt_padding">Excerpt padding:</label>
-			<label index="sorting">Sort results by:</label>
-			<label index="sorting.RPD">Relevancy, page rank, date</label>
-			<label index="sorting.DRP">Date, relevancy, page rank</label>
 
 			<label index="renderer_not_implemented">Function '%s' is empty in default renderer and must be overwritten in implementation!</label>
 			<label index="cannot_create_renderer">[mnoGoSearch] Cannot instantiate renderer!</label>

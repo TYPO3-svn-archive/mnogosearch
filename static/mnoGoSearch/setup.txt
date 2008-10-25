@@ -16,21 +16,67 @@ plugin.tx_mnogosearch_pi1 {
 	# Template file
 	templateFile = {$plugin.tx_mnogosearch_pi1.templateFile}
 
-	# Search options
-	searchOptions {
+	# Mode: short_form, long_form, results
+	mode = long_form,results
+
+	# Search forms
+	form {
+		# Page id where plugin instance with search results is located. If not set, current page is assumed
+		resultsPage = {$plugin.tx_mnogosearch_pi1.resultsPage}
 	}
 
-	number_stdWrap.wrap = <b>|</b>
-	time_format = %0.3f
+	# Search options
+	search {
 
-	# Hightlight for found words
-	excerptHighlight = {$plugin.tx_mnogosearch_pi1.excerptHighlight}
+		# Defines search time look ("Search took XYZ seconds"). Default will look like "0.123"
+		time_format = %0.3f
 
-	# Limit search to these sites
-	siteList = {$plugin.tx_mnogosearch_pi1.siteList}
+		# Limit search to these sites
+		siteList = {$plugin.tx_mnogosearch_pi1.siteList}
 
-	# Page browser configuration
-	pageBrowser < plugin.tx_pagebrowse_pi1
-	pageBrowser.disableCacheHash = 1
+		# Search options
+		options {
+			track_queries = 0
+			cache_queries = 1
+			use_spell_data = 1
+			crosswords = 1
+			detect_clones = 0
+			phrase_search = 1
+			# Suggest is useful only with ISpell data loaded
+			suggest_mode = 1
+			# Word forms is useful only with ISpell data loaded
+			search_word_forms = 1
+		}
 
+		# These are directo mnogosearch configuration directives (like "PopRankShowCntWeight = 0.1"). They are passed as is after all other commands. Use only if you know what you are doing!
+		extendedConfiguration {
+		}
+
+		# Number of results per page
+		resultsPerPage = {$plugin.tx_mnogosearch_pi1.resultsPerPage}
+
+		# Wrap numbers
+		number_stdWrap.wrap = <b>|</b>
+
+		# Minimum word length
+		minimumWordLength = 3
+
+		# Maximum word length
+		maximumWordLength = 32
+
+		# Excerpt size
+		excerptSize = 384
+
+		excerptPadding = 20
+
+		# Hightlight for found words
+		excerptHighlight = <span class="tx-mnogosearch-pi1-result-excerpt-selection">|</span>
+
+		# Sort mode: RPD or PRD. Passing wrong values will cause unpredictable results. No validation, so be careful!
+		sortMode = RPD
+
+		# Page browser configuration
+		pageBrowser < plugin.tx_pagebrowse_pi1
+		pageBrowser.disableCacheHash = 1
+	}
 }

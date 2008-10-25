@@ -15,11 +15,6 @@ if (TYPO3_MODE == 'BE') {
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['list_type_Info']['mnogosearch_pi1'][] = 'EXT:mnogosearch/class.tx_mnogosearch_cms_layout.php:tx_mnogosearch_cms_layout->getExtensionSummary';
 }
 
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tx_mnogosearch/pi1/class.tx_mnogosearch_pi1']['renderers'] = array(
-	'0' => 'EXT:mnogosearch/pi1/renderers/class.tx_mnogosearch_renderer_mtb.php:tx_mnogosearch_renderer_mtb',
-	'1' => 'EXT:mnogosearch/pi1/renderers/class.tx_mnogosearch_renderer_templavoila.php:tx_mnogosearch_renderer_templavoila',
-);
-
 $TYPO3_CONF_VARS['SC_OPTIONS']['GLOBAL']['cliKeys'][$_EXTKEY] = array('EXT:' . $_EXTKEY . '/cli/cli_mnogosearch.php', '_CLI_mnogosearch');
 
 ?>

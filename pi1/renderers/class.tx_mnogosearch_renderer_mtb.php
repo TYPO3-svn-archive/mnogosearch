@@ -22,8 +22,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once(dirname(__FILE__) . '/class.tx_mnogosearch_renderer.php');
-
 /**
  * Base renderer for mnoGoSearch plugin
  *
@@ -31,7 +29,7 @@ require_once(dirname(__FILE__) . '/class.tx_mnogosearch_renderer.php');
  * @package	TYPO3
  * @subpackage	tx_mnogosearch
  */
-class tx_mnogosearch_renderer_mtb extends tx_mnogosearch_renderer {
+class tx_mnogosearch_renderer_mtb {
 
 	/** Template file content */
 	protected $templateCode;
@@ -43,23 +41,22 @@ class tx_mnogosearch_renderer_mtb extends tx_mnogosearch_renderer {
 	 * @return	boolean	true on success
 	 */
 	public function init(tx_mnogosearch_pi1 &$pObj) {
-		/* @var $pObj tx_mnogosearch_pi1 */
-		if (($result = parent::init($pObj))) {
-			$templateFile = $pObj->pi_getFFvalue($pObj->cObj->data['pi_flexform'], 'field_templateFile', 'sTmpl');
-			if (!$templateFile) {
-				$templateFile = $pObj->conf['templateFile'];
-			}
-			$this->templateCode = $pObj->cObj->fileResource($templateFile);
+		$this->pObj = $pObj;
 
-			// Add header parts if there are any
-			$headerParts = $this->pObj->cObj->getSubpart($this->templateCode, '###HEADER_ADDITIONS###');
-			$key = $pObj->extKey . '_' . md5($headerParts);
-			if ($headerParts && !isset($GLOBALS['TSFE']->additionalHeaderData[$key])) {
-				$headerParts = $pObj->cObj->substituteMarker($headerParts, '###SITE_REL_PATH###', t3lib_extMgm::siteRelPath($pObj->extKey));
-				$GLOBALS['TSFE']->additionalHeaderData[$key] = $headerParts;
-			}
+		$templateFile = $pObj->pi_getFFvalue($pObj->cObj->data['pi_flexform'], 'field_templateFile');
+		if (!$templateFile) {
+			$templateFile = $pObj->conf['templateFile'];
 		}
-		return $result;
+		$this->templateCode = $pObj->cObj->fileResource($templateFile);
+
+		// Add header parts if there are any
+		$headerParts = $this->pObj->cObj->getSubpart($this->templateCode, '###HEADER_ADDITIONS###');
+		$key = $pObj->extKey . '_' . md5($headerParts);
+		if ($headerParts && !isset($GLOBALS['TSFE']->additionalHeaderData[$key])) {
+			$headerParts = $pObj->cObj->substituteMarker($headerParts, '###SITE_REL_PATH###', t3lib_extMgm::siteRelPath($pObj->extKey));
+			$GLOBALS['TSFE']->additionalHeaderData[$key] = $headerParts;
+		}
+		return true;
 	}
 
 	/**
@@ -70,7 +67,7 @@ class tx_mnogosearch_renderer_mtb extends tx_mnogosearch_renderer {
 	public function render_simpleSearchForm() {
 		$template = $this->pObj->cObj->getSubpart($this->templateCode, '###SHORT_SEARCH_FORM###');
 		$result = $this->pObj->cObj->substituteMarkerArray($template, array(
-			'###SHORT_SEARCH_FORM_ACTION###' => $this->pObj->pi_getPageLink(intval($this->pObj->pi_getFFvalue($this->pObj->cObj->data['pi_flexform'], 'field_resultsPage'))),
+			'###SHORT_SEARCH_FORM_ACTION###' => $this->pObj->pi_getPageLink($this->getResultPage()),
 			'###SHORT_SEARCH_FORM_VALUE###' => htmlspecialchars($this->pObj->piVars['q']),
 			'###TEXT_SEARCH###' => $this->pObj->pi_getLL('text_submit_short'),
 			));
@@ -85,11 +82,24 @@ class tx_mnogosearch_renderer_mtb extends tx_mnogosearch_renderer {
 	public function render_searchForm() {
 		$template = $this->pObj->cObj->getSubpart($this->templateCode, '###LONG_SEARCH_FORM###');
 		$result = $this->pObj->cObj->substituteMarkerArray($template, array(
-			'###LONG_SEARCH_FORM_ACTION###' => $this->pObj->pi_getPageLink(intval($this->pObj->pi_getFFvalue($this->pObj->cObj->data['pi_flexform'], 'field_resultsPage'))),
+			'###LONG_SEARCH_FORM_ACTION###' => $this->pObj->pi_getPageLink($this->getResultPage()),
 			'###LONG_SEARCH_FORM_VALUE###' => htmlspecialchars($this->pObj->piVars['q']),
 			'###TEXT_SEARCH###' => $this->pObj->pi_getLL('text_submit_long'),
 		));
 		return $result;
+	}
+
+	/**
+	 * Obtains page uid where results are displayed
+	 *
+	 * @return	int	Page id
+	 */
+	protected function getResultPage() {
+		$resultPage = intval($this->pObj->conf['form.']['resultsPage']);
+		if (!$resultPage) {
+			$resultPage = $GLOBALS['TSFE']->id;
+		}
+		return $resultPage;
 	}
 
 	/**
@@ -103,12 +113,12 @@ class tx_mnogosearch_renderer_mtb extends tx_mnogosearch_renderer {
 		/* @var $results tx_mnogosearch_results */
 		// Setup variables
 		$result = '';
-		$rpp = intval($this->pObj->pi_getFFvalue($this->pObj->cObj->data['pi_flexform'], 'field_resultsPerPage'));
+		$rpp = intval($this->pObj->conf['search.']['resultsPerPage']);
 		if (!$rpp) {
 			$rpp = 20;
 		}
 		$page = intval($results->firstDoc/$rpp);
-		$numPages = ($results->totalResults/$rpp + (($results->totalResults % $rpp) == 0 ? 0 : 1));
+		$numPages = (intval($results->totalResults/$rpp) + (($results->totalResults % $rpp) == 0 ? 0 : 1));
 
 		// Get template for this function
 		$template = $this->pObj->cObj->getSubpart($this->templateCode, '###SEARCH_RESULTS###');
@@ -116,7 +126,7 @@ class tx_mnogosearch_renderer_mtb extends tx_mnogosearch_renderer {
 		// Results
 		if ($results->numRows == 0) {
 			$resultTemplate = $this->pObj->cObj->getSubpart($this->templateCode, '###SEARCH_RESULTS_EMPTY###');
-			$resultList = $this->pObj->cObj->substituteMarker($resultTemplate, '###TEXT_NOTHING_FOUND###', $pObj->pi_getLL('text_nothing_found'));
+			$resultList = $this->pObj->cObj->substituteMarker($resultTemplate, '###TEXT_NOTHING_FOUND###', $this->pObj->pi_getLL('text_nothing_found'));
 		}
 		else {
 			$resultTemplate = $this->pObj->cObj->getSubpart($this->templateCode, '###SEARCH_RESULTS_RESULT###');
@@ -214,9 +224,15 @@ class tx_mnogosearch_renderer_mtb extends tx_mnogosearch_renderer {
 		return $content;
 	}
 
-	function getPageBrowser($numberOfPages) {
-		$pageBrowserKind = $this->pObj->conf['pageBrowser'];
-		$pageBrowserConfig = (array)$this->pObj->conf['pageBrowser.'];
+	/**
+	 * Obtains page browser.
+	 *
+	 * @param	int	$numberOfPages	Number of pages
+	 * @return	string	HTML from page browser
+	 */
+	protected function getPageBrowser($numberOfPages) {
+		$pageBrowserKind = $this->pObj->conf['search.']['pageBrowser'];
+		$pageBrowserConfig = (array)$this->pObj->conf['search.']['pageBrowser.'];
 		$pageBrowserConfig += array(
 			'pageParameterName' => $this->pObj->prefixId . '|page',
 			'numberOfPages' => $numberOfPages,
@@ -226,6 +242,10 @@ class tx_mnogosearch_renderer_mtb extends tx_mnogosearch_renderer {
 		/* @var $cObj tslib_cObj */
 		$cObj->start(array(), '');
 		return $cObj->cObjGetSingle($pageBrowserKind, $pageBrowserConfig);
+	}
+
+	protected function getLink($page) {
+		return $this->pObj->pi_linkTP_keepPIvars_url(array('page' => $page), 1);
 	}
 }
 

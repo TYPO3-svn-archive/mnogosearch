@@ -41,18 +41,22 @@ class tx_mnogosearch_cms_layout {
 		if ($params['row']['list_type'] == 'mnogosearch_pi1') {
 			$data = t3lib_div::xml2array($params['row']['pi_flexform']);
 			if (is_array($data)) {
-				$mode = $data['data']['sDEF']['lDEF']['field_mode']['vDEF'];
-				switch ($mode) {
-					case 0:
-						$result = $LANG->sL('LLL:EXT:mnogosearch/locallang_db.xml:cms_layout.mode_shortform');
-						break;
-					case 1:
-						$result = $LANG->sL('LLL:EXT:mnogosearch/locallang_db.xml:cms_layout.mode_longform');
-						break;
-					case 2:
-						$result = $LANG->sL('LLL:EXT:mnogosearch/locallang_db.xml:cms_layout.mode_searchresults');
-						break;
+				$modes = $data['data']['sDEF']['lDEF']['field_mode']['vDEF'];
+				$modeList = array();
+				foreach (t3lib_div::trimExplode(',', $modes, true) as $mode) {
+					switch ($mode) {
+						case 'short_form':
+							$modeList[] = $LANG->sL('LLL:EXT:mnogosearch/locallang_db.xml:cms_layout.mode_shortform');
+							break;
+						case 'long_form':
+							$modeList[] = $LANG->sL('LLL:EXT:mnogosearch/locallang_db.xml:cms_layout.mode_longform');
+							break;
+						case 'results':
+							$modeList[] = $LANG->sL('LLL:EXT:mnogosearch/locallang_db.xml:cms_layout.mode_searchresults');
+							break;
+					}
 				}
+				$result = implode(', ', $modeList);
 			}
 			if (!$result) {
 				$result = $LANG->sL('LLL:EXT:mnogosearch/locallang_db.xml:cms_layout.mode_none');
