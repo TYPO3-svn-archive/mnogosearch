@@ -2,6 +2,7 @@
 
 	* Change to TCEmain to use 'pagepath' extension to get path in FE
 	* Record new url when page/record is renamed
+	* Get rid of 'FE' option during extension installation
 
 25-10-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
