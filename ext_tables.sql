@@ -38,5 +38,5 @@ CREATE TABLE tx_mnogosearch_urllog (
 	tx_mnogosearch_pid int(11) DEFAULT '0' NOT NULL,
 
 	PRIMARY KEY (uid),
-	KEY tx_mnogosearch_pid (tx_mnogosearch_pid)
+	KEY tx_mnogosearch_url (tx_mnogosearch_url)
 );
