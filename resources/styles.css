@@ -8,7 +8,6 @@
 }
 
 .tx-mnogosearch-page-browser {
-	xbackground-color: #e7e7e7;
 	padding: 15px 0;
 	margin: 10px 0;
 }
@@ -31,7 +30,8 @@ ol#tx-mnogosearch-result > li {
 }
 
 #tx-mnogosearch-result p {
-	margin: 0 0; padding: 0 0;
+	margin: 0 0;
+	padding: 0 0;
 }
 
 ol#tx-mnogosearch-result li h3 {

@@ -6,6 +6,7 @@
 	* Update index on urllog table to search for urls faster
 	* Get rid of old flexform options
 	* Add a function to get mnoGoSearch API version
+	* Remove unused CSS definition
 
 25-10-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
