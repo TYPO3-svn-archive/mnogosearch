@@ -189,7 +189,7 @@ class tx_mnogosearch_view {
 		$wordInfo = str_replace(' / ', '/', $results->wordInfo);
 		$wordInfo = str_replace(' :', ':', $wordInfo);
 		// TODO stdWrap numbers inside $wordInfo
-		$timeStr = sprintf($this->pObj->conf['time_format'], $results->searchTime);
+		$timeStr = sprintf($this->pObj->conf['search.']['time_format'], $results->searchTime);
 		$content = $this->pObj->cObj->substituteMarkerArray($template, array(
 				// Older markers (partially for compatibility)
 				'###SEARCH_RESULTS_TERMS###' => htmlspecialchars($this->pObj->piVars['q']),
