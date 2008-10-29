@@ -7,6 +7,7 @@
 	* Get rid of old flexform options
 	* Add a function to get mnoGoSearch API version
 	* Remove unused CSS definition
+	* Released version 2.0.2
 
 25-10-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
