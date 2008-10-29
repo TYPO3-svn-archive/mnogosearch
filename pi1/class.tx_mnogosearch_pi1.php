@@ -417,6 +417,16 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 			}
 		}
 	}
+
+	/**
+	 * Returns udmApiVersion. This function is temporary and it is here until
+	 * agent is moved to a separate class.
+	 *
+	 * @return	int	API version
+	 */
+	public function getUdmApiVersion() {
+		return $this->udmApiVersion;
+	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mnogosearch/pi1/class.tx_mnogosearch_pi1.php'])	{

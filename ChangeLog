@@ -5,6 +5,7 @@
 	* Get rid of 'FE' option during extension installation
 	* Update index on urllog table to search for urls faster
 	* Get rid of old flexform options
+	* Add a function to get mnoGoSearch API version
 
 25-10-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
