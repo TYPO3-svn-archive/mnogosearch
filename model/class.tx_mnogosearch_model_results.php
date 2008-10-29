@@ -46,7 +46,7 @@ class tx_mnogosearch_model_results {
 	var $firstDoc;				// First document
 	var $lastDoc;				// Last document
 	var $wordInfo;				// Information about found words
-	var $wordSuggest = false;	// Suggestion information
+	//var $wordSuggest = false;	// Suggestion information
 	var $results = array();		// List of results
 	var	$indexConfigCache = array();	// Cache for indexing configuration entries
 
@@ -57,18 +57,21 @@ class tx_mnogosearch_model_results {
 	 * @param resource $res	mnoGoSearch result
 	 * @param tx_mnogosearch_pi1 $pObj	Calling onject (pi1 plugin)
 	 */
-	function init(&$udmAgent, &$res, &$pObj) {
+	function init(&$udmAgent, &$res, tx_mnogosearch_pi1 &$pObj) {
 		$this->totalResults = Udm_Get_Res_Param($res, UDM_PARAM_FOUND);
 		$this->numRows = Udm_Get_Res_Param($res, UDM_PARAM_NUM_ROWS);
 		$this->wordInfo = Udm_Get_Res_Param($res, UDM_PARAM_WORDINFO_ALL);
 		$this->searchTime = Udm_Get_Res_Param($res, UDM_PARAM_SEARCHTIME);
 		$this->firstDoc = Udm_Get_Res_Param($res, UDM_PARAM_FIRST_DOC);
 		$this->lastDoc = Udm_Get_Res_Param($res, UDM_PARAM_LAST_DOC);
+		/*
+		// No suggest mode yet
 		if ($this->totalResults == 0) {
-			if ($pObj->udmApiVersion >= 30233 && (intval($pObj->pi_getFFvalue($pObj->cObj->data['pi_flexform'], 'field_options')) & 128)) {
+			if ($pObj->getUdmApiVersion() >= 30233 && $pObj->conf['search.']['options.']['suggest_mode']) {
 				$this->wordSuggest = Udm_Get_Agent_Param_Ex($udmAgent, 'WS');
 			}
 		}
+		*/
 
 		// Process results
 		for ($i = 0; $i < $this->numRows; $i++) {
@@ -80,7 +83,6 @@ class tx_mnogosearch_model_results {
 			$result->url = $this->processURL(Udm_Get_Res_Field($res, $i, UDM_FIELD_URL), $pObj);
 			$result->contentType = Udm_Get_Res_Field($res, $i, UDM_FIELD_CONTENT);
 			$result->documentSize = Udm_Get_Res_Field($res, $i, UDM_FIELD_SIZE);
-			//$ndoc=Udm_Get_Res_Field($res,$i,UDM_FIELD_ORDER);
 			$result->rating = Udm_Get_Res_Field($res, $i, UDM_FIELD_RATING);
 			$result->title = Udm_Get_Res_Field($res, $i, UDM_FIELD_TITLE);
 			if ($result->title == '') {
@@ -95,14 +97,14 @@ class tx_mnogosearch_model_results {
 			$result->category = Udm_Get_Res_Field($res,$i,UDM_FIELD_CATEGORY);
 
 			// Check clones if necessary
-			if ((intval($pObj->pi_getFFvalue($pObj->cObj->data['pi_flexform'], 'field_options')) & 32)) {
+			if ($pObj->conf['search.']['options.']['detect_clones']) {
 				if (0 == Udm_Get_Res_Field($res, $i, UDM_FIELD_ORIGINID)) {
 					$urlId = Udm_Get_Res_Field($res, $i, UDM_FIELD_URLID);
 					for ($j = 0; $j < $this->numRows; $j++) {
 						if ($j != $i && $urlId == Udm_Get_Res_Field($res, $j, UDM_FIELD_ORIGINID)) {
 							$url = $this->processURL(Udm_Get_Res_Field($res, $j, UDM_FIELD_URL), $pObj);
 							if ($url != $result->url) {
-								$clone = new tx_mnogosearch_model_results;
+								$clone = new tx_mnogosearch_model_result;
 								$clone->url = $url;
 								$clone->contentType = Udm_Get_Res_Field($res, $j, UDM_FIELD_CONTENT);
 								$clone->documentSize = Udm_Get_Res_Field($res, $j, UDM_FIELD_SIZE);
