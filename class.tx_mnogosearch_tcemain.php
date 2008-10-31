@@ -65,7 +65,7 @@ class tx_mnogosearch_tcemain {
 	public function processDatamap_postProcessFieldArray($status, $table, $id, array $fieldArray, t3lib_TCEmain &$pObj) {
 		// Only for LIVE records!
 		if ($pObj->BE_USER->workspace == 0) {
-			$this->processRecordChange($table, $id, $fieldArray, $pObj, true);
+			$this->storePageChanges($table, $id, $fieldArray, $pObj, true);
 		}
 	}
 
@@ -82,7 +82,7 @@ class tx_mnogosearch_tcemain {
 	public function processDatamap_afterDatabaseOperations($status, $table, $id, array $fieldArray, t3lib_TCEmain &$pObj) {
 		// Only for LIVE records!
 		if ($pObj->BE_USER->workspace == 0) {
-			$this->processRecordChange($table, $id, $fieldArray, $pObj, false);
+			$this->storePageChanges($table, $id, $fieldArray, $pObj, false);
 		}
 	}
 
@@ -96,7 +96,7 @@ class tx_mnogosearch_tcemain {
 	 * @param 	boolean	$processClearCachePages	If true, clearCache pages are processed for indexing as well
 	 * @return	void
 	 */
-	protected function processRecordChange($table, $id, array $fieldArray, t3lib_TCEmain &$pObj, $processClearCachePages) {
+	protected function storePageChanges($table, $id, array $fieldArray, t3lib_TCEmain &$pObj, $processClearCachePages) {
 		if ($table == 'pages') {
 			if (!t3lib_div::testInt($id)) {
 				// Page is just created. We do not index empty pages
@@ -154,7 +154,7 @@ class tx_mnogosearch_tcemain {
 	 * @param	int	$pid	Page ID
 	 * @param	object	$pObj	Reference to TCEmain
 	 */
-	protected function processPid($pid, &$pObj) {
+	protected function processPid($pid, t3lib_TCEmain &$pObj) {
 		require_once(t3lib_extMgm::extPath('pagepath', 'class.tx_pagepath_api.php'));
 		$pagePath = tx_pagepath_api::getPagePath($pid);
 		if ($pagePath && !$this->pageAlreadyInLog($pagePath)) {
