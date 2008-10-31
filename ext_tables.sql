@@ -25,7 +25,7 @@ CREATE TABLE tx_mnogosearch_indexconfig (
 	tx_mnogosearch_pid_only text,
 
 	PRIMARY KEY (uid),
-	KEY sorting (sorting)
+	KEY tx_mnogosearch_table (tx_mnogosearch_table(64),sorting)
 );
 
 CREATE TABLE tx_mnogosearch_urllog (
@@ -35,7 +35,6 @@ CREATE TABLE tx_mnogosearch_urllog (
 	crdate int(11) DEFAULT '0' NOT NULL,
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	tx_mnogosearch_url varchar(255) DEFAULT '' NOT NULL,
-	tx_mnogosearch_pid int(11) DEFAULT '0' NOT NULL,
 
 	PRIMARY KEY (uid),
 	KEY tx_mnogosearch_url (tx_mnogosearch_url)

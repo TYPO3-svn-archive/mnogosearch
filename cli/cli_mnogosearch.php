@@ -226,7 +226,9 @@ class tx_mnogosearch_cli {
 		$content .= isset($this->server_methods[$row['tx_mnogosearch_method']]) ? $this->server_methods[$row['tx_mnogosearch_method']] . ' ' : '';
 		$content .= isset($this->realm_subsections[$row['tx_mnogosearch_subsection']]) ? $this->realm_subsections[$row['tx_mnogosearch_subsection']] . ' ' : '';
 		$content .= $row['tx_mnogosearch_url'] . chr(10);
-		$this->allowedServerURLs[] = $row['tx_mnogosearch_url'];
+		if ($row['tx_mnogosearch_method'] != 1 && $row['tx_mnogosearch_method'] != 4) {
+			$this->allowedServerURLs[] = $row['tx_mnogosearch_url'];
+		}
 		return $content;
 	}
 
@@ -239,6 +241,7 @@ class tx_mnogosearch_cli {
 	protected function getServersGetRealm($row) {
 		$content = 'Realm ';
 		$content .= isset($this->server_methods[$row['tx_mnogosearch_method']]) ? $this->server_methods[$row['tx_mnogosearch_method']] . ' ' : '';
+		$regExp = false;
 		if ($row['tx_mnogosearch_cmptype'] > 0 || ($row['tx_mnogosearch_cmpoptions'] & 1)) {
 			$content .= ($row['tx_mnogosearch_cmpoptions'] & 1) ? 'case ' : 'nocase ';
 		}
@@ -246,10 +249,23 @@ class tx_mnogosearch_cli {
 			$content .= 'NoMatch ';
 		}
 		if ($row['tx_mnogosearch_cmptype'] > 0 || ($row['tx_mnogosearch_cmpoptions'] & 1)) {
-			$content .= ($row['tx_mnogosearch_cmptype'] == 1) ? 'Regex ' : 'String ';
+			if ($row['tx_mnogosearch_cmptype'] == 1) {
+				$content .= 'Regex ';
+				$regExp = true;
+			}
+			else {
+				$content .= 'String ';
+			}
 		}
 		$content .= $row['tx_mnogosearch_url'] . chr(10);
-		$this->allowedServerURLs[] = $row['tx_mnogosearch_url'];
+		if ($row['tx_mnogosearch_method'] != 1 && $row['tx_mnogosearch_method'] != 4) {
+			if (!$regExp) {
+				$this->allowedServerURLs[] = $row['tx_mnogosearch_url'];
+			}
+			else {
+				$this->allowedServerURLs[] = '/' . str_replace('/', '\/', $row['tx_mnogosearch_url']) . '/';
+			}
+		}
 		return $content;
 	}
 
@@ -265,6 +281,9 @@ class tx_mnogosearch_cli {
 		if (preg_match('/set\s+names\s+([a-z\-0-9]+)/i', $GLOBALS['TYPO3_CONF_VARS']['SYS']['setDBinit'], $matches)) {
 			$setnames = '?setnames=' . $matches[1];
 		}
+		$this->allowedServerURLs[] = 'htdb:/' .
+					$row['tx_mnogosearch_table'] . '/' .
+					$row['uid'];
 		$content = 'HTDBAddr mysql://' . TYPO3_db_username . ':' .
 					TYPO3_db_password . '@' .
 					TYPO3_db_host . '/' . TYPO3_db . '/' .
@@ -357,8 +376,27 @@ DefaultContentType "text/html' .
 		$res = $GLOBALS['TYPO3_DB']->sql_query('SELECT uid,tx_mnogosearch_url FROM tx_mnogosearch_urllog ORDER BY uid');
 		$content = '';
 		while (false !== ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))) {
+			$addUrl = false;
 			foreach ($this->allowedServerURLs as $allowedUrl) {
-				if (strpos($row['tx_mnogosearch_url'], $allowedUrl) === 0) {
+				if (substr($allowedUrl, 0, 6) == 'htdb:/') {
+					$addUrl = ($allowedUrl == dirname($row['tx_mnogosearch_url']));
+				}
+				elseif (substr($row['tx_mnogosearch_url'], 0, 6) != 'htdb:/') {
+					if ($allowedUrl{0} == '/') {
+						// regexp
+						$addUrl = preg_match($allowedUrl, $row['tx_mnogosearch_url']);
+					}
+					elseif (strpos($allowedUrl, '*')) {
+						// wildcard
+						$regexp = str_replace('*', '.*', $allowedUrl);
+						$addUrl = preg_match('/' . $regexp . '/', $row['tx_mnogosearch_url']);
+					}
+					elseif (strpos($row['tx_mnogosearch_url'], $allowedUrl) === 0) {
+						// normal string
+						$addUrl = true;
+					}
+				}
+				if ($addUrl) {
 					$content .= $row['tx_mnogosearch_url'] . chr(10);
 					$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mnogosearch_urllog', 'uid=' . $row['uid']);
 					break;

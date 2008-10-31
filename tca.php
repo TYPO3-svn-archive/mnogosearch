@@ -253,20 +253,9 @@ $TCA['tx_mnogosearch_urllog'] = array(
 				'eval' => 'required,trim,nospace',
 			)
 		),
-		'tx_mnogosearch_pid' => array(
-			'exclude' => 1,
-			'label' => 'LLL:EXT:mnogosearch/locallang_db.xml:tx_mnogosearch_urllog.tx_mnogosearch_pid',
-			'config' => array(
-				'type' => 'group',
-				'internal_type' => 'db',
-				'allowed' => 'pages',
-				'minitems' => 1,
-				'maxitems' => 1,
-			)
-		),
 	),
 	'types' => array(
-		'0' => array('showitem' => 'tx_mnogosearch_url;;;;1-1-1,tx_mnogosearch_pid'),
+		'0' => array('showitem' => 'tx_mnogosearch_url;;;;1-1-1'),
 	),
 );
 
