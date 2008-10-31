@@ -162,18 +162,9 @@ class tx_mnogosearch_tcemain {
 		$pagePath = tx_pagepath_api::getPagePath($pid);
 		if ($pagePath && !$this->recordAlreadyInLog($pagePath)) {
 			// Check that page is not hidden and regular page
-			if ($this->canIndexPage($pid)) {
-				// Attempt to find page path
-				// Check that this is one of indexed pages!
-				$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-					'COUNT(*) AS counter', 'tx_mnogosearch_indexconfig',
-					'INSTR(' . $GLOBALS['TYPO3_DB']->fullQuoteStr($pagePath, 'tx_mnogosearch_indexconfig') . ',tx_mnogosearch_url) > 0' .
-					t3lib_BEfunc::deleteClause('tx_mnogosearch_indexconfig')
-				);
-				if ($rows[0]['counter'] > 0) {
-					// Insert into log
-					$this->addRecordToUrlLog($pagePath);
-				}
+			if ($this->canIndexPage($pid, $pagePath)) {
+				// Insert into log
+				$this->addRecordToUrlLog($pagePath);
 			}
 		}
 	}
@@ -196,13 +187,57 @@ class tx_mnogosearch_tcemain {
 	 * Checks if page should be indexed
 	 *
 	 * @param	int	$pid	Page ID to check
-	 * @return	boolean	<code>true</code> if page can be indexed
+	 * @param 	string	$path	Page path
+	 * @return	boolean	true if page can be indexed
 	 */
-	function canIndexPage($pid) {
+	function canIndexPage($pid, $path) {
+		// Check page properties first
 		$pageRec = t3lib_BEfunc::getRecord('pages', $pid, 'doktype,nav_hide,no_cache,no_search,fe_login_mode');
-		$this->log('canIndexPage: Page id=' . $pid, $pageRec);
-		return ($pageRec['doktype'] <= 2 && !$pageRec['nav_hide'] && !$pageRec['no_cache']
+		$pageAllowsIndexing = ($pageRec['doktype'] <= 2 && !$pageRec['nav_hide'] && !$pageRec['no_cache']
 				&& !$pageRec['no_search'] && !$pageRec['fe_login_mode']);
+		if ($pageAllowsIndexing) {
+			// Check indexing configurations
+			$pageAllowsIndexing = $this->checkIndexingConfigurations($path);
+		}
+		return $pageAllowsIndexing;
+	}
+
+	/**
+	 * Checks indexing configuration (if path is allowed)
+	 *
+	 * @param	string	$path	Path
+	 * @return	boolean	true if indexing configuration allows this page
+	 */
+	protected function checkIndexingConfigurations($path) {
+		$where = 'tx_mnogosearch_type<>11';
+		$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*',
+					'tx_mnogosearch_indexconfig', $where);
+		$result = false;
+		foreach ($rows as $row) {
+			if ($row['tx_mnogosearch_type'] == '0') {
+				// Server
+				$result = (strpos($path, $row['tx_mnogosearch_url']) === 0);
+				break;
+			}
+			elseif ($row['tx_mnogosearch_type'] == '1') {
+				// Realm
+				$caseFlag = ($row['tx_mnogosearch_cmpoptions'] & 1 ? 'i' : '');
+				if ($row['tx_mnogosearch_cmptype'] == 1) {
+					// Regexp
+					$regexp = '/' . str_replace('/', '\/', $row['tx_mnogosearch_url']) . '/' . $caseFlag;
+					$result = @preg_match($regexp, $path);
+					break;
+				}
+				else {
+					// Wildcards
+					$regexp = '/' . str_replace('/', '\/',
+							str_replace('*', '.*', $row['tx_mnogosearch_url'])) . '/' . $caseFlag;
+					$result = @preg_match($regexp, $path);
+					break;
+				}
+			}
+		}
+		return $result;
 	}
 
 	/**
@@ -272,7 +307,7 @@ class tx_mnogosearch_tcemain {
 	 */
 	protected function isIndexable($table, array $record, &$configUid) {
 		$indexingConfigs = t3lib_BEfunc::getRecordsByField('tx_mnogosearch_indexconfig',
-				'tx_mnogosearch_table', $table, '', '', 'sorting');
+				'tx_mnogosearch_table', $table, 'AND tx_mnogosearch_type=11', '', 'sorting');
 		$result = false;
 		if (is_array($indexingConfigs)) {
 			foreach ($indexingConfigs as $config) {

@@ -388,7 +388,7 @@ DefaultContentType "text/html' .
 					}
 					elseif (strpos($allowedUrl, '*')) {
 						// wildcard
-						$regexp = str_replace('*', '.*', $allowedUrl);
+						$regexp = str_replace('/', '\/', str_replace('*', '.*', $allowedUrl));
 						$addUrl = preg_match('/' . $regexp . '/', $row['tx_mnogosearch_url']);
 					}
 					elseif (strpos($row['tx_mnogosearch_url'], $allowedUrl) === 0) {

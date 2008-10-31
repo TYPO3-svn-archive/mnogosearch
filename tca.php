@@ -232,7 +232,7 @@ $TCA['tx_mnogosearch_indexconfig'] = array(
 		),
 	),
 	'types' => array(
-		'0' => array('showitem' => 'tx_mnogosearch_type;;;;1-1-1,tx_mnogosearch_url;;;;3-3-3,tx_mnogosearch_method,tx_mnogosearch_subsection;;;;4-4-4,tx_mnogosearch_period, tx_mnogosearch_additional_config'),
+		'0' => array('showitem' => 'tx_mnogosearch_type;;;;1-1-1,tx_mnogosearch_url;;;;3-3-3,tx_mnogosearch_method,tx_mnogosearch_period;;;;4-4-4, tx_mnogosearch_additional_config'),
 		'1' => array('showitem' => 'tx_mnogosearch_type;;;;1-1-1,tx_mnogosearch_url;;;;3-3-3,tx_mnogosearch_method,tx_mnogosearch_period;;;;4-4-4,tx_mnogosearch_cmptype;;1;;5-5-5, tx_mnogosearch_additional_config'),
 		'11' => array('showitem' => 'tx_mnogosearch_type;;;;1-1-1, tx_mnogosearch_table;;;;3-3-3, tx_mnogosearch_title_field, tx_mnogosearch_body_field, tx_mnogosearch_url_parameters, tx_mnogosearch_display_pid, tx_mnogosearch_pid_only, tx_mnogosearch_period;;;;4-4-4 tx_mnogosearch_additional_config'),
 	),

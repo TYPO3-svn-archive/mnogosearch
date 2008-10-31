@@ -2,6 +2,7 @@
 
 	* Make sure that functions are not defined more than once in tca.php
 	* Add record reindexing to CLI script and TCEmain hook
+	* Record only indexable pages in URL log
 
 29-10-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
