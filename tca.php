@@ -3,57 +3,60 @@ if (!defined ('TYPO3_MODE')) {
 	die ('Access denied.');
 }
 
-function tx_mnogosearch_sortItems(array $item1, array $item2) {
-	return strcmp($item1[0], $item2[0]);
-}
+if (!function_exists('tx_mnogosearch_sortItems')) {
 
-/**
- * Creates a list of tables for table selector
- *
- * @param	array	$params	Parameters to the function
- * @return	void
- */
-function tx_mnogosearch_listRecordTables(array &$params) {
-	$tableNames = array_keys($GLOBALS['TYPO3_DB']->admin_get_tables());
-	$tables = array();
-	foreach ($tableNames as $name) {
-		if ($name != 'tt_content' && preg_match('/^(tt|tx)_/', $name) &&
-				isset($GLOBALS['TCA'][$name]) &&
-				!$GLOBALS['TCA'][$name]['hideTable'] &&
-				strpos($name, 'tx_mnogosearch_') === false) {
-			$title = $GLOBALS['LANG']->sL($GLOBALS['TCA'][$name]['ctrl']['title']);
-			if ($title) {
-				$tables[$title] = array($title, $name, $GLOBALS['TCA'][$name]['ctrl']['iconfile']);
-			}
-		}
+	function tx_mnogosearch_sortItems(array $item1, array $item2) {
+		return strcmp($item1[0], $item2[0]);
 	}
-	usort($tables, tx_mnogosearch_sortItems);
-	$params['items'] += $tables;
-}
 
-/**
- * Creates a list of tables for text fields for the current table
- *
- * @param	array	$params	Parameters to the function
- * @return	void
- */
-function tx_mnogosearch_listTableFields(array &$params) {
-	$tableName = $params['row']['tx_mnogosearch_table'];
-	if ($tableName != '') {
-		$fieldTypeFilter = ($params['field'] == 'tx_mnogosearch_title_field' ?
-				array('input') : array('input', 'text'));
-		$fields = array_keys($GLOBALS['TYPO3_DB']->admin_get_fields($tableName));
-		t3lib_div::loadTCA($params['row']['tx_mnogosearch_table']);
-		$result = array();
-		foreach ($fields as $field) {
-			if (isset($GLOBALS['TCA'][$tableName]['columns'][$field]) &&
-					in_array($GLOBALS['TCA'][$tableName]['columns'][$field]['config']['type'], $fieldTypeFilter)) {
-				$title = trim($GLOBALS['LANG']->sL($GLOBALS['TCA'][$tableName]['columns'][$field]['label']), ':');
-				$result[$title] = array($title, $field);
+	/**
+	 * Creates a list of tables for table selector
+	 *
+	 * @param	array	$params	Parameters to the function
+	 * @return	void
+	 */
+	function tx_mnogosearch_listRecordTables(array &$params) {
+		$tableNames = array_keys($GLOBALS['TYPO3_DB']->admin_get_tables());
+		$tables = array();
+		foreach ($tableNames as $name) {
+			if ($name != 'tt_content' && preg_match('/^(tt|tx)_/', $name) &&
+					isset($GLOBALS['TCA'][$name]) &&
+					!$GLOBALS['TCA'][$name]['hideTable'] &&
+					strpos($name, 'tx_mnogosearch_') === false) {
+				$title = $GLOBALS['LANG']->sL($GLOBALS['TCA'][$name]['ctrl']['title']);
+				if ($title) {
+					$tables[$title] = array($title, $name, $GLOBALS['TCA'][$name]['ctrl']['iconfile']);
+				}
 			}
 		}
-		usort($result, tx_mnogosearch_sortItems);
-		$params['items'] += $result;
+		usort($tables, tx_mnogosearch_sortItems);
+		$params['items'] += $tables;
+	}
+
+	/**
+	 * Creates a list of tables for text fields for the current table
+	 *
+	 * @param	array	$params	Parameters to the function
+	 * @return	void
+	 */
+	function tx_mnogosearch_listTableFields(array &$params) {
+		$tableName = $params['row']['tx_mnogosearch_table'];
+		if ($tableName != '') {
+			$fieldTypeFilter = ($params['field'] == 'tx_mnogosearch_title_field' ?
+					array('input') : array('input', 'text'));
+			$fields = array_keys($GLOBALS['TYPO3_DB']->admin_get_fields($tableName));
+			t3lib_div::loadTCA($params['row']['tx_mnogosearch_table']);
+			$result = array();
+			foreach ($fields as $field) {
+				if (isset($GLOBALS['TCA'][$tableName]['columns'][$field]) &&
+						in_array($GLOBALS['TCA'][$tableName]['columns'][$field]['config']['type'], $fieldTypeFilter)) {
+					$title = trim($GLOBALS['LANG']->sL($GLOBALS['TCA'][$tableName]['columns'][$field]['label']), ':');
+					$result[$title] = array($title, $field);
+				}
+			}
+			usort($result, tx_mnogosearch_sortItems);
+			$params['items'] += $result;
+		}
 	}
 }
 
@@ -266,4 +269,5 @@ $TCA['tx_mnogosearch_urllog'] = array(
 		'0' => array('showitem' => 'tx_mnogosearch_url;;;;1-1-1,tx_mnogosearch_pid'),
 	),
 );
+
 ?>
