@@ -2,7 +2,7 @@
 mnoGoSearchPath = /opt/mnogosearch
 
 # cat=basic/enable; type=string; label=Database connection string:mnoGoSearch connection URL
-dbaddr = mysql://user:pass@host/dbname/?dbmode=blob&LiveUpdates=yes
+dbaddr = mysql://user:pass@host/dbname/?dbmode=multi
 
 # cat=basic/enable; type=string; label=Charset for database:Search engine will use this character set to store data in the database.  May not be empty!
 LocalCharset = utf-8

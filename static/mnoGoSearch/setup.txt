@@ -48,7 +48,7 @@ plugin.tx_mnogosearch_pi1 {
 			search_word_forms = 1
 		}
 
-		# These are directo mnogosearch configuration directives (like "PopRankShowCntWeight = 0.1"). They are passed as is after all other commands. Use only if you know what you are doing!
+		# These are direct mnogosearch configuration directives (like "PopRankShowCntWeight = 0.1"). They are passed as is after all other commands. Use only if you know what you are doing!
 		extendedConfiguration {
 		}
 
@@ -78,5 +78,26 @@ plugin.tx_mnogosearch_pi1 {
 		# Page browser configuration
 		pageBrowser < plugin.tx_pagebrowse_pi1
 		pageBrowser.disableCacheHash = 1
+	}
+
+	icons {
+		* = EXT:mnogosearch/resources/icons/file.png
+		c = EXT:mnogosearch/resources/icons/c.png
+		cpp = EXT:mnogosearch/resources/icons/cplusplus.png
+		doc = EXT:mnogosearch/resources/icons/word.png
+		h = EXT:mnogosearch/resources/icons/h.png
+		html =
+		log = EXT:mnogosearch/resources/icons/text.png
+		ods = EXT:mnogosearch/resources/icons/oocalc.png
+		odt = EXT:mnogosearch/resources/icons/oowriter.png
+		odp = EXT:mnogosearch/resources/icons/ooimpress.png
+		pdf = EXT:mnogosearch/resources/icons/acrobat.png
+		php =
+		ppt = EXT:mnogosearch/resources/icons/powerpoint.png
+		sxc = EXT:mnogosearch/resources/icons/oocalc.png
+		sxi = EXT:mnogosearch/resources/icons/ooimpress.png
+		sxw = EXT:mnogosearch/resources/icons/oowriter.png
+		txt = EXT:mnogosearch/resources/icons/text.png
+		xls = EXT:mnogosearch/resources/icons/excel.png
 	}
 }

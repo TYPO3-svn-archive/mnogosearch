@@ -4,6 +4,7 @@
 	* Add record reindexing to CLI script and TCEmain hook
 	* Record only indexable pages in URL log
 	* Rewrite manual
+	* Added file icons
 
 29-10-2008	Dmitry Dulepov	<dmitry@typo3.org>
 

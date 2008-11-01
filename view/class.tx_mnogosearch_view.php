@@ -135,6 +135,7 @@ class tx_mnogosearch_view {
 			foreach ($results->results as $result) {
 				/* @var tx_mnogosearch_result $result */
 				// Basic fields
+				$iconSrc = $this->getIconSrc($result->url);
 				$t = $this->pObj->cObj->substituteMarkerArray($resultTemplate, array(
 						'###SEARCH_RESULTS_RESULT_NUMBER###' => $results->firstDoc + ($i++),
 						'###SEARCH_RESULTS_RESULT_URL###' => $result->url,
@@ -143,6 +144,7 @@ class tx_mnogosearch_view {
 						'###SEARCH_RESULTS_RESULT_EXCERPT###' => $result->excerpt,
 						'###TEXT_ADDITIONAL_RESULTS###' => $this->pObj->pi_getLL('text_additional_results'),
 						'###UNIQID###' => uniqid('c'),
+						'###ICON_SRC###' => $iconSrc,
 					));
 				// Make links
 				$links = '';
@@ -151,6 +153,9 @@ class tx_mnogosearch_view {
 						'###SEARCH_RESULTS_RESULT_ALT_LINK_URL###' => $r->url,
 						'###SEARCH_RESULTS_RESULT_ALT_LINK_TITLE###' => $r->url,
 						));
+				}
+				if ($iconSrc == '') {
+					$t = $this->pObj->cObj->substituteSubpart($t, '###ICON###', '');
 				}
 				if ($links != '') {
 					$resultList .= $this->pObj->cObj->substituteSubpart($t, '###SEARCH_RESULTS_RESULT_ALT_LINK###', $links);
@@ -246,6 +251,20 @@ class tx_mnogosearch_view {
 
 	protected function getLink($page) {
 		return $this->pObj->pi_linkTP_keepPIvars_url(array('page' => $page), 1);
+	}
+
+	protected function getIconSrc($url) {
+		$parts = pathinfo($url);
+		$icon = '';
+		if ($parts['extension']) {
+			$icon = (isset($this->pObj->conf['icons.'][$parts['extension']]) ?
+					$this->pObj->conf['icons.'][$parts['extension']] :
+					$this->pObj->conf['icons.'][$parts['extension']]);
+			if ($icon) {
+				$icon = $GLOBALS['TSFE']->tmpl->getFileName($icon);
+			}
+		}
+		return $icon;
 	}
 }
 

@@ -110,11 +110,7 @@ class tx_mnogosearch_cli {
 	 */
 	protected function getExtraIndexerArguments() {
 		if (($key = array_search('-x', $GLOBALS['argv']))) {
-			if (t3lib_div::testInt($GLOBALS['argv'][$key + 1]{0})) {
-				if ($GLOBALS['argv'][$key + 1] != '0') {
-					$this->extraIndexerArguments = trim($GLOBALS['argv'][$key + 1], '"');
-				}
-			}
+			$this->extraIndexerArguments = trim($GLOBALS['argv'][$key + 1], '"');
 		}
 	}
 
@@ -333,6 +329,21 @@ class tx_mnogosearch_cli {
 			$GLOBALS['extraOptions'] = $GLOBALS['argv'][$pos + 1];
 		}
 
+		// Get path to PHP interpreter
+		if (basename($_ENV['_']) == 'php') {
+			$phpPath = $_ENV['_'];
+		}
+		else {
+			$phpPath = trim(`which php`);
+		}
+		$openOfficeCmd = '';
+		if ($phpPath) {
+			$openOfficeCmd = 'Mime application/vnd.oasis.opendocument.text text/plain ' .
+						'"' . $phpPath . ' -q ' .
+						escapeshellarg(dirname(__FILE__) . '/catoo.php') .
+						' $1"';
+		}
+
 		// Note when adding new sections, do not forget to adjust weight factors in pi1!
 		$content = '# Defaults
 DBAddr ' . $this->sysconf['dbaddr'] . '
@@ -348,8 +359,13 @@ Section meta.description 4 64 text
 SaveSectionSize yes
 LocalCharset ' . ($this->sysconf['LocalCharset'] ? $this->sysconf['LocalCharset'] : 'UTF-8') . '
 BrowserCharset ' . ($this->sysconf['BrowserCharset'] ? $this->sysconf['BrowserCharset'] : 'UTF-8') . '
-Allow *.htm *.html *.php *.txt */
-Disallow *.rdf *.xml *.rss *.js *.css *.jpg *.png *.gif
+#Allow *.htm *.html *.php *.txt */ *.pdf *.doc *.odt *.swx
+Mime application/msword text/plain "catdoc -a $1"
+Mime application/pdf text/plain "pdftotext -enc UTF-8 $1 -"
+Mime application/vnd.ms-excel text/html "xltohtml $1"
+Mime application/vnd.ms-powerpoint text/html "pptohtml $1"
+' . $openOfficeCmd . '
+Disallow *.rdf *.xml *.rss *.js *.css *.jpg *.png *.gif *.svg *.swf
 HoldBadHrefs 2d
 DetectClones yes
 HTTPHeader "X-TYPO3-mnogosearch: ' . md5('mnogosearch' . $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey']) . '"
@@ -437,7 +453,7 @@ DefaultContentType "text/html' .
 			return;
 		}
 
-		$cmdLine = $this->sysconf['mnoGoSearchPath'] . '/sbin/indexer ' . $this->silenceOption . ' -r -N 2 -w -d ' . $this->configFileName . ' ' . $GLOBALS['extraOptions'];
+		$cmdLine = $this->sysconf['mnoGoSearchPath'] . '/sbin/indexer ' . $this->silenceOption . ' -r '  . $this->extraIndexerArguments . ' -d ' . $this->configFileName . ' ';
 		if ($dryRun) {
 			echo 'Executing: ' . $cmdLine . chr(10);
 		}
@@ -448,7 +464,7 @@ DefaultContentType "text/html' .
 		// New URLs
 		$newUrlFile = (in_array('-n', $GLOBALS['argv']) ? $this->createNewUrlList() : '');
 		if ($newUrlFile && filesize($newUrlFile)) {
-			$cmdLine = $this->sysconf['mnoGoSearchPath'] . '/sbin/indexer ' . $this->silenceOption . ' -a -i -r -N 2 -w -d ' . $this->configFileName . ' -f ' . $newUrlFile . ' ' . $GLOBALS['extraOptions'];
+			$cmdLine = $this->sysconf['mnoGoSearchPath'] . '/sbin/indexer ' . $this->silenceOption . ' -a -i -r -d ' . $this->configFileName . ' -f ' . $newUrlFile . ' ' . $GLOBALS['extraOptions'];
 			if ($dryRun) {
 				echo 'Using URL configuration file ' . $newUrlFile . ':
 -------------------------

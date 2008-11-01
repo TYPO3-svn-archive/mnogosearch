@@ -29,6 +29,10 @@ ol#tx-mnogosearch-result > li {
 	margin-bottom: 10px;
 }
 
+ol#tx-mnogosearch-result > li img {
+	vertical-align: middle;
+}
+
 #tx-mnogosearch-result p {
 	margin: 0 0;
 	padding: 0 0;
