@@ -5,6 +5,7 @@
 	* Record only indexable pages in URL log
 	* Rewrite manual
 	* Added file icons
+	* Add support for indexing OpenOffice documents
 
 29-10-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
