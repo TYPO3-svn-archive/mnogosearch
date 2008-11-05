@@ -1,3 +1,7 @@
+05-11-2008	Dmitry Dulepov	<dmitry@typo3.org>
+
+	* Fixed SQL error in TCEmain hook
+
 31-10-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
 	* Make sure that functions are not defined more than once in tca.php

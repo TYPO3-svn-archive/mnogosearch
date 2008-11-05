@@ -294,7 +294,7 @@ class tx_mnogosearch_tcemain {
 	protected function enableFields($table) {
 		$enableFields = trim(t3lib_BEfunc::BEenableFields($table));
 		$deleteFields = trim(t3lib_BEfunc::deleteClause($table));
-		return ' ' . ($enableFields != 'AND' ? $enableFields : '') .
+		return ' ' . ($enableFields != 'AND' ? $enableFields : '') . ' ' .
 				($deleteFields != 'AND' ? $deleteFields : '');
 	}
 
