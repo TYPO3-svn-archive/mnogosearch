@@ -1,12 +1,6 @@
 # Enable mnoGoSearcg
 config.tx_mnogosearch_enable = 1
 
-# Disables indexing for elements with "Index" flag cleared
-tt_content.stdWrap.stdWrap.setContentToCurrent = 1
-tt_content.stdWrap.stdWrap.override.current = 1
-tt_content.stdWrap.stdWrap.override.wrap = <!--UdmComment-->|<!--/UdmComment-->
-tt_content.stdWrap.stdWrap.override.if.isFalse.field = sectionIndex
-
 # Declare plugin
 plugin.tx_mnogosearch_pi1 = USER_INT
 plugin.tx_mnogosearch_pi1 {
