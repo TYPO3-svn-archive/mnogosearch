@@ -7,6 +7,7 @@
 	* Check all ways to set page title in post processing hook
 	* Released version 2.1.1
 	* Fix "(no title)" for files
+	* Remove UdmComment from everywhere because it may conflict with post processing hook
 	* Released version 2.1.2
 
 05-11-2008	Dmitry Dulepov	<dmitry@typo3.org>

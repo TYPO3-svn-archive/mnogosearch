@@ -143,7 +143,7 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 			}
 		}
 
-		return '<!--UdmComment-->' . $this->pi_wrapInBaseClass($content) . '<!--/UdmComment-->';
+		return $this->pi_wrapInBaseClass($content);
 	}
 
 	/**
