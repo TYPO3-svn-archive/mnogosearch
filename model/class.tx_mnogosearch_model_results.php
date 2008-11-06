@@ -85,10 +85,12 @@ class tx_mnogosearch_model_results {
 			$result->documentSize = Udm_Get_Res_Field($res, $i, UDM_FIELD_SIZE);
 			$result->rating = Udm_Get_Res_Field($res, $i, UDM_FIELD_RATING);
 			$result->title = Udm_Get_Res_Field($res, $i, UDM_FIELD_TITLE);
-			if ($result->title == '') {
-				$result->title = basename($result->url);
+			if (trim($result->title) == '') {
+				$result->title = $pObj->pi_getLL('no_page_title');
 			}
-			$result->title = $this->highlight($result->title, $pObj);
+			else {
+				$result->title = $this->highlight($result->title, $pObj);
+			}
 			$result->excerpt = $this->highlight(strip_tags(Udm_Get_Res_Field($res, $i, UDM_FIELD_TEXT)), $pObj);
 			$result->keywords = $this->highlight(strip_tags(Udm_Get_Res_Field($res, $i, UDM_FIELD_KEYWORDS)), $pObj);
 			$result->description = $this->highlight(strip_tags(Udm_Get_Res_Field($res, $i, UDM_FIELD_DESC)), $pObj);
@@ -170,7 +172,7 @@ class tx_mnogosearch_model_results {
 		// create fake results
 		for ($i = 0; $i < $foundDocs; $i++) {
 			$result = t3lib_div::makeInstance('tx_mnogosearch_model_results');
-			/* @var $result tx_mnogosearch_model_results */
+			/* @var $result tx_mnogosearch_model_result */
 			$result->url = '/' . uniqid(uniqid(), true);
 			$result->title = ucfirst($this->getExcerpt($lipsum, rand(3, 12)));
 			$result->contentType = 'text/html';

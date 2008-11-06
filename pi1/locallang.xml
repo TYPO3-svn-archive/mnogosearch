@@ -39,6 +39,8 @@
 			<label index="page_range">Page %1$s of %2$s</label> <!-- + stdWrap for numbers! -->
 			<label index="text_nothing_found">The search returned no results.</label>
 			<label index="text_additional_results">Similar pages</label>
+
+			<label index="no_page_title">(no title)</label>
 		</languageKey>
 	</data>
 </T3locallang>

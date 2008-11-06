@@ -1,3 +1,7 @@
+06-11-2008	Dmitry Dulepov	<dmitry@typo3.org>
+
+	* Do not attempt to create page title if none exists
+
 05-11-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
 	* Fixed SQL error in TCEmain hook
