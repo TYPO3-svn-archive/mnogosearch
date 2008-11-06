@@ -50,20 +50,6 @@ class tx_mnogosearch_postproc {
 		// Only if no login user and page is searchable!
 		if (!$pObj->page['no_search'] && !is_array($pObj->fe_user->user) && !count($pObj->fe_user->groupData['uid'])) {
 
-			// Set last modified time
-			if ($pObj->register['SYS_LASTCHANGED']) {
-				if ($_SERVER['HTTP_IF_MODIFIED_SINCE']) {
-					$time = strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']);
-					if ($time >= $pObj->register['SYS_LASTCHANGED']) {
-						header('HTTP/1.1 304 Not Modified');
-						$pObj->content = '';
-					}
-				}
-				elseif (!$pObj->config['config']['sendCacheHeaders']) {
-					header('Last-modified: ' . gmdate('D, d M Y H:i:s T', $pObj->register['SYS_LASTCHANGED']));
-				}
-			}
-
 			if ($pObj->content) {
 				// Add our comments
 				$parts = preg_split('/(<\/?body\s?[^>]*>)/ims', $pObj->content, -1, PREG_SPLIT_DELIM_CAPTURE);

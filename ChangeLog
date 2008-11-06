@@ -2,6 +2,7 @@
 
 	* Do not attempt to create page title if none exists
 	* Add information about Debian to the manual
+	* Remove sending HTTP status code 304 as it may cause problems with some pages that contain records
 
 05-11-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
