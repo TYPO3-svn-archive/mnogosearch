@@ -59,8 +59,10 @@ class tx_mnogosearch_postproc {
 				}
 
 				if (!$pObj->config['config']['tx_mnogosearch_keepSiteTitle']) {
-					// Remove title
-					$pObj->content = preg_replace('/<title>(.*?)<\/title>/', '<title>' . $pObj->page['title'] . '</title>', $pObj->content);
+					// Replace title
+					$title = ($pObj->indexedDocTitle ? $pObj->indexedDocTitle :
+								($pObj->altPageTitle ? $pObj->altPageTitle : $pObj->page['title']));
+					$pObj->content = preg_replace('/<title>(.*?)<\/title>/', '<title>' . htmlspecialchars($title) . '</title>', $pObj->content);
 				}
 
 				// Respect TYPO3SEARCH_xxx

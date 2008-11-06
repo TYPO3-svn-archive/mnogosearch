@@ -4,6 +4,7 @@
 	* Add information about Debian to the manual
 	* Remove sending HTTP status code 304 as it may cause problems with some pages that contain records
 	* Disable usage of "No index" flag
+	* Check all ways to set page title in post processing hook
 
 05-11-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
