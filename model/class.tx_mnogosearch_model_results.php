@@ -86,7 +86,14 @@ class tx_mnogosearch_model_results {
 			$result->rating = Udm_Get_Res_Field($res, $i, UDM_FIELD_RATING);
 			$result->title = Udm_Get_Res_Field($res, $i, UDM_FIELD_TITLE);
 			if (trim($result->title) == '') {
-				$result->title = $pObj->pi_getLL('no_page_title');
+				// Check if file
+				$urlParts = parse_url($result->url);
+				if (@is_file(PATH_site . trim($urlParts['path'], '/'))) {
+					$result->title = basename($urlParts['path']);
+				}
+				else {
+					$result->title = $pObj->pi_getLL('no_page_title');
+				}
 			}
 			else {
 				$result->title = $this->highlight($result->title, $pObj);
