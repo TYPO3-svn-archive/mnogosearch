@@ -24,6 +24,8 @@
 
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
+ *
+ * $Id$
  */
 
 /**

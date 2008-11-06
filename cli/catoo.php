@@ -23,7 +23,7 @@
 ***************************************************************/
 
 /**
- * $Id: $
+ * $Id$
  *
  * This script converts content of OpenOffice sxw/odt files to text and writes
  * it to standard output.
