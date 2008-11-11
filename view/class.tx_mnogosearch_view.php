@@ -170,25 +170,6 @@ class tx_mnogosearch_view {
 			$resultList = $this->pObj->cObj->substituteMarker($resultList, '###SEARCH_RESULTS_FIRST###', $results->firstDoc);
 		}
 
-		// Pager
-		$pager = '';
-		if ($results->totalResults > $rpp) {
-			$pagerTemplate = $this->pObj->cObj->getSubpart($template, '###SEARCH_RESULTS_PAGER###');
-			$prevLink = $nextLink = '';
-			if ($page > 0) {
-				$pageTemplate = $this->pObj->cObj->getSubpart($pagerTemplate, '###SEARCH_RESULTS_PAGER_PREV###');
-				$prevLink = $this->pObj->cObj->substituteMarker($pageTemplate, '###SEARCH_RESULTS_PAGER_PREV_LINK###', $this->getLink($page - 1));
-			}
-			if ($results->lastDoc < $results->totalResults) {
-				$pageTemplate = $this->pObj->cObj->getSubpart($pagerTemplate, '###SEARCH_RESULTS_PAGER_NEXT###');
-				$nextLink = $this->pObj->cObj->substituteMarker($pageTemplate, '###SEARCH_RESULTS_PAGER_NEXT_LINK###', $this->getLink($page + 1));
-			}
-			// Put all together
-			$pager = $this->pObj->cObj->substituteMarker($pagerTemplate, '###SEARCH_RESULTS_PAGER_CURRENT_PAGE###', $page + 1);
-			$pager = $this->pObj->cObj->substituteSubpart($pager, '###SEARCH_RESULTS_PAGER_PREV###', $prevLink);
-			$pager = $this->pObj->cObj->substituteSubpart($pager, '###SEARCH_RESULTS_PAGER_NEXT###', $nextLink);
-		}
-
 		// Put all together
 		$totalPages = intval($results->totalResults/$rpp) + ($results->totalResults % $rpp ? 1 : 0);
 		$wordInfo = str_replace(' / ', '/', $results->wordInfo);
@@ -225,7 +206,6 @@ class tx_mnogosearch_view {
 			));
 		$content = $this->pObj->cObj->substituteSubpart($content, '###SEARCH_RESULTS_CONTENT###', $resultList);
 		$content = $this->pObj->cObj->substituteSubpart($content, '###SEARCH_RESULTS_EMPTY###', '');
-		$content = $this->pObj->cObj->substituteSubpart($content, '###SEARCH_RESULTS_PAGER###', $pager);
 		return $content;
 	}
 

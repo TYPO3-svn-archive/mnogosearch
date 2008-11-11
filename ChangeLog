@@ -1,3 +1,7 @@
+11-11-2008	Dmitry Dulepov	<dmitry@typo3.org>
+
+	* Remove old pager code
+
 06-11-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
 	* Do not attempt to create page title if none exists
