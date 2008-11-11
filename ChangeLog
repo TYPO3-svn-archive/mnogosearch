@@ -2,6 +2,7 @@
 
 	* Remove old pager code
 	* Fix search limit for records
+	* Explain search limiting in the manual
 
 06-11-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
