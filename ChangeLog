@@ -1,6 +1,7 @@
 11-11-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
 	* Remove old pager code
+	* Fix search limit for records
 
 06-11-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
