@@ -3,6 +3,7 @@
 	* Remove old pager code
 	* Fix search limit for records
 	* Explain search limiting in the manual
+	* Released version 2.1.3
 
 06-11-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
