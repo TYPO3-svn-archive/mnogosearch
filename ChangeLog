@@ -1,6 +1,7 @@
 2008-11-22  Dmitry Dulepov  <dmitry@typo3.org>
 
 	* Make found symbols bold by default
+	* Fix regex to detect new lines in the title tag
 
 11-11-2008	Dmitry Dulepov	<dmitry@typo3.org>
 

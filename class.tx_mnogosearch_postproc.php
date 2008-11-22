@@ -64,7 +64,7 @@ class tx_mnogosearch_postproc {
 					// Replace title
 					$title = ($pObj->indexedDocTitle ? $pObj->indexedDocTitle :
 								($pObj->altPageTitle ? $pObj->altPageTitle : $pObj->page['title']));
-					$pObj->content = preg_replace('/<title>(.*?)<\/title>/', '<title>' . htmlspecialchars($title) . '</title>', $pObj->content);
+					$pObj->content = preg_replace('/<title>[^<]*<\/title>/', '<title>' . htmlspecialchars($title) . '</title>', $pObj->content);
 				}
 
 				// Respect TYPO3SEARCH_xxx
