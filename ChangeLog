@@ -1,3 +1,7 @@
+2008-11-22  Dmitry Dulepov  <dmitry@typo3.org>
+
+	* Make found symbols bold by default
+
 11-11-2008	Dmitry Dulepov	<dmitry@typo3.org>
 
 	* Remove old pager code
