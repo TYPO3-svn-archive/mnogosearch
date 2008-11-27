@@ -14,7 +14,7 @@ BrowserCharset = utf-8
 IncludeFile =
 
 # cat=basic/enable; type=options[Disable=,File (fileadmin/mnogosearch.log)=file,TYPO3 devLog=devlog]; label=Enable debug logging:Writes messages to debug log if enabled. If you select "TYPO3 devLog", make sure you install cc_devlog or rlmp_filedevlog. Disable when not needed!
-debugLog =
+#debugLog =
 
 # cat=basic/enable; type=boolean; label=Hide internal tables in List module
 hide_internal_tables = 1

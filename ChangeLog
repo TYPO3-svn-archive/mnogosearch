@@ -5,6 +5,7 @@
 	* Fixed bug #2233: (No title) for found documents with spaces
 	* Fixed bug #2236: Not all pages of the site are indexed
 	* Small manual updates
+	* Disable debug logging for now
 
 2008-11-22  Dmitry Dulepov  <dmitry@typo3.org>
 
