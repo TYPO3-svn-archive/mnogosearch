@@ -6,6 +6,7 @@
 	* Fixed bug #2236: Not all pages of the site are indexed
 	* Small manual updates
 	* Disable debug logging for now
+	* Released version 2.1.4
 
 2008-11-22  Dmitry Dulepov  <dmitry@typo3.org>
 
