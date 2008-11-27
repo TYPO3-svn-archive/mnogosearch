@@ -91,7 +91,7 @@ class tx_mnogosearch_postproc {
 	 * @return	string	Processing content
 	 */
 	protected function processContent($html) {
-		list($part1, $content, $part2) = split('</?body[^>]*>', $html);
+		list($part1, $content, $part2) = preg_split('/<\/?body[^>]*>/', $html);
 
 		$process = true;
 		$result = '';
