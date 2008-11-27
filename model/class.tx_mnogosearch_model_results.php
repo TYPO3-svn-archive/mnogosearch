@@ -88,7 +88,7 @@ class tx_mnogosearch_model_results {
 			if (trim($result->title) == '') {
 				// Check if file
 				$urlParts = parse_url($result->url);
-				if (@is_file(PATH_site . trim($urlParts['path'], '/'))) {
+				if (@is_file(PATH_site . trim(rawurldecode($urlParts['path']), '/'))) {
 					$result->title = basename($urlParts['path']);
 				}
 				else {
@@ -113,7 +113,7 @@ class tx_mnogosearch_model_results {
 						if ($j != $i && $urlId == Udm_Get_Res_Field($res, $j, UDM_FIELD_ORIGINID)) {
 							$url = $this->processURL(Udm_Get_Res_Field($res, $j, UDM_FIELD_URL), $pObj);
 							if ($url != $result->url) {
-								$clone = new tx_mnogosearch_model_result;
+								$clone = t3lib_div::makeInstance('tx_mnogosearch_model_result');
 								$clone->url = $url;
 								$clone->contentType = Udm_Get_Res_Field($res, $j, UDM_FIELD_CONTENT);
 								$clone->documentSize = Udm_Get_Res_Field($res, $j, UDM_FIELD_SIZE);

@@ -2,6 +2,7 @@
 
 	* Fixed bug #2232: TYPO3SEARCH markers not respected
 	* Fixed: CSS list was not aligned properly vertically
+	* Fixed bug #2233: (No title) for found documents with spaces
 
 2008-11-22  Dmitry Dulepov  <dmitry@typo3.org>
 
