@@ -53,29 +53,15 @@ class tx_mnogosearch_postproc {
 		if (!$pObj->page['no_search'] && !is_array($pObj->fe_user->user) && !count($pObj->fe_user->groupData['uid'])) {
 
 			if ($pObj->content) {
-				// Add our comments
-				$parts = preg_split('/(<\/?body\s?[^>]*>)/ims', $pObj->content, -1, PREG_SPLIT_DELIM_CAPTURE);
-				if (count($parts) == 5) {
-					$pObj->content = $parts[0] . $parts[1] . '<!--UdmComment-->' . $parts[2] .
-								'<!--/UdmComment-->' . $parts[3] . $parts[4];
+				if (strpos($pObj->content, '<!--TYPO3SEARCH_begin-->')) {
+					// Remove parts that should not be indexed
+					$pObj->content = $this->processContent($pObj->content);
 				}
-
+				// Replace title if necessary
 				if (!$pObj->config['config']['tx_mnogosearch_keepSiteTitle']) {
-					// Replace title
 					$title = ($pObj->indexedDocTitle ? $pObj->indexedDocTitle :
 								($pObj->altPageTitle ? $pObj->altPageTitle : $pObj->page['title']));
 					$pObj->content = preg_replace('/<title>[^<]*<\/title>/', '<title>' . htmlspecialchars($title) . '</title>', $pObj->content);
-				}
-
-				// Respect TYPO3SEARCH_xxx
-				if (strpos($pObj->content, '<!--TYPO3SEARCH_begin-->'))  {
-					// Has search tags
-					$pObj->content = str_replace('<!--TYPO3SEARCH_begin-->', '<!--/UdmComment--><!--TYPO3SEARCH_begin-->', $pObj->content);
-					$pObj->content = str_replace('<!--TYPO3SEARCH_end-->', '<!--TYPO3SEARCH_end--><!--UdmComment-->', $pObj->content);
-				}
-				else {
-					// No search tags, enable search for the whole content
-					$pObj->content = preg_replace('/<!--\/?UdmComment-->/ims', '', $pObj->content);
 				}
 			}
 		}
@@ -95,6 +81,56 @@ class tx_mnogosearch_postproc {
 			// Remove mnoGoSearch tags
 			$pObj->content = preg_replace('/<!--\/?UdmComment-->/ims', '', $pObj->content);
 		}
+	}
+
+	/**
+	 * Processes content by removing everything except links from parts of
+	 * the content that should not be searched.
+	 *
+	 * @param	string	$html	HTML to process
+	 * @return	string	Processing content
+	 */
+	protected function processContent($html) {
+		list($part1, $content, $part2) = split('</?body[^>]*>', $html);
+
+		$process = true;
+		$result = '';
+		$regexp = '/(<!--TYPO3SEARCH_(?:begin|end)-->)/';
+		$blocks = preg_split($regexp, $content, -1, PREG_SPLIT_DELIM_CAPTURE);
+
+		foreach ($blocks as $block) {
+			if ($block == '<!--TYPO3SEARCH_begin-->') {
+				$process = false;
+			}
+			elseif ($block == '<!--TYPO3SEARCH_end-->') {
+				$process = true;
+			}
+			elseif ($process) {
+				$result .= $this->processBlock($block);
+			}
+			else {
+				$result .= $block;
+			}
+		}
+		return $part1 . '<body>' . $result . '</body>' . $part2;
+	}
+
+	/**
+	 * Processes a single block of text, removes everything execept links.
+	 *
+	 * @param	string	$block	Content part
+	 * @return	string	Processed block
+	 */
+	protected function processBlock($block) {
+		$regexp = '/(<a[^>]+href=[^>]+>)/';
+		$matches = array();
+		$result = '';
+		if (preg_match_all($regexp, $block, $matches)) {
+			foreach ($matches[0] as $match) {
+				$result .= $match . ' </a>';
+			}
+		}
+		return $result;
 	}
 }
 
