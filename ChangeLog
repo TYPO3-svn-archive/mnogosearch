@@ -1,3 +1,7 @@
+2008-11-28  Dmitry Dulepov  <dmitry@typo3.org>
+
+	* Updated manual to show how to index https:// sites
+
 2008-11-27  Dmitry Dulepov  <dmitry@typo3.org>
 
 	* Fixed bug #2232: TYPO3SEARCH markers not respected
