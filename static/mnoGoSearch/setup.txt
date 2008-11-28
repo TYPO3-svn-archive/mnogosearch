@@ -1,4 +1,4 @@
-# Enable mnoGoSearcg
+# Enable mnoGoSearch
 config.tx_mnogosearch_enable = 1
 
 # Declare plugin
