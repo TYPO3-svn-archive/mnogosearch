@@ -35,6 +35,13 @@ class tx_mnogosearch_view {
 	protected $templateCode;
 
 	/**
+	 * Parent object
+	 *
+	 * @var tx_mnogosearch_pi1
+	 */
+	protected $pObj;
+
+	/**
 	 * Initializes the renderer
 	 *
 	 * @param	tx_mnogosearch_pi1	$pObj	Calling object
@@ -69,7 +76,7 @@ class tx_mnogosearch_view {
 		$result = $this->pObj->cObj->substituteMarkerArray($template, array(
 			'###SHORT_SEARCH_FORM_ACTION###' => $this->pObj->pi_getPageLink($this->getResultPage()),
 			'###SHORT_SEARCH_FORM_VALUE###' => htmlspecialchars($this->pObj->piVars['q']),
-			'###TEXT_SEARCH###' => $this->pObj->pi_getLL('text_submit_short'),
+			'###TEXT_SEARCH###' => $this->pObj->pi_getLL('text_submit_short', '', true),
 			));
 		return $result;
 	}
@@ -82,9 +89,10 @@ class tx_mnogosearch_view {
 	public function render_searchForm() {
 		$template = $this->pObj->cObj->getSubpart($this->templateCode, '###LONG_SEARCH_FORM###');
 		$result = $this->pObj->cObj->substituteMarkerArray($template, array(
+			'###TEXT_SEARCH_FOR###' => $this->pObj->pi_getLL('text_search_text', '', true),
 			'###LONG_SEARCH_FORM_ACTION###' => $this->pObj->pi_getPageLink($this->getResultPage()),
 			'###LONG_SEARCH_FORM_VALUE###' => htmlspecialchars($this->pObj->piVars['q']),
-			'###TEXT_SEARCH###' => $this->pObj->pi_getLL('text_submit_long'),
+			'###TEXT_SEARCH###' => $this->pObj->pi_getLL('text_submit_long', '', true),
 		));
 		return $result;
 	}

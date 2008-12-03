@@ -1,3 +1,7 @@
+2008-12-03  Dmitry Dulepov  <dmitry@typo3.org>
+
+	* Fixed non-localized string in the long search form
+
 2008-11-28  Dmitry Dulepov  <dmitry@typo3.org>
 
 	* Updated manual to show how to index https:// sites
