@@ -238,9 +238,6 @@ class tx_mnogosearch_cli {
 		$content = 'Realm ';
 		$content .= isset($this->server_methods[$row['tx_mnogosearch_method']]) ? $this->server_methods[$row['tx_mnogosearch_method']] . ' ' : '';
 		$regExp = false;
-		if ($row['tx_mnogosearch_cmptype'] > 0 || ($row['tx_mnogosearch_cmpoptions'] & 1)) {
-			$content .= ($row['tx_mnogosearch_cmpoptions'] & 1) ? 'case ' : 'nocase ';
-		}
 		if ($row['tx_mnogosearch_cmpoptions'] & 2) {
 			$content .= 'NoMatch ';
 		}
