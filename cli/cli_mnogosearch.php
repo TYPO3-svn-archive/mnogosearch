@@ -172,7 +172,7 @@ class tx_mnogosearch_cli {
 		foreach ($rows as $row) {
 			$content .= '# uid=' . $row['uid'] . chr(10);
 			if ($row['tx_mnogosearch_period'] != 0) {
-				$content .= 'Period ' . ($row['tx_mnogosearch_period']*60*60) . 'h' . chr(10);
+				$content .= 'Period ' . $row['tx_mnogosearch_period'] . 'h' . chr(10);
 				$hasPeriod = true;
 			}
 			elseif ($hasPeriod) {
@@ -362,7 +362,7 @@ Mime application/pdf text/plain "pdftotext -enc UTF-8 $1 -"
 Mime application/vnd.ms-excel text/html "xltohtml $1"
 Mime application/vnd.ms-powerpoint text/html "pptohtml $1"
 ' . $openOfficeCmd . '
-Disallow *.rdf *.xml *.rss *.js *.css *.jpg *.png *.gif *.svg *.swf
+Disallow *.rdf *.xml *.rss *.js *.css *.jpg *.png *.gif *.svg *.swf *.tif *.tiff *.bz2 *.gz
 HoldBadHrefs 2d
 DetectClones yes
 HTTPHeader "X-TYPO3-mnogosearch: ' . md5('mnogosearch' . $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey']) . '"

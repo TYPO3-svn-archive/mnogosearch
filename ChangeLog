@@ -1,3 +1,7 @@
+2008-12-09  Dmitry Dulepov  <dmitry@typo3.org>
+
+	* Fixed: period was incorrectly specified
+
 2008-12-04  Dmitry Dulepov  <dmitry@typo3.org>
 
 	* Manual update with information about order fo allow/disallow records
