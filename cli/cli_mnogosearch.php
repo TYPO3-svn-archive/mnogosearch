@@ -357,12 +357,15 @@ SaveSectionSize yes
 LocalCharset ' . ($this->sysconf['LocalCharset'] ? $this->sysconf['LocalCharset'] : 'UTF-8') . '
 BrowserCharset ' . ($this->sysconf['BrowserCharset'] ? $this->sysconf['BrowserCharset'] : 'UTF-8') . '
 #Allow *.htm *.html *.php *.txt */ *.pdf *.doc *.odt *.swx
+Mime message/rfc822 text/plain "cat $1"
 Mime application/msword text/plain "catdoc -a $1"
 Mime application/pdf text/plain "pdftotext -enc UTF-8 $1 -"
 Mime application/vnd.ms-excel text/html "xltohtml $1"
 Mime application/vnd.ms-powerpoint text/html "pptohtml $1"
 ' . $openOfficeCmd . '
-Disallow *.rdf *.xml *.rss *.js *.css *.jpg *.png *.gif *.svg *.swf *.tif *.tiff *.bz2 *.gz
+Disallow *.rdf *.xml *.rss *.js *.css *.jpg *.png *.gif *.svg *.swf *.tif *.tiff
+Disallow *.bz2 *.gz *.zip *.xpi *.dmg *.exe *.scr *.avi *.jpeg *.ods *.psd *.rar
+Disallow *.fla Thumbs.db *.rpm *.rm *.qt *.mov *.pfb *.ttf* *.fon *.mpg *.mpeg *.ai
 HoldBadHrefs 2d
 DetectClones yes
 HTTPHeader "X-TYPO3-mnogosearch: ' . md5('mnogosearch' . $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey']) . '"
