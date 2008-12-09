@@ -338,7 +338,7 @@ class tx_mnogosearch_cli {
 			$openOfficeCmd = 'Mime application/vnd.oasis.opendocument.text text/plain ' .
 						'"' . $phpPath . ' -q ' .
 						escapeshellarg(dirname(__FILE__) . '/catoo.php') .
-						' $1"';
+						' \'$1\'"';
 		}
 
 		// Note when adding new sections, do not forget to adjust weight factors in pi1!
@@ -356,6 +356,7 @@ Section meta.description 4 64 text
 SaveSectionSize yes
 LocalCharset ' . ($this->sysconf['LocalCharset'] ? $this->sysconf['LocalCharset'] : 'UTF-8') . '
 BrowserCharset ' . ($this->sysconf['BrowserCharset'] ? $this->sysconf['BrowserCharset'] : 'UTF-8') . '
+
 #Allow *.htm *.html *.php *.txt */ *.pdf *.doc *.odt *.swx
 Mime message/rfc822 text/plain "cat $1"
 Mime application/msword text/plain "catdoc -a $1"
@@ -363,9 +364,22 @@ Mime application/pdf text/plain "pdftotext -enc UTF-8 $1 -"
 Mime application/vnd.ms-excel text/html "xltohtml $1"
 Mime application/vnd.ms-powerpoint text/html "pptohtml $1"
 ' . $openOfficeCmd . '
+
 Disallow *.rdf *.xml *.rss *.js *.css *.jpg *.png *.gif *.svg *.swf *.tif *.tiff
 Disallow *.bz2 *.gz *.zip *.xpi *.dmg *.exe *.scr *.avi *.jpeg *.ods *.psd *.rar
 Disallow *.fla Thumbs.db *.rpm *.rm *.qt *.mov *.pfb *.ttf* *.fon *.mpg *.mpeg *.ai
+Disallow *.t3x *.t3d *.dll *.dat *.cab *.inf
+
+AddType application/vnd.oasis.opendocument.text *.sxw *.odt
+AddType text/plain *.txt
+AddType text/html *.html *.htm
+AddType text/rtf *.rtf
+AddType application/pdf *.pdf
+AddType message/rfc822 *.eml
+AddType application/msword *.doc *.dot
+AddType application/vnd.ms-excel *.xls
+AddType application/vnd.ms-powerpoint *.ppt
+
 HoldBadHrefs 2d
 DetectClones yes
 HTTPHeader "X-TYPO3-mnogosearch: ' . md5('mnogosearch' . $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey']) . '"
