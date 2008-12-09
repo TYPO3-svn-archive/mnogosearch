@@ -1,6 +1,7 @@
 2008-12-09  Dmitry Dulepov  <dmitry@typo3.org>
 
 	* Fixed: period was incorrectly specified
+	* Fixed: file names with spaces shows %20 in titles
 
 2008-12-04  Dmitry Dulepov  <dmitry@typo3.org>
 

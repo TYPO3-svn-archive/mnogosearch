@@ -88,8 +88,9 @@ class tx_mnogosearch_model_results {
 			if (trim($result->title) == '') {
 				// Check if file
 				$urlParts = parse_url($result->url);
-				if (@is_file(PATH_site . trim(rawurldecode($urlParts['path']), '/'))) {
-					$result->title = basename($urlParts['path']);
+				$path = rawurldecode($urlParts['path']);
+				if (@is_file(PATH_site . trim($path, '/'))) {
+					$result->title = basename($path);
 				}
 				else {
 					$result->title = $pObj->pi_getLL('no_page_title');
