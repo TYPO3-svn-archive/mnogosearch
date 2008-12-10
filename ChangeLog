@@ -6,6 +6,7 @@
 	* Deleted old manual
 	* Released version 2.1.5
 	* Added new markers (date and size) to the output
+	* Added "Last-modified" header generation while indexing (only if not set already)
 
 2008-12-09  Dmitry Dulepov  <dmitry@typo3.org>
 

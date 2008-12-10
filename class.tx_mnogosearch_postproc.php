@@ -63,6 +63,10 @@ class tx_mnogosearch_postproc {
 								($pObj->altPageTitle ? $pObj->altPageTitle : $pObj->page['title']));
 					$pObj->content = preg_replace('/<title>[^<]*<\/title>/', '<title>' . htmlspecialchars($title) . '</title>', $pObj->content);
 				}
+				// Last-modified is necessary to show it in search results. TYPO3
+				// never sends "Not modified" response, so we are safe for
+				// "If-modified-since" requests.
+				$this->addLastModified($pObj);
 			}
 		}
 		else {
@@ -131,6 +135,23 @@ class tx_mnogosearch_postproc {
 			}
 		}
 		return $result;
+	}
+
+	/**
+	 * Adds the "Last-modified" header to the page
+	 *
+	 * @param	tslib_fe $pObj	Parent object
+	 * @return 	void
+	 */
+	protected function addLastModified(tslib_fe $pObj) {
+		// See if we have this header already
+		$headers = headers_list();
+		foreach ($headers as $header) {
+			if (stripos($header, 'Last-modified:') === 0) {
+				return;
+			}
+		}
+		header('Last-modified: ' . gmdate('D, d M Y H:i:s T', $pObj->register['SYS_LASTCHANGED']));
 	}
 }
 
