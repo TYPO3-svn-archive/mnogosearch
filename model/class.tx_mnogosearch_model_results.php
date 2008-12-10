@@ -46,6 +46,7 @@ class tx_mnogosearch_model_results {
 	var $firstDoc;				// First document
 	var $lastDoc;				// Last document
 	var $wordInfo;				// Information about found words
+	var	$lastModified;			// Last modified date
 	//var $wordSuggest = false;	// Suggestion information
 	var $results = array();		// List of results
 	var	$indexConfigCache = array();	// Cache for indexing configuration entries
@@ -105,6 +106,7 @@ class tx_mnogosearch_model_results {
 			$result->language = Udm_Get_Res_Field($res, $i, UDM_FIELD_LANG);
 			$result->charset = Udm_Get_Res_Field($res, $i, UDM_FIELD_CHARSET);
 			$result->category = Udm_Get_Res_Field($res,$i,UDM_FIELD_CATEGORY);
+			$result->lastModified = $this->convertDateTime(strval(Udm_Get_Res_Field($res, $i, UDM_FIELD_MODIFIED)));
 
 			// Check clones if necessary
 			if ($pObj->conf['search.']['options.']['detect_clones']) {
@@ -118,7 +120,7 @@ class tx_mnogosearch_model_results {
 								$clone->url = $url;
 								$clone->contentType = Udm_Get_Res_Field($res, $j, UDM_FIELD_CONTENT);
 								$clone->documentSize = Udm_Get_Res_Field($res, $j, UDM_FIELD_SIZE);
-								//$clone->lastModified = format_lastmod(Udm_Get_Res_Field($res,$j,UDM_FIELD_MODIFIED));
+								$clone->lastModified = $this->convertDateTime(strval(Udm_Get_Res_Field($res,$j,UDM_FIELD_MODIFIED)));
 								$result->clones[] = $clone;
 							}
 						}
@@ -270,6 +272,22 @@ class tx_mnogosearch_model_results {
 			$url = $newUrl;
 		}
 		return $url;
+	}
+
+	/**
+	 * Converts data and time to the Unix time stamp. See pi1/class.tx_mnogosearch_pi1.php
+	 * near line #209 where "DateFormat" is set.
+	 *
+	 * @param	string	$datetime	Date and time
+	 * @return	int	Timestamp
+	 */
+	protected function convertDateTime($datetime) {
+		sscanf($datetime, '%d.%d.%d.%d.%d.%d', $day, $month, $year, $hour, $minute, $second);
+		$result = mktime($hour, $minute, $second, $month, $day, $year);
+		if ($result < 24*60*60) {
+			$result = 0;
+		}
+		return $result;
 	}
 }
 

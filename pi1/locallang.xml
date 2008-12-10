@@ -41,6 +41,8 @@
 			<label index="text_additional_results">Similar pages</label>
 
 			<label index="no_page_title">(no title)</label>
+
+			<label index="file_sizes">B,K,M,G</label>
 		</languageKey>
 	</data>
 </T3locallang>

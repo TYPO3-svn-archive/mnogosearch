@@ -201,6 +201,9 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_DETECT_CLONES, ($this->conf['search.']['options.']['detect_clones'] ? UDM_ENABLED : UDM_DISABLED));
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_PHRASE_MODE, ($this->conf['search.']['options.']['phrase_search'] ? UDM_ENABLED : UDM_DISABLED));
 
+		// Date format (like for strftime, see sql.c#5592
+		Udm_Set_Agent_Param_Ex($udmAgent, 'DateFormat', '%d.%m.%Y.%H.%M.%S');
+
 		// Popularity rank
 		Udm_Set_Agent_Param_Ex($udmAgent, 'PopRankUseShowCnt', 'yes');
 

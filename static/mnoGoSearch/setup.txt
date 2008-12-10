@@ -25,6 +25,12 @@ plugin.tx_mnogosearch_pi1 {
 		# Defines search time look ("Search took XYZ seconds"). Default will look like "0.123"
 		time_format = %0.3f
 
+		resultTime_stdWrap {
+			if.isFalse.current = 1
+			strftime = %x %X
+			noTrimWrap = |&ndash; ||
+		}
+
 		# Limit search to these sites
 		siteList = {$plugin.tx_mnogosearch_pi1.siteList}
 

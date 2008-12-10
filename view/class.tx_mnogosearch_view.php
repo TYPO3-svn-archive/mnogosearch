@@ -141,7 +141,7 @@ class tx_mnogosearch_view {
 			$linksTemplate = $this->pObj->cObj->getSubpart($resultTemplate, '###SEARCH_RESULTS_RESULT_ALT_LINK###');
 			$resultList = ''; $i = 0;
 			foreach ($results->results as $result) {
-				/* @var tx_mnogosearch_result $result */
+				/* @var $result tx_mnogosearch_result */
 				// Basic fields
 				$iconSrc = $this->getIconSrc($result->url);
 				$t = $this->pObj->cObj->substituteMarkerArray($resultTemplate, array(
@@ -150,6 +150,8 @@ class tx_mnogosearch_view {
 						'###SEARCH_RESULTS_RESULT_TITLE###' => $result->title,	// todo: htmlspecialchars?
 						'###SEARCH_RESULTS_RESULT_RELEVANCY###' => sprintf('%.2f', $result->rating),
 						'###SEARCH_RESULTS_RESULT_EXCERPT###' => $result->excerpt,
+						'###SEARCH_RESULTS_RESULT_SIZE###' => $this->formatSize($result->documentSize),
+						'###SEARCH_RESULTS_RESULT_LASTMOD###' => $result->lastModified ? $this->pObj->cObj->stdWrap($result->lastModified, $this->pObj->conf['search.']['resultTime_stdWrap.']) : '',
 						'###TEXT_ADDITIONAL_RESULTS###' => $this->pObj->pi_getLL('text_additional_results'),
 						'###UNIQID###' => uniqid('c'),
 						'###ICON_SRC###' => $iconSrc,
@@ -253,6 +255,24 @@ class tx_mnogosearch_view {
 			}
 		}
 		return $icon;
+	}
+
+	protected function formatSize($size) {
+		$sizes = explode(',', $this->pObj->pi_getLL('file_sizes'));
+		if ($size < 1024) {
+			$result = '<1' . $sizes[1];
+		}
+		else {
+			$result = '';
+			for ($i = 0; $i < 4; $i++) {
+				$result = intval($size) . $sizes[$i];
+				$size /= 1024;
+				if ($size < 1) {
+					break;
+				}
+			}
+		}
+		return $result;
 	}
 }
 
