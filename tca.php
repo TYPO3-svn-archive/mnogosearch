@@ -173,6 +173,7 @@ $TCA['tx_mnogosearch_indexconfig'] = array(
 		'tx_mnogosearch_title_field' => array(
 			'exclude' => 1,
 			'label' => 'LLL:EXT:mnogosearch/locallang_db.xml:tx_mnogosearch_indexconfig.tx_mnogosearch_title_field',
+			'displayCond' => 'FIELD:tx_mnogosearch_table:!=:',
 			'config' => array(
 				'type' => 'select',
 				'allowNonIdValues' => true,
@@ -185,6 +186,7 @@ $TCA['tx_mnogosearch_indexconfig'] = array(
 		'tx_mnogosearch_body_field' => array(
 			'exclude' => 1,
 			'label' => 'LLL:EXT:mnogosearch/locallang_db.xml:tx_mnogosearch_indexconfig.tx_mnogosearch_body_field',
+			'displayCond' => 'FIELD:tx_mnogosearch_table:!=:',
 			'config' => array(
 				'type' => 'select',
 				'allowNonIdValues' => true,
@@ -198,6 +200,7 @@ $TCA['tx_mnogosearch_indexconfig'] = array(
 		'tx_mnogosearch_url_parameters' => array(
 			'exclude' => 1,
 			'label' => 'LLL:EXT:mnogosearch/locallang_db.xml:tx_mnogosearch_indexconfig.tx_mnogosearch_url_parameters',
+			'displayCond' => 'FIELD:tx_mnogosearch_table:!=:',
 			'config' => array(
 				'type' => 'input',
 				'eval' => 'trim',
@@ -207,6 +210,7 @@ $TCA['tx_mnogosearch_indexconfig'] = array(
 		'tx_mnogosearch_display_pid' => array(
 			'exclude' => 1,
 			'label' => 'LLL:EXT:mnogosearch/locallang_db.xml:tx_mnogosearch_indexconfig.tx_mnogosearch_display_pid',
+			'displayCond' => 'FIELD:tx_mnogosearch_table:!=:',
 			'config' => array(
 				'type' => 'group',
 				'internal_type' => 'db',
@@ -220,6 +224,7 @@ $TCA['tx_mnogosearch_indexconfig'] = array(
 		'tx_mnogosearch_pid_only' => array(
 			'exclude' => 1,
 			'label' => 'LLL:EXT:mnogosearch/locallang_db.xml:tx_mnogosearch_indexconfig.tx_mnogosearch_pid_only',
+			'displayCond' => 'FIELD:tx_mnogosearch_table:!=:',
 			'config' => array(
 				'type' => 'group',
 				'internal_type' => 'db',

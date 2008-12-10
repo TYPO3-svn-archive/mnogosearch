@@ -4,6 +4,7 @@
 	* Updated manual: added information about conflict with nc_staticfilecache
 	* Updated manual: added information about indexing files without using HTTP
 	* Deleted old manual
+	* Released version 2.1.5
 
 2008-12-09  Dmitry Dulepov  <dmitry@typo3.org>
 
