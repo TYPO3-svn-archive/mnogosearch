@@ -1,3 +1,7 @@
+2008-12-10  Dmitry Dulepov  <dmitry@typo3.org>
+
+	* Updated manual with the information about TYPO3SEARCH_xxx and more advanced https:// indexing
+
 2008-12-09  Dmitry Dulepov  <dmitry@typo3.org>
 
 	* Fixed: period was incorrectly specified
