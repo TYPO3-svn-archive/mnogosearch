@@ -3,6 +3,7 @@
 	* Updated manual with the information about TYPO3SEARCH_xxx and more advanced https:// indexing
 	* Updated manual: added information about conflict with nc_staticfilecache
 	* Updated manual: added information about indexing files without using HTTP
+	* Deleted old manual
 
 2008-12-09  Dmitry Dulepov  <dmitry@typo3.org>
 
