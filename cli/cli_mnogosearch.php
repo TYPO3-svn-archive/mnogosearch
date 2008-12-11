@@ -304,10 +304,26 @@ class tx_mnogosearch_cli {
 
 		$content .= 'HTDBLimit 4096' . chr(10);
 
+		//
 		// Create HTDBDoc query
+		//
 		$content .= 'HTDBDoc "SELECT ';
+
+		// Add title
 		$content .= ($row['tx_mnogosearch_title_field'] ? $row['tx_mnogosearch_title_field'] : '""');
 		$content .= ' AS title,';
+
+		// Add last modified
+		if ($row['tx_mnogosearch_lastmod_field']) {
+			$content .= $row['tx_mnogosearch_lastmod_field'] . ' AS last_mod_time,';
+		}
+
+		// TODO Add status and get rid of enableFields above.
+		// See http://www.mnogosearch.org/doc33/msearch-extended-indexing.html#htdb
+		// See http://dev.mysql.com/doc/refman/5.0/en/case-statement.html
+		// $content .= 'CASE WHEN (delete=1 OR hidden=1 OR startime<... ....) THEN 404 ELSE 200';
+
+		// Add body
 		$bodyFields = t3lib_div::trimExplode(',', $row['tx_mnogosearch_body_field'], true);
 		$content .= (count($bodyFields) > 1 ? 'CONCAT(' . implode(',\' \',', $bodyFields) . ')' : $bodyFields[0]);
 		$content .= ' AS body FROM ' . $row['tx_mnogosearch_table'] . ' WHERE uid=$3"' . chr(10);

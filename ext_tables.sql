@@ -20,6 +20,7 @@ CREATE TABLE tx_mnogosearch_indexconfig (
 	tx_mnogosearch_table varchar(255) DEFAULT '' NOT NULL,
 	tx_mnogosearch_title_field varchar(255) DEFAULT '' NOT NULL,
 	tx_mnogosearch_body_field varchar(255) DEFAULT '' NOT NULL,
+	tx_mnogosearch_lastmod_field varchar(255) DEFAULT '' NOT NULL,
 	tx_mnogosearch_url_parameters text,
 	tx_mnogosearch_display_pid int(11) DEFAULT '0' NOT NULL,
 	tx_mnogosearch_pid_only text,

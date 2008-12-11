@@ -58,6 +58,38 @@ if (!function_exists('tx_mnogosearch_sortItems')) {
 			$params['items'] += $result;
 		}
 	}
+
+	function tx_mnogosearch_listTableTimeFields(array &$params) {
+		$tableName = $params['row']['tx_mnogosearch_table'];
+		if ($tableName != '') {
+			$fields = array_keys($GLOBALS['TYPO3_DB']->admin_get_fields($tableName));
+			t3lib_div::loadTCA($params['row']['tx_mnogosearch_table']);
+			$result = array();
+			foreach ($fields as $field) {
+				if (isset($GLOBALS['TCA'][$tableName]['columns'][$field]) &&
+						$GLOBALS['TCA'][$tableName]['columns'][$field]['config']['type'] == 'input' &&
+						isset($GLOBALS['TCA'][$tableName]['columns'][$field]['config']['eval']) &&
+						preg_match('/(^|,)\s*(date|datetime)\s*(,|$)/', $GLOBALS['TCA'][$tableName]['columns'][$field]['config']['eval'])) {
+					$title = trim($GLOBALS['LANG']->sL($GLOBALS['TCA'][$tableName]['columns'][$field]['label']), ':');
+					$result[$title] = array($title, $field);
+				}
+			}
+			if ($GLOBALS['TCA'][$tableName]['ctrl']['tstamp']) {
+				if (!isset($GLOBALS['TCA'][$tableName]['columns']['tstamp'])) {
+					$title = $GLOBALS['LANG']->sL('LLL:EXT:mnogosearch/locallang_db.xml:generic_tstamp');
+					$result[$title] = array($title, 'tstamp');
+				}
+			}
+			elseif ($GLOBALS['TCA'][$tableName]['ctrl']['crdate']) {
+				if (!isset($GLOBALS['TCA'][$tableName]['columns']['crdate'])) {
+					$title = $GLOBALS['LANG']->sL('LLL:EXT:mnogosearch/locallang_db.xml:generic_crdate');
+					$result[$title] = array($title, 'crdate');
+				}
+			}
+			usort($result, tx_mnogosearch_sortItems);
+			$params['items'] += $result;
+		}
+	}
 }
 
 $TCA['tx_mnogosearch_indexconfig'] = array(
@@ -197,6 +229,19 @@ $TCA['tx_mnogosearch_indexconfig'] = array(
 				'itemsProcFunc' => 'tx_mnogosearch_listTableFields',
 			)
 		),
+		'tx_mnogosearch_lastmod_field' => array(
+			'exclude' => 1,
+			'label' => 'LLL:EXT:mnogosearch/locallang_db.xml:tx_mnogosearch_indexconfig.tx_mnogosearch_lastmod_field',
+			'displayCond' => 'FIELD:tx_mnogosearch_table:!=:',
+			'config' => array(
+				'type' => 'select',
+				'allowNonIdValues' => true,
+				'items' => array(
+					array('', ''),
+				),
+				'itemsProcFunc' => 'tx_mnogosearch_listTableTimeFields',
+			)
+		),
 		'tx_mnogosearch_url_parameters' => array(
 			'exclude' => 1,
 			'label' => 'LLL:EXT:mnogosearch/locallang_db.xml:tx_mnogosearch_indexconfig.tx_mnogosearch_url_parameters',
@@ -239,7 +284,7 @@ $TCA['tx_mnogosearch_indexconfig'] = array(
 	'types' => array(
 		'0' => array('showitem' => 'tx_mnogosearch_type;;;;1-1-1,tx_mnogosearch_url;;;;3-3-3,tx_mnogosearch_method,tx_mnogosearch_period;;;;4-4-4, tx_mnogosearch_additional_config'),
 		'1' => array('showitem' => 'tx_mnogosearch_type;;;;1-1-1,tx_mnogosearch_url;;;;3-3-3,tx_mnogosearch_method,tx_mnogosearch_period;;;;4-4-4,tx_mnogosearch_cmptype;;1;;5-5-5, tx_mnogosearch_additional_config'),
-		'11' => array('showitem' => 'tx_mnogosearch_type;;;;1-1-1,tx_mnogosearch_table;;;;3-3-3, tx_mnogosearch_title_field, tx_mnogosearch_body_field, tx_mnogosearch_url_parameters, tx_mnogosearch_display_pid, tx_mnogosearch_pid_only, tx_mnogosearch_period;;;;4-4-4, tx_mnogosearch_additional_config'),
+		'11' => array('showitem' => 'tx_mnogosearch_type;;;;1-1-1,tx_mnogosearch_table;;;;3-3-3, tx_mnogosearch_title_field, tx_mnogosearch_body_field, tx_mnogosearch_lastmod_field, tx_mnogosearch_url_parameters;;;;4-4-4, tx_mnogosearch_display_pid, tx_mnogosearch_pid_only, tx_mnogosearch_period;;;;4-4-4, tx_mnogosearch_additional_config'),
 	),
 	'palettes' => array(
 		'1' => array('showitem' => 'tx_mnogosearch_cmpoptions')

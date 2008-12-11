@@ -35,6 +35,7 @@
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_table">Table to index:</label>
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_title_field">Title field for the record:</label>
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_body_field">Body text fields for the record:</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_lastmod_field">Field with record's "last modified" time:</label>
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_url_parameters">Single view URL parameters:</label>
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_display_pid">Page to display these records:</label>
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_pid_only">Limit to records at:</label>
@@ -48,6 +49,8 @@
 			<label index="cms_layout.mode_searchresults">Search results</label>
 			<label index="cms_layout.mode_none">No mode set (plugin is not configured?)</label>
 			<label index="table_records">Records: %s</label>
+			<label index="generic_crdate">Record creation date and time</label>
+			<label index="generic_tstamp">Record modification date and time</label>
 		</languageKey>
 	</data>
 </T3locallang>
