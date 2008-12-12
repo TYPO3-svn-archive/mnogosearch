@@ -1,3 +1,7 @@
+2008-12-12  Dmitry Dulepov  <dmitry@typo3.org>
+
+	* Fixed bug: if title field for the records is empty, HTDBDoc produces error in CLI script
+
 2008-12-11  Dmitry Dulepov  <dmitry@typo3.org>
 
 	* Added new column to the records indexing to allow recording "Last modified" time for records

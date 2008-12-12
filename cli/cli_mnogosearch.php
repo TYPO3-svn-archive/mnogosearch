@@ -310,7 +310,7 @@ class tx_mnogosearch_cli {
 		$content .= 'HTDBDoc "SELECT ';
 
 		// Add title
-		$content .= ($row['tx_mnogosearch_title_field'] ? $row['tx_mnogosearch_title_field'] : '""');
+		$content .= ($row['tx_mnogosearch_title_field'] ? $row['tx_mnogosearch_title_field'] : '\'\'');
 		$content .= ' AS title,';
 
 		// Add last modified
