@@ -26,7 +26,12 @@ plugin.tx_mnogosearch_pi1 {
 		time_format = %0.3f
 
 		resultTime_stdWrap {
-			if.isFalse.current = 1
+			# Next two lines check that value is not empty. If it is, stdWrap returns empty value too
+			# The first one sets "$this->data[$this->currentValKey]=$content;", the last checks
+			# that "$this->data[$this->currentValKey]" is not empty or zero
+			setContentToCurrent = 1
+			if.isTrue.current = 1
+
 			strftime = %x %X
 			noTrimWrap = |&ndash; ||
 		}

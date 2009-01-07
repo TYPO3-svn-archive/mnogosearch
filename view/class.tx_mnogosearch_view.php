@@ -151,7 +151,7 @@ class tx_mnogosearch_view {
 						'###SEARCH_RESULTS_RESULT_RELEVANCY###' => sprintf('%.2f', $result->rating),
 						'###SEARCH_RESULTS_RESULT_EXCERPT###' => $result->excerpt,
 						'###SEARCH_RESULTS_RESULT_SIZE###' => $this->formatSize($result->documentSize),
-						'###SEARCH_RESULTS_RESULT_LASTMOD###' => $result->lastModified ? $this->pObj->cObj->stdWrap($result->lastModified, $this->pObj->conf['search.']['resultTime_stdWrap.']) : '',
+						'###SEARCH_RESULTS_RESULT_LASTMOD###' => $this->pObj->cObj->stdWrap($result->lastModified, $this->pObj->conf['search.']['resultTime_stdWrap.']),
 						'###TEXT_ADDITIONAL_RESULTS###' => $this->pObj->pi_getLL('text_additional_results'),
 						'###UNIQID###' => uniqid('c'),
 						'###ICON_SRC###' => $iconSrc,
