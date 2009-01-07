@@ -35,7 +35,7 @@ $EM_CONF[$_EXTKEY] = array(
 			'typo3' => '4.1.1-4.99.99',
 			'php' => '5.1.0-100.0.0',
 			'pagebrowse' => '1.0.1-100.0.0',
-			'pagepath' => '0.1.2-100.0.0',
+			'pagepath' => '0.1.3-100.0.0',
 		),
 		'conflicts' => array(
 			'tstidy' => '',
