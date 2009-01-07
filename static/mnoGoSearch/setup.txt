@@ -85,8 +85,8 @@ plugin.tx_mnogosearch_pi1 {
 		pageBrowser.disableCacheHash = 1
 	}
 
+	defaultFileIcon = EXT:mnogosearch/resources/icons/file.png
 	icons {
-		* = EXT:mnogosearch/resources/icons/file.png
 		c = EXT:mnogosearch/resources/icons/c.png
 		cpp = EXT:mnogosearch/resources/icons/cplusplus.png
 		doc = EXT:mnogosearch/resources/icons/word.png

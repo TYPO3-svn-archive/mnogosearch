@@ -249,7 +249,7 @@ class tx_mnogosearch_view {
 		if ($parts['extension']) {
 			$icon = (isset($this->pObj->conf['icons.'][$parts['extension']]) ?
 					$this->pObj->conf['icons.'][$parts['extension']] :
-					$this->pObj->conf['icons.'][$parts['extension']]);
+					$this->pObj->conf['defaultFileIcon']);
 			if ($icon) {
 				$icon = $GLOBALS['TSFE']->tmpl->getFileName($icon);
 			}
