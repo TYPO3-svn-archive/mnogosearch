@@ -92,3 +92,8 @@ ol#tx-mnogosearch-result li h3 a {
 	padding: 1px 0 3px 20px;
 	margin: 0 0;
 }
+
+.tx-mnogosearch-short-search-form fieldset,
+.tx-mnogosearch-long-form fieldset {
+	border: none;
+}

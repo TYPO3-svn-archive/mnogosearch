@@ -4,7 +4,7 @@
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 <title>Search form template</title>
 <!-- ###HEADER_ADDITIONS### begin -->
-<link rel="stylesheet" href="###SITE_REL_PATH###resources/styles.css" />
+<link type="text/css" rel="stylesheet" href="###SITE_REL_PATH###resources/styles.css" />
 <script type="text/javascript" src="###SITE_REL_PATH###resources/scripts.js"></script>
 <!-- ###HEADER_ADDITIONS### end -->
 </head>
@@ -15,8 +15,10 @@
 <div class="tx-mnogosearch-short-search-form">
 	<!-- WARNING! Do not change method to "post"! -->
 	<form action="###SHORT_SEARCH_FORM_ACTION###" method="get">
-		<input type="text" name="tx_mnogosearch_pi1[q]" value="###SHORT_SEARCH_FORM_VALUE###" />
-		<input type="submit" name="tx_mnogosearch_pi1[submit]" value="###TEXT_SEARCH###" />
+		<fieldset>
+			<input type="text" name="tx_mnogosearch_pi1[q]" value="###SHORT_SEARCH_FORM_VALUE###" />
+			<input type="submit" name="tx_mnogosearch_pi1[submit]" value="###TEXT_SEARCH###" />
+		</fieldset>
 	</form>
 </div>
 <!-- ###SHORT_SEARCH_FORM### end -->
@@ -33,17 +35,19 @@
 <div id="long-search-form">
 	<!-- WARNING! Do not change method to "post"! -->
 	<form class="tx-mnogosearch-long-form" action="###LONG_SEARCH_FORM_ACTION###" method="get">
-		<table>
-			<tr><td>
-				###TEXT_SEARCH_FOR###
-			</td><td colspan="3">
-				<input size="50" type="text" name="tx_mnogosearch_pi1[q]" value="###LONG_SEARCH_FORM_VALUE###" />
-			</td></tr>
-			<tr><td>
-			</td><td>
-				<input type="submit" name="tx_mnogosearch_pi1[submit]" value="###TEXT_SEARCH###" />
-			</td></tr>
-		</table>
+		<fieldset>
+			<table>
+				<tr><td>
+					###TEXT_SEARCH_FOR###
+				</td><td colspan="3">
+					<input size="50" type="text" name="tx_mnogosearch_pi1[q]" value="###LONG_SEARCH_FORM_VALUE###" />
+				</td></tr>
+				<tr><td>
+				</td><td>
+					<input type="submit" name="tx_mnogosearch_pi1[submit]" value="###TEXT_SEARCH###" />
+				</td></tr>
+			</table>
+		</fieldset>
 	</form>
 </div>
 <!-- ###LONG_SEARCH_FORM### end -->
