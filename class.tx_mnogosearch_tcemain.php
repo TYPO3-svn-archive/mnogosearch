@@ -54,23 +54,6 @@ class tx_mnogosearch_tcemain {
 
 	/**
 	 * Hooks to data change procedure to watch modified data. This hook is called
-	 * before data is written to the database, so all paths are unmodified paths.
-	 *
-	 * @param	string	$status	Record status (new or update)
-	 * @param	string	$table	Table name
-	 * @param	integer	$id	Record ID
-	 * @param	array	$fieldArray	Modified fields
-	 * @param	object	$pObj	Reference to TCEmain
-	 */
-	public function processDatamap_postProcessFieldArray($status, $table, $id, array $fieldArray, t3lib_TCEmain &$pObj) {
-		// Only for LIVE records!
-		if ($pObj->BE_USER->workspace == 0) {
-			$this->storePageChanges($table, $id, $fieldArray, $pObj, true);
-		}
-	}
-
-	/**
-	 * Hooks to data change procedure to watch modified data. This hook is called
 	 * after data is written to the database, so all paths are modified paths.
 	 *
 	 * @param	string	$status	Record status (new or update)

@@ -1,6 +1,7 @@
 2009-01-07  Dmitry Dulepov  <dmitry@typo3.org>
 
 	* Removed hook definition for TCEMain's processCmdMap because it was not used
+	* Fixed bug #2417: mnoGoSearch + TemplaVoila cause wrong RealURL paths
 
 2008-12-12  Dmitry Dulepov  <dmitry@typo3.org>
 
