@@ -17,6 +17,14 @@ plugin.tx_mnogosearch_pi1 {
 	form {
 		# Page id where plugin instance with search results is located. If not set, current page is assumed
 		resultsPage = {$plugin.tx_mnogosearch_pi1.resultsPage}
+
+		# Advanced search form options
+		advanced {
+			# Valid values are: hide/hidden/disable/disabled, enable/enabled/visible/default, select/selector, radio, check/checkbox/checkboxes
+			siteSelector = disable
+			# Valid values are: 1/enable/yes, 0/disable/false
+			siteSelector.searchAll = enable
+		}
 	}
 
 	# Search options

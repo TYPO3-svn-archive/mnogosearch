@@ -1,6 +1,7 @@
 2009-01-15  Dmitry Dulepov  <dmitry@typo3.org>
 
 	* Added title field to the indexing config (to be used in the advanced search form)
+	* Added site selector to TS and HTML templates
 
 2009-01-07  Dmitry Dulepov  <dmitry@typo3.org>
 

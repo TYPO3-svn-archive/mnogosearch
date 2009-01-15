@@ -39,9 +39,42 @@
 			<table>
 				<tr><td>
 					###TEXT_SEARCH_FOR###
-				</td><td colspan="3">
+				</td><td>
 					<input size="50" type="text" name="tx_mnogosearch_pi1[q]" value="###LONG_SEARCH_FORM_VALUE###" />
 				</td></tr>
+
+				<!-- ###SITESEL_SELECT### begin -->
+				<tr><td>
+					###TEXT_SEARCH_WHERE###
+				</td><td>
+					<select name="tx_mnogosearch_pi1[l][]">
+						<!-- ###SITESEL_OPTION### begin -->
+						<option value="###VALUE###">###TEXT###</option>
+						<!-- ###SITESEL_OPTION### end -->
+					</select>
+				</td></tr>
+				<!-- ###SITESEL_SELECT### end -->
+
+				<!-- ###SITESEL_RADIO### begin -->
+				<tr><td>
+					###TEXT_SEARCH_WHERE###
+				</td><td>
+					<!-- ###SITESEL_OPTION### begin -->
+					<input type="radio"  name="tx_mnogosearch_pi1[l][]" value="###VALUE###" />###TEXT###
+					<!-- ###SITESEL_OPTION### end -->
+				</td></tr>
+				<!-- ###SITESEL_RADIO### end -->
+
+				<!-- ###SITESEL_CHECK### begin -->
+				<tr><td>
+					###TEXT_SEARCH_WHERE###
+				</td><td>
+					<!-- ###SITESEL_OPTION### begin -->
+					<input type="checkbox" name="tx_mnogosearch_pi1[l][]" value="###VALUE###" />###TEXT###
+					<!-- ###SITESEL_OPTION### end -->
+				</td></tr>
+				<!-- ###SITESEL_CHECK### end -->
+
 				<tr><td>
 				</td><td>
 					<input type="submit" name="tx_mnogosearch_pi1[submit]" value="###TEXT_SEARCH###" />
