@@ -19,6 +19,13 @@ $tx_mnogosearch_sysconf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extCon
  * @return	void
  */
 function tx_mnogosearch_indexingConfig_labelFunc(array &$params) {
+	// Check user-entered title
+	if ($params['row']['title']) {
+		$params['title'] = $params['row']['title'];
+		return;
+	}
+
+	// Generate title
 	require_once(t3lib_extMgm::extPath('lang', 'lang.php'));
 	if ($GLOBALS['LANG'] instanceof language) {
 		$lang = &$GLOBALS['LANG'];

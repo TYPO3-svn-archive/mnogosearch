@@ -1,3 +1,7 @@
+2009-01-15  Dmitry Dulepov  <dmitry@typo3.org>
+
+	* Added title field to the indexing config (to be used in the advanced search form)
+
 2009-01-07  Dmitry Dulepov  <dmitry@typo3.org>
 
 	* Removed hook definition for TCEMain's processCmdMap because it was not used

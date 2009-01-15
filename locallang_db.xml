@@ -8,6 +8,7 @@
 		<languageKey index="default" type="array">
 			<label index="tt_content.list_type_pi1">mnoGoSearch</label>
 			<label index="tx_mnogosearch_indexconfig">mnoGoSearch indexing configuration</label>
+			<label index="tx_mnogosearch_indexconfig.title">Title for the advanced search form:</label>
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_type">Configuration type:</label>
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_type.server">Server</label>
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_type.realm">Realm</label>
