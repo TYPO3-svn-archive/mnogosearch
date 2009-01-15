@@ -94,6 +94,10 @@ class tx_mnogosearch_view {
 			'###LONG_SEARCH_FORM_VALUE###' => htmlspecialchars($this->pObj->piVars['q']),
 			'###TEXT_SEARCH###' => $this->pObj->pi_getLL('text_submit_long', '', true),
 		));
+
+		// Site selector
+		$result = $this->render_searchForm_siteSelector($result);
+
 		return $result;
 	}
 
@@ -269,6 +273,128 @@ class tx_mnogosearch_view {
 				$size /= 1024;
 				if ($size < 1) {
 					break;
+				}
+			}
+		}
+		return $result;
+	}
+
+	/**
+	 * Renders site selector for the advanced search form. For the selector to
+	 * appear it must be enabled in the TS configuration and at least two
+	 * indexing configs must present in the search limit (or one limit + search
+	 * of the whole site enabled)
+	 *
+	 * @param	string	$template	HTML template to use
+	 * @return	string	$template with updated search limit subparts
+	 */
+	protected function render_searchForm_siteSelector($template) {
+		$siteSelectorTags = array(
+			'###SITESEL_SELECT###',
+			'###SITESEL_RADIO###',
+			'###SITESEL_CHECK###'
+		);
+		$tag = '';
+		$conf = &$this->pObj->conf['form.']['advanced.'];
+		if (isset($conf['form.']['advanced.']) && isset($conf['form.']['advanced.']['siteSelector'])) {
+			$sections = $this->getSearchSections($conf);
+			if ($sections > 1) {
+				$template = $this->pObj->cObj->substituteSubpart($template, '###SITESEL_RADIO###', '');
+				$template = $this->pObj->cObj->substituteSubpart($template, '###SITESEL_CHECK###', '');
+			}
+			else {
+				$tag = $this->getSiteSelectorTag($conf);
+				if ($tag) {
+					$subpart = $this->pObj->cObj->getSubpart($template, $tag);
+					$optionSubpart = $this->pObj->cObj->getSubpart($template, '###SITESEL_OPTION###');
+					$options = '';
+					foreach ($sections as $uid => $section) {
+						$options .= $this->pObj->cObj->substituteMarkerArray($optionSubpart,
+							array(
+								'###VALUE###' => $uid,
+								'###TEXT###' => $section
+							)
+						);
+					}
+					$subpart = $this->pObj->cObj->substituteSubpart($subpart, '###SITESEL_OPTION###', $options);
+					$template = $this->pObj->cObj->substituteSubpart($template, $tag, $subpart);
+				}
+			}
+		}
+		// Remove all unused selectors
+		foreach ($siteSelectorTags as $selectorTag) {
+			if ($tag != $selectorTag) {
+				$template = $this->pObj->cObj->substituteSubpart($template, $selectorTag, '');
+			}
+		}
+		return $template;
+	}
+
+	/**
+	 * Obtains site selector subpart name
+	 *
+	 * @param	array	$conf	Configuration of the advanced form
+	 * @return	string	Subpart name
+	 */
+	protected function getSiteSelectorTag(array $conf) {
+		$tag = '';
+		switch ($conf['siteSelector']) {
+			case 'select':
+				$tag = '###SITESEL_SELECT###';
+				break;
+			case 'radio':
+				$tag = '###SITESEL_RADIO###';
+				break;
+			case 'checkboxes':
+				$tag = '###SITESEL_CHECK###';
+				break;
+		}
+		return $tag;
+	}
+
+	/**
+	 * Obtains search sections of the site from the configuration
+	 *
+	 * @param	array	$conf	Confiuration of the advanced search form
+	 * @return	array	Key is uid of the indexing configuration, value is title
+	 * @see	tx_mnogosearch_pi1::addSearchRestrictions()
+	 */
+	protected function getSearchSections(array $conf) {
+		$result = array();
+		if ($this->conf['siteList']) {
+			// Add "Search all" if necessary
+			if ($conf['siteSelector.']['searchAll']) {
+				$result[''] = $this->pObj->pi_getCategoryTableContents('search_all');
+			}
+
+			// Limit domains
+			$domainList = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+				'tx_mnogosearch_type,tx_mnogosearch_url,tx_mnogosearch_table,uid,title',
+				'tx_mnogosearch_indexconfig',
+				'uid IN (' . $this->conf['siteList'] . ') AND ' .
+				// Server
+				'((tx_mnogosearch_type=0 AND tx_mnogosearch_method<=0) OR ' .
+				// Records
+				'tx_mnogosearch_type=11)' .
+				$this->pObj->cObj->enableFields('tx_mnogosearch_indexconfig'));
+			$lang = null;
+			foreach ($domainList as $domain) {
+				if ($domain['title']) {
+					$result[$domain['uid']] = $domain['title'];
+				}
+				elseif ($domain['type'] != 11) {
+					// Server
+					$result[$domain['uid']] = $domain['tx_mnogosearch_url'];
+				}
+				else {
+					// htdb domains
+					if ($lang == null) {
+						t3lib_div::requireOnce(t3lib_extMgm::extPath('lang', 'lang.php'));
+						$lang = t3lib_div::makeInstance('language');
+						/* @var $lang language */
+						$lang->init($GLOBALS['TSFE']->lang);
+					}
+					$result[$domain['uid']] = $lang->sL($GLOBALS['TCA'][$domain['tx_mnogosearch_table']]['title']);
 				}
 			}
 		}

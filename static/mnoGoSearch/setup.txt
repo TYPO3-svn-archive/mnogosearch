@@ -20,10 +20,10 @@ plugin.tx_mnogosearch_pi1 {
 
 		# Advanced search form options
 		advanced {
-			# Valid values are: hide/hidden/disable/disabled, enable/enabled/visible/default, select/selector, radio, check/checkbox/checkboxes
-			siteSelector = disable
-			# Valid values are: 1/enable/yes, 0/disable/false
-			siteSelector.searchAll = enable
+			# Valid values are: disabled, select, radio, checkboxes
+			siteSelector = disabled
+			# Valid values are: 1, 0
+			siteSelector.searchAll = 1
 		}
 	}
 

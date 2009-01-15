@@ -397,11 +397,12 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 	 *
 	 * @param	resource	$udmAgent	UDM agent
 	 * @return	void
+	 * @see	tx_mnogosearch_view::getSearchSections()
 	 */
 	protected function addSearchRestrictions(&$udmAgent) {
 		if ($this->conf['siteList']) {
 			// Limit normal domains
-			$domainList = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('tx_mnogosearch_url,tx_mnogosearch_type',
+			$domainList = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('tx_mnogosearch_url',
 				'tx_mnogosearch_indexconfig',
 				'uid IN (' . $this->conf['siteList'] . ') AND tx_mnogosearch_type=0' .
 				' AND tx_mnogosearch_method<=0' . $this->cObj->enableFields('tx_mnogosearch_indexconfig'));
