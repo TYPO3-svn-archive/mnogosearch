@@ -296,25 +296,34 @@ class tx_mnogosearch_view {
 		);
 		$tag = '';
 		$conf = &$this->pObj->conf['form.']['advanced.'];
-		if (isset($conf['form.']['advanced.']) && isset($conf['form.']['advanced.']['siteSelector'])) {
+		if (isset($conf['siteSelector'])) {
 			$sections = $this->getSearchSections($conf);
+			// We go only if there are at least two sections (i.e. theare are options to choose from)
 			if ($sections > 1) {
-				$template = $this->pObj->cObj->substituteSubpart($template, '###SITESEL_RADIO###', '');
-				$template = $this->pObj->cObj->substituteSubpart($template, '###SITESEL_CHECK###', '');
-			}
-			else {
 				$tag = $this->getSiteSelectorTag($conf);
 				if ($tag) {
 					$subpart = $this->pObj->cObj->getSubpart($template, $tag);
-					$optionSubpart = $this->pObj->cObj->getSubpart($template, '###SITESEL_OPTION###');
+					$optionSubpart = $this->pObj->cObj->getSubpart($subpart, '###SITESEL_OPTION###');
 					$options = '';
 					foreach ($sections as $uid => $section) {
-						$options .= $this->pObj->cObj->substituteMarkerArray($optionSubpart,
-							array(
-								'###VALUE###' => $uid,
-								'###TEXT###' => $section
-							)
-						);
+						if ($conf['siteSelector.']['exclude'] == '' || !t3lib_div::inList($conf['siteSelector.']['exclude'], $uid)) {
+							if (is_array($this->pObj->piVars['l']) && in_array($uid, $this->pObj->piVars['l']) ||
+								!is_array($this->pObj->piVars['l']) && $uid == '') {
+								$selected = ' selected="selected" ';
+								$checked = ' checked="checked" ';
+							}
+							else {
+								$selected = $checked = '';
+							}
+							$options .= $this->pObj->cObj->substituteMarkerArray($optionSubpart,
+								array(
+									'###VALUE###' => htmlspecialchars($uid),
+									'###TEXT###' => htmlspecialchars($section),
+									'###SELECTED###' => $selected,
+									'###CHECKED###' => $checked
+								)
+							);
+						}
 					}
 					$subpart = $this->pObj->cObj->substituteSubpart($subpart, '###SITESEL_OPTION###', $options);
 					$template = $this->pObj->cObj->substituteSubpart($template, $tag, $subpart);
@@ -327,6 +336,8 @@ class tx_mnogosearch_view {
 				$template = $this->pObj->cObj->substituteSubpart($template, $selectorTag, '');
 			}
 		}
+		$template = $this->pObj->cObj->substituteMarker($template, '###TEXT_SEARCH_WHERE###',
+			$this->pObj->pi_getLL('search_where'));
 		return $template;
 	}
 
@@ -361,17 +372,17 @@ class tx_mnogosearch_view {
 	 */
 	protected function getSearchSections(array $conf) {
 		$result = array();
-		if ($this->conf['siteList']) {
+		if ($this->pObj->conf['siteList']) {
 			// Add "Search all" if necessary
-			if ($conf['siteSelector.']['searchAll']) {
-				$result[''] = $this->pObj->pi_getCategoryTableContents('search_all');
+			if ($conf['siteSelector.']['searchAll'] && $conf['siteSelector'] != 'checkboxes') {
+				$result[''] = $this->pObj->pi_getLL('search_all');
 			}
 
 			// Limit domains
 			$domainList = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 				'tx_mnogosearch_type,tx_mnogosearch_url,tx_mnogosearch_table,uid,title',
 				'tx_mnogosearch_indexconfig',
-				'uid IN (' . $this->conf['siteList'] . ') AND ' .
+				'uid IN (' . $this->pObj->conf['siteList'] . ') AND ' .
 				// Server
 				'((tx_mnogosearch_type=0 AND tx_mnogosearch_method<=0) OR ' .
 				// Records
@@ -382,7 +393,7 @@ class tx_mnogosearch_view {
 				if ($domain['title']) {
 					$result[$domain['uid']] = $domain['title'];
 				}
-				elseif ($domain['type'] != 11) {
+				elseif ($domain['tx_mnogosearch_type'] != 11) {
 					// Server
 					$result[$domain['uid']] = $domain['tx_mnogosearch_url'];
 				}
@@ -394,7 +405,17 @@ class tx_mnogosearch_view {
 						/* @var $lang language */
 						$lang->init($GLOBALS['TSFE']->lang);
 					}
-					$result[$domain['uid']] = $lang->sL($GLOBALS['TCA'][$domain['tx_mnogosearch_table']]['title']);
+					$result[$domain['uid']] = $lang->sL($GLOBALS['TCA'][$domain['tx_mnogosearch_table']]['ctrl']['title']);
+				}
+			}
+			// Call hook for custom sections
+			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mnogosearch']['getCustomSearchLimit'])) {
+				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mnogosearch']['getCustomSearchLimit'] as $userFunc) {
+					$params = array(
+						'pObj' => &$this,
+						'limits' => &$result
+					);
+					t3lib_div::callUserFunction($userFunc, $params, $this);
 				}
 			}
 		}

@@ -38,6 +38,7 @@
 			<label index="file_sizes">B,K,M,G</label>
 
 			<label index="search_all">Everywhere</label>
+			<label index="search_where">Where:</label>
 		</languageKey>
 	</data>
 </T3locallang>

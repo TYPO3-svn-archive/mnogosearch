@@ -1,3 +1,7 @@
+2009-01-16  Dmitry Dulepov  <dmitry@typo3.org>
+
+	* Implemented advanced search form and custom search limits
+
 2009-01-15  Dmitry Dulepov  <dmitry@typo3.org>
 
 	* Added title field to the indexing config (to be used in the advanced search form)

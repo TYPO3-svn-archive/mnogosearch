@@ -24,6 +24,8 @@ plugin.tx_mnogosearch_pi1 {
 			siteSelector = disabled
 			# Valid values are: 1, 0
 			siteSelector.searchAll = 1
+			# A list of indexing configurations to exclude from the form only
+			siteSelector.exclude =
 		}
 	}
 

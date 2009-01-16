@@ -251,13 +251,14 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_HLEND, $this->highlightParts[1]);
 
 		// Create query string -- not really needed?
+		/*
 		$q_string = '';
 		foreach ($this->piVars as $key => $val) {
 			$q_string .= '&' . $key . '=' . urlencode($val);
 		}
 		$q_string = substr($q_string, 1);
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_QSTRING, $q_string);
-
+		*/
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_REMOTE_ADDR, t3lib_div::getIndpEnv('REMOTE_ADDR'));
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_QUERY, $this->piVars['q']);
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_GROUPBYSITE, UDM_DISABLED);
@@ -400,24 +401,67 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 	 * @see	tx_mnogosearch_view::getSearchSections()
 	 */
 	protected function addSearchRestrictions(&$udmAgent) {
-		if ($this->conf['siteList']) {
-			// Limit normal domains
-			$domainList = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('tx_mnogosearch_url',
-				'tx_mnogosearch_indexconfig',
-				'uid IN (' . $this->conf['siteList'] . ') AND tx_mnogosearch_type=0' .
-				' AND tx_mnogosearch_method<=0' . $this->cObj->enableFields('tx_mnogosearch_indexconfig'));
-			foreach ($domainList as $domain) {
-				Udm_Add_Search_Limit($udmAgent, UDM_LIMIT_URL, $domain['tx_mnogosearch_url']);
-			}
+		// We process two lists:
+		//	- configuration ($this->conf['siteList'] + tx_mnogosearch_indexconfig)
+		//	- custom (added by hooks)
+		$configLimitList = array();
+		$customLimitList = array();
 
-			// Limit htdb domains
-			$recordList = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('tx_mnogosearch_table,uid',
+		// Check if user sent something with the request
+		if (!isset($this->piVars['l']) || !is_array($this->piVars['l'])) {
+			// Nothing sent, use configuration
+			$configLimitList = $this->conf['siteList'];
+		}
+		else {
+			// User has specified custom limits in the search form. We need
+			// to check that they are in the allowed site list. If it is not,
+			// call a hook to very custom limit
+			foreach ($this->piVars['l'] as $key => $limit) {
+				if (!t3lib_div::inList($this->conf['siteList'], $limit)) {
+					unset($this->piVars['l'][$key]);
+					$customLimitList[] = $limit;
+				}
+				else {
+					// $limit is an int (because it is in the siteList)
+					$configLimitList[] = $limit;
+				}
+			}
+		}
+
+		// Add all configuration limits
+		if (count($configLimitList) > 0) {
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				'uid,tx_mnogosearch_type,tx_mnogosearch_url,tx_mnogosearch_table',
 				'tx_mnogosearch_indexconfig',
-				'uid IN (' . $this->conf['siteList'] . ') AND tx_mnogosearch_type=11' .
-				$this->cObj->enableFields('tx_mnogosearch_indexconfig'));
-			foreach ($recordList as $recordDef) {
-				$limit = sprintf('htdb:/%s/%d/', $recordDef['tx_mnogosearch_table'], $recordDef['uid']);
-				Udm_Add_Search_Limit($udmAgent, UDM_LIMIT_URL, $limit);
+				'uid IN (' . implode(',', $configLimitList) . ') AND (' .
+				// Server
+				'(tx_mnogosearch_type=0 AND tx_mnogosearch_method<=0) OR ' .
+				// Tables
+				'(tx_mnogosearch_type=11)' .
+				')' . $this->cObj->enableFields('tx_mnogosearch_indexconfig'));
+			while (false !== ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))) {
+				if ($row['tx_mnogosearch_type'] != 11) {
+					// Server
+					Udm_Add_Search_Limit($udmAgent, UDM_LIMIT_URL, $row['tx_mnogosearch_url']);
+				}
+				else {
+					// Table
+					$limit = sprintf('htdb:/%s/%d/', $row['tx_mnogosearch_table'], $row['uid']);
+					Udm_Add_Search_Limit($udmAgent, UDM_LIMIT_URL, $limit);
+				}
+			}
+			$GLOBALS['TYPO3_DB']->sql_free_result($res);
+		}
+
+		// Call hooks to add custom limits
+		if (count($customLimitList) > 0 && is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mnogosearch']['addCustomSearchLimit'])) {
+			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mnogosearch']['addCustomSearchLimit'] as $userFunc) {
+				$params = array(
+					'pObj' => &$this,
+					'limits' => $customLimitList,
+					'udmAgent' => &$udmAgent
+				);
+				t3lib_div::callUserFunction($userFunc, $params, $this);
 			}
 		}
 	}
