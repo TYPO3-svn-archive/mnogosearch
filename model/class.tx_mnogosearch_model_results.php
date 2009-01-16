@@ -61,7 +61,7 @@ class tx_mnogosearch_model_results {
 	function init(&$udmAgent, &$res, tx_mnogosearch_pi1 &$pObj) {
 		$this->totalResults = Udm_Get_Res_Param($res, UDM_PARAM_FOUND);
 		$this->numRows = Udm_Get_Res_Param($res, UDM_PARAM_NUM_ROWS);
-		$this->wordInfo = Udm_Get_Res_Param($res, UDM_PARAM_WORDINFO_ALL);
+		$this->wordInfo = Udm_Get_Res_Param($res, UDM_PARAM_WORDINFO);
 		$this->searchTime = Udm_Get_Res_Param($res, UDM_PARAM_SEARCHTIME);
 		$this->firstDoc = Udm_Get_Res_Param($res, UDM_PARAM_FIRST_DOC);
 		$this->lastDoc = Udm_Get_Res_Param($res, UDM_PARAM_LAST_DOC);

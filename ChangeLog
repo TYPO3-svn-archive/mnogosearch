@@ -1,6 +1,7 @@
 2009-01-16  Dmitry Dulepov  <dmitry@typo3.org>
 
 	* Implemented advanced search form and custom search limits
+	* Fixed bug #3240: Indication of number of found items
 
 2009-01-15  Dmitry Dulepov  <dmitry@typo3.org>
 

@@ -298,7 +298,7 @@ class tx_mnogosearch_view {
 		$conf = &$this->pObj->conf['form.']['advanced.'];
 		if (isset($conf['siteSelector'])) {
 			$sections = $this->getSearchSections($conf);
-			// We go only if there are at least two sections (i.e. theare are options to choose from)
+			// We go only if there are at least two sections (i.e. there are options to choose from)
 			if ($sections > 1) {
 				$tag = $this->getSiteSelectorTag($conf);
 				if ($tag) {
