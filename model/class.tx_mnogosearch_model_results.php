@@ -288,8 +288,8 @@ class tx_mnogosearch_model_results {
 						$newUrl = t3lib_div::locationHeaderUrl($newUrl);
 					}
 				}
+				$url = $newUrl;
 			}
-			$url = $newUrl;
 		}
 		return $url;
 	}

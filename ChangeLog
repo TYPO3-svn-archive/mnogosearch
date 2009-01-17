@@ -10,6 +10,7 @@
 	* Advanced form uses <div> instead of <table>
 	* Added a setting for the explicit default value in the advanced search form
 	* Found terms are now shown as bold
+	* Changed internal limit processing to allow more flexible customization using hooks
 
 2009-01-16  Dmitry Dulepov  <dmitry@typo3.org>
 

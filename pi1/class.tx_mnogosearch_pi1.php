@@ -408,22 +408,24 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 		$customLimitList = array();
 
 		// Check if user sent something with the request
-		if (!isset($this->piVars['l']) || !is_array($this->piVars['l'])) {
+		if (!isset($this->piVars['l']) || !is_array($this->piVars['l']) || in_array('', $this->piVars['l'])) {
 			// Nothing sent, use configuration
-			$configLimitList = $this->conf['siteList'];
+			$configLimitList = explode(',', $this->conf['siteList']);
 		}
 		else {
 			// User has specified custom limits in the search form. We need
 			// to check that they are in the allowed site list. If it is not,
 			// call a hook to very custom limit
 			foreach ($this->piVars['l'] as $key => $limit) {
-				if (!t3lib_div::inList($this->conf['siteList'], $limit)) {
-					unset($this->piVars['l'][$key]);
-					$customLimitList[] = $limit;
-				}
-				else {
-					// $limit is an int (because it is in the siteList)
-					$configLimitList[] = $limit;
+				if ($limit != '') {
+					if (!t3lib_div::inList($this->conf['siteList'], $limit)) {
+						unset($this->piVars['l'][$key]);
+						$customLimitList[] = $limit;
+					}
+					else {
+						// $limit is an int (because it is in the siteList)
+						$configLimitList[] = $limit;
+					}
 				}
 			}
 		}
@@ -454,12 +456,13 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 		}
 
 		// Call hooks to add custom limits
-		if (count($customLimitList) > 0 && is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mnogosearch']['addCustomSearchLimit'])) {
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mnogosearch']['addCustomSearchLimit'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mnogosearch']['addCustomSearchLimit'] as $userFunc) {
 				$params = array(
 					'pObj' => &$this,
-					'limits' => $customLimitList,
-					'udmAgent' => &$udmAgent
+					'customLimits' => $customLimitList,
+					'configLimits' => $configLimitList,
+					'udmAgent' => &$udmAgent,
 				);
 				t3lib_div::callUserFunction($userFunc, $params, $this);
 			}
