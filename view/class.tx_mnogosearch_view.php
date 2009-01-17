@@ -314,10 +314,11 @@ class tx_mnogosearch_view {
 					$subpart = $this->pObj->cObj->getSubpart($template, $tag);
 					$optionSubpart = $this->pObj->cObj->getSubpart($subpart, '###SITESEL_OPTION###');
 					$options = '';
+					$default = $conf['siteSelector.']['default'];
 					foreach ($sections as $uid => $section) {
 						if ($conf['siteSelector.']['exclude'] == '' || !t3lib_div::inList($conf['siteSelector.']['exclude'], $uid)) {
 							if (is_array($this->pObj->piVars['l']) && in_array($uid, $this->pObj->piVars['l']) ||
-								!is_array($this->pObj->piVars['l']) && $uid == '') {
+								!is_array($this->pObj->piVars['l']) && $uid == $default) {
 								$selected = ' selected="selected" ';
 								$checked = ' checked="checked" ';
 							}
