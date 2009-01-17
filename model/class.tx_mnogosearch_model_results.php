@@ -239,8 +239,8 @@ class tx_mnogosearch_model_results {
 		if (substr($url, 0, 6) == 'htdb:/') {
 
 			// Try hooks first
-			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mnogosearch']['getCustomSearchLimit'])) {
-				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mnogosearch']['getCustomSearchLimit'] as $userFunc) {
+			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mnogosearch']['preProcessURL'])) {
+				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mnogosearch']['preProcessURL'] as $userFunc) {
 					$params = array(
 						'pObj' => &$this,
 						'url' => &$url
