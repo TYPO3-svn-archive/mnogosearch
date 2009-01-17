@@ -8,7 +8,7 @@ CREATE TABLE tx_mnogosearch_indexconfig (
 	crdate int(11) DEFAULT '0' NOT NULL,
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	sorting int(11) DEFAULT '0' NOT NULL,
-	title varchar(255) DEFAULT '0' NOT NULL,
+	title varchar(255) DEFAULT '' NOT NULL,
 	tx_mnogosearch_type int(11) DEFAULT '0' NOT NULL,
 	tx_mnogosearch_url varchar(255) DEFAULT '' NOT NULL,
 	tx_mnogosearch_method int(11) DEFAULT '-1' NOT NULL,

@@ -12,6 +12,7 @@
 	* Found terms are now shown as bold
 	* Changed internal limit processing to allow more flexible customization using hooks
 	* Added information about error 139 to the FAQ
+	* Fixed wrong default value for the title field
 
 2009-01-16  Dmitry Dulepov  <dmitry@typo3.org>
 
