@@ -114,3 +114,12 @@ ol#tx-mnogosearch-result li h3 a {
 #tx_mnogosearch_pi1_submit {
 	margin-left: 109px;
 }
+
+.tx-mnogosearch-pi1-result-excerpt-selection {
+	/*
+	border: 1px dotted silver;
+	margin: 0 3px;
+	padding: 2px 2px;
+	*/
+	font-weight: bold;
+}
