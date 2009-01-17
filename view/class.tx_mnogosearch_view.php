@@ -67,6 +67,15 @@ class tx_mnogosearch_view {
 	}
 
 	/**
+	 * Retrieves the controller.
+	 *
+	 * @return	tx_mnogosearch_pi1
+	 */
+	public function getController() {
+		return $this->pObj;
+	}
+
+	/**
 	 * Renders simple search form
 	 *
 	 * @return	string	Generated HTML
