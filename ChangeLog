@@ -5,6 +5,8 @@
 	* Fixed bug #1937: little changes in the manual
 	* Added hook to preprocess htdb:/ URLs (for www.calis.lv)
 	* Added a function too obtain controller from view in hooks
+	* Fixed typo in class name
+	* Added controller reference to hook parameters
 
 2009-01-16  Dmitry Dulepov  <dmitry@typo3.org>
 

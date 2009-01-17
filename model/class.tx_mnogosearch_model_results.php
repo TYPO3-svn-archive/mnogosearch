@@ -235,7 +235,7 @@ class tx_mnogosearch_model_results {
 	 * @param	tx_monogosearch_pi1	$pObj	Calling object
 	 * @return string	Converted URL
 	 */
-	protected function processURL($url, tx_monogosearch_pi1 &$pObj) {
+	protected function processURL($url, tx_mnogosearch_pi1 &$pObj) {
 		if (substr($url, 0, 6) == 'htdb:/') {
 
 			// Try hooks first
@@ -243,7 +243,8 @@ class tx_mnogosearch_model_results {
 				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mnogosearch']['preProcessURL'] as $userFunc) {
 					$params = array(
 						'pObj' => &$this,
-						'url' => &$url
+						'url' => &$url,
+						'controller' => &$pObj,
 					);
 					t3lib_div::callUserFunction($userFunc, $params, $this);
 					if (substr($url, 0, 6) != 'htdb:/') {
