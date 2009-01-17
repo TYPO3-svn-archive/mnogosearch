@@ -97,3 +97,11 @@ ol#tx-mnogosearch-result li h3 a {
 .tx-mnogosearch-long-form fieldset {
 	border: none;
 }
+
+.tx-mnogosearch-pi1 table {
+	border: none;
+}
+
+.tx-mnogosearch-spacer {
+	width: 10px;
+}
