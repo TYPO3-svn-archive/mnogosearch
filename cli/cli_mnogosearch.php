@@ -168,16 +168,19 @@ class tx_mnogosearch_cli {
 						t3lib_BEfunc::BEenableFields('tx_mnogosearch_indexconfig')*/,
 					'', 'sorting');
 
-		$hasPeriod = true;
+		$hasPeriod = false;
 		foreach ($rows as $row) {
 			$content .= '# uid=' . $row['uid'] . chr(10);
-			if ($row['tx_mnogosearch_period'] != 0) {
-				$content .= 'Period ' . $row['tx_mnogosearch_period'] . 'h' . chr(10);
+			if ($row['tx_mnogosearch_period'] != '0' && $row['tx_mnogosearch_period'] != '') {
+				$content .= 'Period ' .
+					(t3lib_div::testInt($row['tx_mnogosearch_period']) ?
+						$row['tx_mnogosearch_period'] . 'h' :
+						$row['tx_mnogosearch_period']) . chr(10);
 				$hasPeriod = true;
 			}
-			elseif ($hasPeriod) {
-				$content .= 'Period 1m-6h' . chr(10);
-				$hasPeriod = false;
+			elseif (!$hasPeriod) {
+				$content .= 'Period 10y' . chr(10);
+				$hasPeriod = true;
 			}
 
 			// Add any extra config. This must go *before* servers!

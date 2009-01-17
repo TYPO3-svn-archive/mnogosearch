@@ -15,7 +15,7 @@ CREATE TABLE tx_mnogosearch_indexconfig (
 	tx_mnogosearch_subsection int(11) DEFAULT '-1' NOT NULL,
 	tx_mnogosearch_cmptype int(11) DEFAULT '-1' NOT NULL,
 	tx_mnogosearch_cmpoptions int(11) DEFAULT '0' NOT NULL,
-	tx_mnogosearch_period int(11) DEFAULT '0' NOT NULL,
+	tx_mnogosearch_period varchar(32) DEFAULT '' NOT NULL,
 	tx_mnogosearch_additional_config text,
 
 	tx_mnogosearch_table varchar(255) DEFAULT '' NOT NULL,

@@ -184,10 +184,10 @@ $TCA['tx_mnogosearch_indexconfig'] = array(
 			'config' => array(
 				'type' => 'input',
 				'size' => '30',
-				'eval' => 'trim,int',
+				'eval' => 'trim',
 				'checkbox' => '0',
-				'default' => '0',
-				'size' => 5,
+				'default' => '',
+				'size' => 10,
 			)
 		),
 		'tx_mnogosearch_additional_config' => array(

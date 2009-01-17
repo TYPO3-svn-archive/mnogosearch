@@ -31,7 +31,7 @@
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_cmptype">Comparison type:</label>
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_cmptype.string">String</label>
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_cmptype.regexp">Regular expression</label>
-			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_period">Indexing period (in hours):</label>
+			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_period">Indexing period (hours or expression):</label>
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_additional_config">Additional indexer configuration:</label>
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_table">Table to index:</label>
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_title_field">Title field for the record:</label>
