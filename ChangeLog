@@ -1,3 +1,7 @@
+2009-01-17  Dmitry Dulepov  <dmitry@typo3.org>
+
+	* Fixed bug #2370: Pi1 is always USER_INT
+
 2009-01-16  Dmitry Dulepov  <dmitry@typo3.org>
 
 	* Implemented advanced search form and custom search limits
