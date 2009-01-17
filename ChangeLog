@@ -2,6 +2,7 @@
 
 	* Fixed bug #2370: Pi1 is always USER_INT
 	* Updated manual with the information about configuring the advanced search form
+	* Fixed bug #1937: little changes in the manual
 
 2009-01-16  Dmitry Dulepov  <dmitry@typo3.org>
 
