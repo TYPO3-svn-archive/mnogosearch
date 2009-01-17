@@ -7,6 +7,7 @@
 	* Added a function too obtain controller from view in hooks
 	* Fixed typo in class name
 	* Added controller reference to hook parameters
+	* Advanced form uses <div> instead of <table>
 
 2009-01-16  Dmitry Dulepov  <dmitry@typo3.org>
 

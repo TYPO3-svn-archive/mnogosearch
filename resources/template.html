@@ -36,55 +36,47 @@
 	<!-- WARNING! Do not change method to "post"! -->
 	<form class="tx-mnogosearch-long-form" action="###LONG_SEARCH_FORM_ACTION###" method="get">
 		<fieldset>
-			<table>
-				<tr><td>
-					###TEXT_SEARCH_FOR###
-				</td><td class="tx-mnogosearch-spacer">
-				</td><td>
-					<input size="50" type="text" name="tx_mnogosearch_pi1[q]" value="###LONG_SEARCH_FORM_VALUE###" />
-				</td></tr>
+			<div class="tx-mnogosearch-form-field">
+				<label for="tx_mnogosearch_pi1_q">###TEXT_SEARCH_FOR###</label>
+				<input size="50" type="text" name="tx_mnogosearch_pi1[q]" id="tx_mnogosearch_pi1_q" value="###LONG_SEARCH_FORM_VALUE###" />
+			</div>
 
-				<!-- ###SITESEL_SELECT### begin -->
-				<tr><td>
-					###TEXT_SEARCH_WHERE###
-				</td><td class="tx-mnogosearch-spacer">
-				</td><td>
-					<select name="tx_mnogosearch_pi1[l][]">
-						<!-- ###SITESEL_OPTION### begin -->
-						<option value="###VALUE###"###SELECTED###>###TEXT###</option>
-						<!-- ###SITESEL_OPTION### end -->
-					</select>
-				</td></tr>
-				<!-- ###SITESEL_SELECT### end -->
-
-				<!-- ###SITESEL_RADIO### begin -->
-				<tr><td>
-					###TEXT_SEARCH_WHERE###
-				</td><td class="tx-mnogosearch-spacer">
-				</td><td>
+			<!-- ###SITESEL_SELECT### begin -->
+			<div class="tx-mnogosearch-form-field">
+				<label for="tx_mnogosearch_pi1_l">###TEXT_SEARCH_WHERE###</label>
+				<select name="tx_mnogosearch_pi1[l][]" id="tx_mnogosearch_pi1_l">
 					<!-- ###SITESEL_OPTION### begin -->
-					<input type="radio"  name="tx_mnogosearch_pi1[l][]"###CHECKED### value="###VALUE###" />###TEXT###
+					<option value="###VALUE###"###SELECTED###>###TEXT###</option>
 					<!-- ###SITESEL_OPTION### end -->
-				</td></tr>
-				<!-- ###SITESEL_RADIO### end -->
+				</select>
+			</div>
+			<!-- ###SITESEL_SELECT### end -->
 
-				<!-- ###SITESEL_CHECK### begin -->
-				<tr><td>
-					###TEXT_SEARCH_WHERE###
-				</td><td class="tx-mnogosearch-spacer">
-				</td><td>
-					<!-- ###SITESEL_OPTION### begin -->
-					<input type="checkbox" name="tx_mnogosearch_pi1[l][]"###CHECKED### value="###VALUE###" />###TEXT###
-					<!-- ###SITESEL_OPTION### end -->
-				</td></tr>
-				<!-- ###SITESEL_CHECK### end -->
+			<!-- ###SITESEL_RADIO### begin -->
+			<div class="tx-mnogosearch-form-field">
+				<label for="tx_mnogosearch_pi1_l">###TEXT_SEARCH_WHERE###</label>
+				<span id="tx_mnogosearch_pi1_l">
+				<!-- ###SITESEL_OPTION### begin -->
+				<input type="radio" name="tx_mnogosearch_pi1[l][]"###CHECKED### value="###VALUE###" />###TEXT###
+				<!-- ###SITESEL_OPTION### end -->
+				</span>
+			</div>
+			<!-- ###SITESEL_RADIO### end -->
 
-				<tr><td>
-				</td><td class="tx-mnogosearch-spacer">
-				</td><td>
-					<input type="submit" name="tx_mnogosearch_pi1[submit]" value="###TEXT_SEARCH###" />
-				</td></tr>
-			</table>
+			<!-- ###SITESEL_CHECK### begin -->
+			<div class="tx-mnogosearch-form-field">
+				<label for="tx_mnogosearch_pi1_l">###TEXT_SEARCH_WHERE###</label>
+				<span id="tx_mnogosearch_pi1_l">
+				<!-- ###SITESEL_OPTION### begin -->
+				<input type="checkbox" name="tx_mnogosearch_pi1[l][]"###CHECKED### value="###VALUE###" />###TEXT###
+				<!-- ###SITESEL_OPTION### end -->
+				</span>
+			</div>
+			<!-- ###SITESEL_CHECK### end -->
+
+			<div class="tx-mnogosearch-form-field">
+				<input type="submit" name="tx_mnogosearch_pi1[submit]" id="tx_mnogosearch_pi1_submit" value="###TEXT_SEARCH###" />
+			</div>
 		</fieldset>
 	</form>
 </div>

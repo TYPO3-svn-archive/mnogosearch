@@ -98,10 +98,19 @@ ol#tx-mnogosearch-result li h3 a {
 	border: none;
 }
 
-.tx-mnogosearch-pi1 table {
-	border: none;
+.tx-mnogosearch-form-field {
+	clear: left;
+	margin-bottom: 5px;
+	oveflow: hidden;
 }
 
-.tx-mnogosearch-spacer {
-	width: 10px;
+.tx-mnogosearch-form-field label {
+	display: block;
+	float: left;
+	padding-right: 9px;
+	width: 100px;
+}
+
+#tx_mnogosearch_pi1_submit {
+	margin-left: 109px;
 }
