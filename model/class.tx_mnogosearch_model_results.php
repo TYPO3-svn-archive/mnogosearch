@@ -235,43 +235,59 @@ class tx_mnogosearch_model_results {
 	 * @param	tx_monogosearch_pi1	$pObj	Calling object
 	 * @return string	Converted URL
 	 */
-	function processURL($url, &$pObj) {
-		/* @vat $pObj tx_monogosearch_pi1 */
+	protected function processURL($url, tx_monogosearch_pi1 &$pObj) {
 		if (substr($url, 0, 6) == 'htdb:/') {
-			$newUrl = '';
-			$parts = t3lib_div::trimExplode('/', $url, true);
-			// $parts now should contain:
-			//	- htdb:
-			//	- table_name
-			//	- uid of the indexing config
-			//	- uid of the record from table_name
-			if (count($parts) == 4) {
-				// Check if we have indexing configuration in the cache and load if not
-				if (!isset($this->indexConfigCache[$parts[2]])) {
-					list($config) = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-							'tx_mnogosearch_table,tx_mnogosearch_url_parameters,tx_mnogosearch_display_pid',
-							'tx_mnogosearch_indexconfig',
-							'uid=' . intval($parts[2])
-						);
-					$this->indexConfigCache[$parts[2]] = $config;
-				}
-				else {
-					$config = $this->indexConfigCache[$parts[2]];
-				}
-				if ($config && $config['tx_mnogosearch_table'] == $parts[1]) {
-					$typoLinkConf = array(
-						'parameter' => $config['tx_mnogosearch_display_pid'],
+
+			// Try hooks first
+			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mnogosearch']['getCustomSearchLimit'])) {
+				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mnogosearch']['getCustomSearchLimit'] as $userFunc) {
+					$params = array(
+						'pObj' => &$this,
+						'url' => &$url
 					);
-					if ($config['tx_mnogosearch_url_parameters']) {
-						$typoLinkConf['useCacheHash'] = true;
-						$typoLinkConf['additionalParams'] = str_replace('{field:uid}', $parts[3], $config['tx_mnogosearch_url_parameters']);
+					t3lib_div::callUserFunction($userFunc, $params, $this);
+					if (substr($url, 0, 6) != 'htdb:/') {
+						// URL was transformed to something visible
+						break;
 					}
-					$newUrl = rawurldecode($pObj->cObj->typoLink_URL($typoLinkConf));
-					// Ensure that URL is complete
-					$newUrl = t3lib_div::locationHeaderUrl($newUrl);
 				}
 			}
-
+			// If we still have htdb:/, search it in the indexing configs
+			if (substr($url, 0, 6) == 'htdb:/') {
+				$newUrl = '';
+				$parts = t3lib_div::trimExplode('/', $url, true);
+				// $parts now should contain:
+				//	- htdb:
+				//	- table_name
+				//	- uid of the indexing config
+				//	- uid of the record from table_name
+				if (count($parts) == 4) {
+					// Check if we have indexing configuration in the cache and load if not
+					if (!isset($this->indexConfigCache[$parts[2]])) {
+						list($config) = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+								'tx_mnogosearch_table,tx_mnogosearch_url_parameters,tx_mnogosearch_display_pid',
+								'tx_mnogosearch_indexconfig',
+								'uid=' . intval($parts[2])
+							);
+						$this->indexConfigCache[$parts[2]] = $config;
+					}
+					else {
+						$config = $this->indexConfigCache[$parts[2]];
+					}
+					if ($config && $config['tx_mnogosearch_table'] == $parts[1]) {
+						$typoLinkConf = array(
+							'parameter' => $config['tx_mnogosearch_display_pid'],
+						);
+						if ($config['tx_mnogosearch_url_parameters']) {
+							$typoLinkConf['useCacheHash'] = true;
+							$typoLinkConf['additionalParams'] = str_replace('{field:uid}', $parts[3], $config['tx_mnogosearch_url_parameters']);
+						}
+						$newUrl = rawurldecode($pObj->cObj->typoLink_URL($typoLinkConf));
+						// Ensure that URL is complete
+						$newUrl = t3lib_div::locationHeaderUrl($newUrl);
+					}
+				}
+			}
 			$url = $newUrl;
 		}
 		return $url;
