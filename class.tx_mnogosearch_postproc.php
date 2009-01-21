@@ -148,10 +148,20 @@ class tx_mnogosearch_postproc {
 		$headers = headers_list();
 		foreach ($headers as $header) {
 			if (stripos($header, 'Last-modified:') === 0) {
+				$parts = t3lib_div::trimExplode(':', $header, true, 2);
+				if (count($parts == 2)) {
+					$time = strtotime($parts[1]);
+					if ($time >= time() - 300) {
+						// The page was just generated. Do not trust this header!
+						break;
+					}
+				}
 				return;
 			}
 		}
-		header('Last-modified: ' . gmdate('D, d M Y H:i:s T', $pObj->register['SYS_LASTCHANGED']));
+		$time = (($pObj->register['SYS_LASTCHANGED'] < time() - 300) ?
+			$pObj->register['SYS_LASTCHANGED'] : $GLOBALS['TSFE']->page['tstamp']);
+		header('Last-modified: ' . gmdate('D, d M Y H:i:s T', $time));
 	}
 }
 
