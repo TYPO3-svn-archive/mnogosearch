@@ -101,7 +101,7 @@ ol#tx-mnogosearch-result li h3 a {
 .tx-mnogosearch-form-field {
 	clear: left;
 	margin-bottom: 5px;
-	oveflow: hidden;
+	overflow: hidden;
 }
 
 .tx-mnogosearch-form-field label {

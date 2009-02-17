@@ -1,3 +1,7 @@
+2009-02-17  Dmitry Dulepov  <dmitry@typo3.org>
+
+	* Fixed wrong CSS property
+
 2009-01-21  Dmitry Dulepov  <dmitry@typo3.org>
 
 	* Changed "Last-modified" handling to provide more realistic modification dates
