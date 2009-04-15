@@ -256,12 +256,19 @@ class tx_mnogosearch_view {
 		return $this->pObj->pi_linkTP_keepPIvars_url(array('page' => $page), 1);
 	}
 
+	/**
+	 * Obtains icon for the file in the URL from TS setup
+	 *
+	 * @param	string	$url	URL of the file
+	 * @return	string	Icon or empty string if there is not icon
+	 */
 	protected function getIconSrc($url) {
 		$parts = pathinfo($url);
 		$icon = '';
 		if ($parts['extension']) {
-			$icon = (isset($this->pObj->conf['icons.'][$parts['extension']]) ?
-					$this->pObj->conf['icons.'][$parts['extension']] :
+			$extension = strtolower($parts['extension']);
+			$icon = (isset($this->pObj->conf['icons.'][$extension]) ?
+					$this->pObj->conf['icons.'][$extension] :
 					$this->pObj->conf['defaultFileIcon']);
 			if ($icon) {
 				$icon = $GLOBALS['TSFE']->tmpl->getFileName($icon);

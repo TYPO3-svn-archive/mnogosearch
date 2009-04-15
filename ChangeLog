@@ -1,3 +1,7 @@
+2009-04-15  Dmitry Dulepov  <dmitry@typo3.org>
+
+	* Fixed bug #3040: uppercase extensions are not recognized
+
 2009-02-23  Dmitry Dulepov  <dmitry@typo3.org>
 
 	* Applied Emile's changes to the template
