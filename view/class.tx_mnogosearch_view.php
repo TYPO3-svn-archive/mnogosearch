@@ -390,10 +390,6 @@ class tx_mnogosearch_view {
 	protected function getSearchSections(array $conf) {
 		$result = array();
 		if ($this->pObj->conf['siteList']) {
-			// Add "Search all" if necessary
-			if ($conf['siteSelector.']['searchAll'] && $conf['siteSelector'] != 'checkboxes') {
-				$result[''] = $this->pObj->pi_getLL('search_all');
-			}
 
 			// Limit domains
 			$domainList = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
@@ -425,6 +421,20 @@ class tx_mnogosearch_view {
 					$result[$domain['uid']] = $lang->sL($GLOBALS['TCA'][$domain['tx_mnogosearch_table']]['ctrl']['title']);
 				}
 			}
+
+			// Sort
+			$sorted = array();
+			// Add "Search all" if necessary
+			if ($conf['siteSelector.']['searchAll'] && $conf['siteSelector'] != 'checkboxes') {
+				$sorted[''] = $this->pObj->pi_getLL('search_all');
+			}
+			foreach (explode(',', $this->pObj->conf['siteList']) as $id) {
+				if (isset($result[$id])) {
+					$sorted[$id] = $result[$id];
+				}
+			}
+			$result = $sorted;
+
 			// Call hook for custom sections
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mnogosearch']['getCustomSearchLimit'])) {
 				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mnogosearch']['getCustomSearchLimit'] as $userFunc) {
