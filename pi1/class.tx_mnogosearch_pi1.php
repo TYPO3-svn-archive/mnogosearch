@@ -258,25 +258,47 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 		}
 		$q_string = substr($q_string, 1);
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_QSTRING, $q_string);
+		Udm_Parse_Query_String($udmAgent, $q_string);
 		*/
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_REMOTE_ADDR, t3lib_div::getIndpEnv('REMOTE_ADDR'));
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_QUERY, $this->piVars['q']);
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_GROUPBYSITE, UDM_DISABLED);
-		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_SEARCH_MODE, UDM_MODE_BOOLEAN);
+		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_SEARCH_MODE, UDM_MODE_ALL);
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_WORD_MATCH, UDM_MATCH_WORD);
 		$val = intval($this->conf['search.']['minimumWordLength']);
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_MIN_WORD_LEN, $val ? $val : 3);
 		$val = intval($this->conf['search.']['maximumWordLength']);
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_MAX_WORD_LEN, $val ? $val : 32);
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_VARDIR, PATH_site . 'typo3temp/mnogosearch/var'); //$this->sysconf['mnoGoSearchPath'] . '/var');
+
+		// Number of sections (must be inline with weightFactor)
+		$numSections = intval($this->conf['search.']['numberOfSections']);
+		Udm_Set_Agent_Param_Ex($udmAgent, 'NumSections', $numSections ? $numSections : 4);	// Affects PageRank!!!
+		
 		// Weight factors (0-15, which is 0-F in hex, see CLI script for sections):
 		//	body: 8 (more than 8 will lower rank for title, less than 8 will lower rank for body)
 		//	title: F (title needs highest!)
-		//	keywords: 1 (minimal)
-		//	description: 1 (minimal)
-		//	fe group id: 1 (may not set to 0 but must not have any real weight!)
-		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_WEIGHT_FACTOR, 0x111F8);
-		Udm_Set_Agent_Param_Ex($udmAgent, 'NumSections', 5);	// Affects PageRank!!!
+		//	keywords: 0 (minimal)
+		//	description: 0 (minimal)
+		//	fe group id: 0 (may not set to 0 but must not have any real weight!)
+		$weightFactor = 0;
+		if (0 == sscanf(strtolower($this->conf['search.']['weightFactor']), '%x', $weightFactor) || $weightFactor == 0) {
+			$weightFactor = 0x00F8;
+		}
+		$weightFactor = sprintf('%0' . $numSections . 'X', $weightFactor);
+		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_WEIGHT_FACTOR, $weightFactor);
+		Udm_Set_Agent_Param_Ex($udmAgent, 'nwf', sprintf('%0' . $numSections . 'X', 0));
+
+		// Increase score for documents with higher word density (use small values!)
+		Udm_Set_Agent_Param_Ex($udmAgent, 'WordDensityFactor', 10);
+		// Increase position of docs where searched words are close to the beginning
+		Udm_Set_Agent_Param_Ex($udmAgent, 'MinCoordFactor', 0);
+		// Count number of found words (low effect)
+		Udm_Set_Agent_Param_Ex($udmAgent, 'NumWordFactor', 10);
+		// Prevent smaller documents from appearing higher in results
+		Udm_Set_Agent_Param_Ex($udmAgent, 'DocSizeWeight', 0);
+		// Improve position for words found with fuzzy search
+		Udm_Set_Agent_Param_Ex($udmAgent, 'WordFormFactor', 50);
 
 		$val = $this->conf['search.']['sortMode'];
 		Udm_Set_Agent_Param($udmAgent, UDM_PARAM_SORT_ORDER, $val ? $val : 'RPD'); // or DRP
@@ -287,8 +309,6 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 			// "sp=1" will search for all word forms
 			Udm_Set_Agent_Param_Ex($udmAgent, 'sp', ($this->conf['search.']['options.']['search_word_forms'] ? '1' : '0'));
 		}
-
-		Udm_Parse_Query_String($udmAgent, $q_string);
 
 		$this->addSearchRestrictions($udmAgent);
 

@@ -92,6 +92,13 @@ plugin.tx_mnogosearch_pi1 {
 		# Sort mode: RPD or PRD. Passing wrong values will cause unpredictable results. No validation, so be careful!
 		sortMode = RPD
 
+		# Number of sections. Do not change this unless you added more sections to indexing!
+		numberOfSections = 4
+		
+		# Weight factor for search. This is a hexadecimal number. See http://www.mnogosearch.org/doc33/msearch-doingsearch.html#search-changeweight for details.
+		# Do not change this value unless you absolutely know what you are doing!
+		weightFactor = 00F8
+
 		# Page browser configuration
 		pageBrowser < plugin.tx_pagebrowse_pi1
 		pageBrowser.disableCacheHash = 1

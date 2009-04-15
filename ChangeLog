@@ -1,6 +1,7 @@
 2009-04-15  Dmitry Dulepov  <dmitry@typo3.org>
 
 	* Fixed bug #3040: uppercase extensions are not recognized
+	* Tuned search results so that subject has more weight than body
 
 2009-02-23  Dmitry Dulepov  <dmitry@typo3.org>
 
