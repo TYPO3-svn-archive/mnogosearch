@@ -126,7 +126,7 @@ class tx_mnogosearch_cli {
 			$conn = mysql_connect($parts['host'], $parts['user'], $parts['pass']);
 			if (mysql_errno() == 0) {
 				$dbname = trim($parts['path'], '/');
-				$rs = mysql_query('SHOW TABLES FROM ' . mysql_real_escape_string($dbname, $conn) . ' LIKE \'qcache\'', $conn);
+				$rs = mysql_query('SHOW TABLES FROM `' . mysql_real_escape_string($dbname, $conn) . '` LIKE \'qcache\'', $conn);
 				if (mysql_errno() == 0) {
 					$hasTables = (mysql_num_rows($rs) > 0);
 					mysql_free_result($rs);
