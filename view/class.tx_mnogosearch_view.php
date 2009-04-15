@@ -159,8 +159,8 @@ class tx_mnogosearch_view {
 				$iconSrc = $this->getIconSrc($result->url);
 				$t = $this->pObj->cObj->substituteMarkerArray($resultTemplate, array(
 						'###SEARCH_RESULTS_RESULT_NUMBER###' => $results->firstDoc + ($i++),
-						'###SEARCH_RESULTS_RESULT_URL###' => $result->url,
-						'###SEARCH_RESULTS_RESULT_TITLE###' => $result->title,	// todo: htmlspecialchars?
+						'###SEARCH_RESULTS_RESULT_URL###' => htmlspecialchars($result->url),
+						'###SEARCH_RESULTS_RESULT_TITLE###' => htmlspecialchars($result->title),
 						'###SEARCH_RESULTS_RESULT_RELEVANCY###' => sprintf('%.2f', $result->rating),
 						'###SEARCH_RESULTS_RESULT_EXCERPT###' => $result->excerpt,
 						'###SEARCH_RESULTS_RESULT_SIZE###' => $this->formatSize($result->documentSize),

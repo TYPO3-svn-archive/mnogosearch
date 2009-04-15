@@ -3,6 +3,7 @@
 	* Fixed bug #3040: uppercase extensions are not recognized
 	* Tuned search results so that subject has more weight than body
 	* Fixed bug #3067: order of the checkboxes (or selections) for advanced search
+	* Fixed bug #2531: some issues about xhtml validation
 
 2009-02-23  Dmitry Dulepov  <dmitry@typo3.org>
 
