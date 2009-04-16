@@ -1,3 +1,7 @@
+2009-04-16  Dmitry Dulepov  <dmitry@typo3.org>
+
+	* Fixed issue with HTML tags in search results title
+
 2009-04-15  Dmitry Dulepov  <dmitry@typo3.org>
 
 	* Fixed bug #3040: uppercase extensions are not recognized
