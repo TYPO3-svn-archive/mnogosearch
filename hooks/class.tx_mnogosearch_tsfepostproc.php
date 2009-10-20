@@ -35,7 +35,7 @@
  * @package	TYPO3
  * @subpackage	tx_mnogosearch
  */
-class tx_mnogosearch_postproc {
+class tx_mnogosearch_tsfepostproc {
 
 	/**
 	 * Check for <code>If-modified-since</code> header and creates <code>304 Not Modified</code> response of necessary
@@ -165,8 +165,8 @@ class tx_mnogosearch_postproc {
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mnogosearch/class.tx_mnogosearch_postproc.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mnogosearch/class.tx_mnogosearch_postproc.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mnogosearch/hooks/class.tx_mnogosearch_tsfepostproc.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mnogosearch/hooks/class.tx_mnogosearch_tsfepostproc.php']);
 }
 
 ?>
