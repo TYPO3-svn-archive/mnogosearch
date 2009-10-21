@@ -9,6 +9,9 @@ if (TYPO3_MODE == 'FE' && $_SERVER['HTTP_X_TYPO3_MNOGOSEARCH'] == md5('mnogosear
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['initFEuser']['mnogosearch'] = 'EXT:mnogosearch/hooks/class.tx_mnogosearch_fegroups.php:tx_mnogosearch_fegroups->setFEGroups';
 }
 
+// This hook is included always because we never ever want our parameter in cHash
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_div.php']['cHashParamsHook']['mnogosearch'] = 'EXT:mnogosearch/hooks/class.tx_mnogosearch_fegroups.php:tx_mnogosearch_chash->updateCHashParameters';
+
 // Hook for tt_news to set page modification date correctly. This must run outside of the above block because page can be cached and it will not be executed when necessary
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['tt_news']['extraItemMarkerHook'][$_EXTKEY] = 'EXT:' . $_EXTKEY . '/hooks/class.tx_mnogosearch_ttnews.php:&tx_mnogosearch_ttnews';
 
