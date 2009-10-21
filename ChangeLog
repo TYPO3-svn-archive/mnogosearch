@@ -3,6 +3,7 @@
 	* Added a new TSFE hook to force user groups for pages and content
 	* Added a user group field to the indexing configuration record
 	* Added a hook to exclude tx_mnogosearch_gid from cHash parameters
+	* Added new classes for more structured processing in the command line tool
 
 2009-10-20  Dmitry Dulepov  <dmitry@typo3.org>
 
