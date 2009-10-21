@@ -25,6 +25,8 @@ CREATE TABLE tx_mnogosearch_indexconfig (
 	tx_mnogosearch_url_parameters text,
 	tx_mnogosearch_display_pid int(11) DEFAULT '0' NOT NULL,
 	tx_mnogosearch_pid_only text,
+	
+	user_groups text,
 
 	PRIMARY KEY (uid),
 	KEY tx_mnogosearch_table (tx_mnogosearch_table(64),sorting)

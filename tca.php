@@ -288,11 +288,26 @@ $TCA['tx_mnogosearch_indexconfig'] = array(
 				'prepend_tname' => false,
 			)
 		),
+		'user_groups' => array(
+			'exclude' => false,
+			'label' => 'LLL:EXT:mnogosearch/locallang_db.xml:tx_mnogosearch_indexconfig.user_groups',
+			'config' => array (
+				'type' => 'select',
+				'foreign_table' => 'fe_groups',
+				'items' => array (
+					array('LLL:EXT:mnogosearch/locallang_db.xml:tx_mnogosearch_indexconfig.user_groups.anonymous', -1000),
+					array('LLL:EXT:mnogosearch/locallang_db.xml:tx_mnogosearch_indexconfig.user_groups.any', -2),
+					array('LLL:EXT:lang/locallang_general.xml:LGL.usergroups', '--div--')
+				),
+				'maxitems' => 100,
+				'size' => 5
+			)
+		)
 	),
 	'types' => array(
-		'0' => array('showitem' => 'tx_mnogosearch_type;;;;1-1-1,tx_mnogosearch_url;;2;;3-3-3,tx_mnogosearch_method,tx_mnogosearch_period;;;;4-4-4, tx_mnogosearch_additional_config'),
-		'1' => array('showitem' => 'tx_mnogosearch_type;;;;1-1-1,tx_mnogosearch_url;;2;;3-3-3,tx_mnogosearch_method,tx_mnogosearch_period;;;;4-4-4,tx_mnogosearch_cmptype;;1;;5-5-5, tx_mnogosearch_additional_config'),
-		'11' => array('showitem' => 'tx_mnogosearch_type;;;;1-1-1,tx_mnogosearch_table;;2;;3-3-3, tx_mnogosearch_title_field, tx_mnogosearch_body_field, tx_mnogosearch_lastmod_field, tx_mnogosearch_url_parameters;;;;4-4-4, tx_mnogosearch_display_pid, tx_mnogosearch_pid_only, tx_mnogosearch_period;;;;4-4-4, tx_mnogosearch_additional_config'),
+		'0' => array('showitem' => 'tx_mnogosearch_type;;;;1-1-1,tx_mnogosearch_url;;2;;3-3-3,tx_mnogosearch_method,tx_mnogosearch_period;;;;4-4-4, tx_mnogosearch_additional_config, --div--;LLL:EXT:mnogosearch/locallang_db.xml:tx_mnogosearch_indexconfig.access_div, user_groups;;;;1-1-1'),
+		'1' => array('showitem' => 'tx_mnogosearch_type;;;;1-1-1,tx_mnogosearch_url;;2;;3-3-3,tx_mnogosearch_method,tx_mnogosearch_period;;;;4-4-4,tx_mnogosearch_cmptype;;1;;5-5-5, tx_mnogosearch_additional_config, --div--;LLL:EXT:mnogosearch/locallang_db.xml:tx_mnogosearch_indexconfig.access_div, user_groups;;;;1-1-1'),
+		'11' => array('showitem' => 'tx_mnogosearch_type;;;;1-1-1,tx_mnogosearch_table;;2;;3-3-3, tx_mnogosearch_title_field, tx_mnogosearch_body_field, tx_mnogosearch_lastmod_field, tx_mnogosearch_url_parameters;;;;4-4-4, tx_mnogosearch_display_pid, tx_mnogosearch_pid_only, tx_mnogosearch_period;;;;4-4-4, tx_mnogosearch_additional_config, --div--;LLL:EXT:mnogosearch/locallang_db.xml:tx_mnogosearch_indexconfig.access_div, user_groups;;;;1-1-1'),
 	),
 	'palettes' => array(
 		'1' => array('showitem' => 'tx_mnogosearch_cmpoptions'),
