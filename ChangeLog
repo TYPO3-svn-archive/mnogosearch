@@ -1,3 +1,7 @@
+2009-10-21  Dmitry Dulepov  <dmitry@typo3.org>
+
+	* Added a new TSFE hook to force user groups for pages and content
+
 2009-10-20  Dmitry Dulepov  <dmitry@typo3.org>
 
 	* Renamed TSFE postproc hook class
