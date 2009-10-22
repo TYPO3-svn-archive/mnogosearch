@@ -158,7 +158,8 @@ abstract class tx_mnogosearch_baseconfig {
 	 * @return boolean
 	 */
 	public function hasPeriod() {
-		return trim($this->data['period']) != '';
+		$period = trim($this->data['period']);
+		return $period != '' && $period != '0';
 	}
 
 

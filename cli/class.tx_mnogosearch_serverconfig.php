@@ -46,7 +46,9 @@ class tx_mnogosearch_serverconfig extends tx_mnogosearch_baseconfig {
 		$result = 'Server ';
 		$result .= $this->getMethodAsString();
 		$result .= $this->getSubSection();
-		$result .= $this->data['tx_mnogosearch_url'] . chr(10);
+		$result .= $this->data['url'] . chr(10);
+
+		return $result;
 	}
 
 	/**
@@ -56,9 +58,9 @@ class tx_mnogosearch_serverconfig extends tx_mnogosearch_baseconfig {
 	 */
 	public function getAllowedServerURLs() {
 		$result = array();
-		$method = $this->data['tx_mnogosearch_method'];
+		$method = $this->data['method'];
 		if ($method != self::DISALLOW && $method != self::SKIP) {
-			$result[] = $this->data['tx_mnogosearch_url'];
+			$result[] = $this->data['url'];
 		}
 		return $result;
 	}

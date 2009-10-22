@@ -279,7 +279,7 @@ DefaultContentType "text/html' .
 	 * @return	void
 	 */
 	protected function getPeriod(tx_mnogosearch_baseconfig &$configuration, &$resetPeriod) {
-		if ($this->configHasPeriod($configuration)) {
+		if ($configuration->hasPeriod()) {
 			$this->generatedContent .= 'Period ' . $configuration->getPeriod();
 			$resetPeriod = true;
 		}
@@ -322,6 +322,7 @@ DefaultContentType "text/html' .
 			/* @var $configuration tx_mnogosearch_baseconfig */
 			$this->generatedContent .= sprintf('# uid=%d' . chr(10), $configuration->getId());
 			$this->generatedContent .= $this->getPeriod($configuration, $resetPeriod);
+			$this->generatedContent .= $configuration->getConfigurationLines();
 			$this->generatedContent .= $configuration->getRawConfig();
 			$this->allowedURLs += $configuration->getAllowedServerURLs();
 		}

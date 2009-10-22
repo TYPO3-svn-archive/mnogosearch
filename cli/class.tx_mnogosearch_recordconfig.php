@@ -73,7 +73,8 @@ class tx_mnogosearch_recordconfig extends tx_mnogosearch_baseconfig {
 	protected function getHtdbAddr() {
 		$setnames = $this->getSetNames();
 		return sprintf('HTDBAddr mysql://%s:%s@%s/%s/%s',
-			TYPO3_db_username, TYPO3_db_password, TYPO3_db_host, TYPO3_db, $setnames) .
+			TYPO3_db_username, TYPO3_db_password, TYPO3_db_host, TYPO3_db,
+				$setnames ? '?' . $setnames : '') .
 			chr(10);
 	}
 
@@ -85,15 +86,15 @@ class tx_mnogosearch_recordconfig extends tx_mnogosearch_baseconfig {
 	protected function getHTDBDoc() {
 		$table = $this->getTable();
 
-		$result .= 'HTDBDoc "SELECT ';
+		$result .= 'HTDBDoc "SELECT `';
 
 		// Add title
 		$result .= ($this->data['title_field'] ? $this->data['title_field'] : '\'\'');
-		$result .= ' AS title,';
+		$result .= '` AS title,';
 
 		// Add last modified
 		if ($this->data['lastmod_field']) {
-			$result .= $this->data['lastmod_field'] . ' AS last_mod_time,';
+			$result .= '`' . $this->data['lastmod_field'] . '` AS last_mod_time,';
 		}
 
 		// TODO Add status and get rid of enableFields above.
@@ -102,9 +103,9 @@ class tx_mnogosearch_recordconfig extends tx_mnogosearch_baseconfig {
 		// $result .= 'CASE WHEN (delete=1 OR hidden=1 OR startime<... ....) THEN 404 ELSE 200';
 
 		// Add body
-		$bodyFields = t3lib_div::trimExplode(',', $this->data['body_field'], true);
+		$bodyFields = $this->getQuotedFieldArray($this->data['body_field']);
 		$result .= (count($bodyFields) > 1 ? 'CONCAT(' . implode(',\' \',', $bodyFields) . ')' : $bodyFields[0]);
-		$result .= ' AS body FROM ' . $table . ' WHERE uid=$3"' . chr(10);
+		$result .= ' AS body FROM `' . $table . '` WHERE uid=$3"' . chr(10);
 		$result .= 'Server htdb:/' . $table . '/' . chr(10);
 
 		return $result;
@@ -117,7 +118,7 @@ class tx_mnogosearch_recordconfig extends tx_mnogosearch_baseconfig {
 	 */
 	protected function getHtdbList() {
 		$table = $this->getTable();
-		$result = sprintf('HTDBList "SELECT CONCAT(\'htdb:/%s/%d/\', uid) FROM %s',
+		$result = sprintf('HTDBList "SELECT CONCAT(\'htdb:/%s/%d/\', uid) FROM `%s`',
 			$table, $this->getId(), $table);
 
 		$where = $this->getTableWhere();
@@ -125,7 +126,20 @@ class tx_mnogosearch_recordconfig extends tx_mnogosearch_baseconfig {
 			$result .= ' WHERE ' . $where;
 		}
 
-		return $result;
+		return $result . '"' . chr(10);
+	}
+
+	/**
+	 * Fetches setnames configuration from the TYPO3 configuration
+	 *
+	 * @return	string
+	 */
+	protected function getSetNames() {
+		$setnames = '';
+		if (preg_match('/set\s+names\s+([a-z\-0-9]+)/i', $GLOBALS['TYPO3_CONF_VARS']['SYS']['setDBinit'], $matches)) {
+			$setnames = 'setnames=' . $matches[1];
+		}
+		return $setnames;
 	}
 
 	/**
@@ -161,16 +175,18 @@ class tx_mnogosearch_recordconfig extends tx_mnogosearch_baseconfig {
 	}
 
 	/**
-	 * Fetches setnames configuration from the TYPO3 configuration
+	 * Quotes database fields for the query
 	 *
-	 * @return	string
+	 * @param	array	$fields
+	 * @return	array
 	 */
-	protected function getSetNames() {
-		$setnames = '';
-		if (preg_match('/set\s+names\s+([a-z\-0-9]+)/i', $GLOBALS['TYPO3_CONF_VARS']['SYS']['setDBinit'], $matches)) {
-			$setnames = 'setnames=' . $matches[1];
+	protected function getQuotedFieldArray($fields) {
+		$fields = t3lib_div::trimExplode(',', $this->data['body_field'], true);
+		foreach ($fields as &$field) {
+			$field = '`' . $field . '`';
 		}
-		return $setnames;
+
+		return $fields;
 	}
 }
 

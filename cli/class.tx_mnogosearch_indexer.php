@@ -77,12 +77,32 @@ class tx_mnogosearch_indexer {
 	}
 
 	/**
+	 * Cleans up
+	 *
+	 * @return	void
+	 */
+	public function __destruct() {
+		if (!empty($this->configurationFileName)) {
+			@unlink($this->configurationFileName);
+		}
+	}
+
+	/**
 	 * Runs a "convert blob" mnoGoSearch operation
 	 *
 	 * @return	void
 	 */
 	public function convertBlobs() {
 		$this->execute('-Eblob');
+	}
+
+	/**
+	 * Clears mnoGoSearch database
+	 *
+	 * @return	void
+	 */
+	public function clearDatabase() {
+		$this->execute('-Cw');
 	}
 
 	/**
@@ -154,7 +174,7 @@ class tx_mnogosearch_indexer {
 	 */
 	public function setConfigurationGenerator(tx_mnogosearch_configgenerator &$configurationGenerator) {
 		$this->configurationGenerator = $configurationGenerator;
-		$this->configurationFileName = $configurationGenerator->getIndexerConfiguration();
+		$this->configurationFileName = $configurationGenerator->createIndexerConfigurationFile();
 	}
 
 	/**
@@ -168,8 +188,8 @@ class tx_mnogosearch_indexer {
 		if ($this->commandLineOptions->hasOption(tx_mnogosearch_clioptions::EXTFLAGS)) {
 			$extraOptions = $this->commandLineOptions->getOptionParameter(tx_mnogosearch_clioptions::EXTFLAGS);
 		}
-		$commandLine = sprintf('%s/sbin/indexer %s %s -d %s %s',
-			$this->indexerPath, $this->getSilenceOption(),
+		$commandLine = sprintf('%s %s %s -d %s %s',
+			$this->indexerPath, $this->getSilenceOption(), $options,
 			escapeshellarg($this->configurationFileName), $extraOptions);
 		return trim($commandLine);
 	}
@@ -195,7 +215,7 @@ class tx_mnogosearch_indexer {
 	protected function execute($options) {
 		$commandLine = $this->buildCommandLine($options);
 		if ($this->commandLineOptions->hasOption(tx_mnogosearch_clioptions::DRYRUN)) {
-			echo sprintf('Executing: %s' . chr(10), $options);
+			echo sprintf('Executing: %s' . chr(10), $commandLine);
 		}
 		else {
 			@exec($commandLine);
@@ -211,9 +231,10 @@ class tx_mnogosearch_indexer {
 		if ($this->commandLineOptions->hasOption(tx_mnogosearch_clioptions::VERBOSE)) {
 			$verbosityLevel = intval($this->commandLineOptions->getOptionParameter(tx_mnogosearch_clioptions::VERBOSE));
 			if ($verbosityLevel > 0) {
-				$this->silenceOption = '-v ' . max(1, min(5, $verbosityLevel));
+				return '-v ' . max(1, min(5, $verbosityLevel));
 			}
 		}
+		return '';
 	}
 }
 

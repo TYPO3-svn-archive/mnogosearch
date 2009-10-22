@@ -28,6 +28,11 @@
  * $Id$
  */
 
+if (!defined('TYPO3_MODE')) {
+	echo 'Please use "./typo3/cli_dispatch.phpsh mnogosearch -?" for help. Thank you.' . chr(10);
+	exit;
+}
+
 require_once(t3lib_extMgm::extPath('mnogosearch', 'cli/class.tx_mnogosearch_clioptions.php'));
 require_once(t3lib_extMgm::extPath('mnogosearch', 'cli/class.tx_mnogosearch_configgenerator.php'));
 require_once(t3lib_extMgm::extPath('mnogosearch', 'cli/class.tx_mnogosearch_dboperations.php'));
@@ -50,6 +55,13 @@ class tx_mnogosearch_climain {
 	protected $commandLineOptions;
 
 	/**
+	 * Shows if we are in "dry-run" mode
+	 *
+	 * @var boolean
+	 */
+	protected $dryRun;
+
+	/**
 	 * mnoGoSearch indexer instance
 	 *
 	 * @var	tx_mnogosearch_indexer
@@ -63,6 +75,7 @@ class tx_mnogosearch_climain {
 	 */
 	public function __construct() {
 		$this->createCommandLineOptions();
+		$this->dryRun = $this->commandLineOptions->hasOption(tx_mnogosearch_clioptions::DRYRUN);
 	}
 
 	/**
@@ -94,6 +107,19 @@ class tx_mnogosearch_climain {
 	}
 
 	/**
+	 * Converts blobs
+	 *
+	 * @return	void
+	 */
+	protected function convertBlobs() {
+		$sysconf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mnogosearch']);
+		if (stristr($this->sysconf['dbaddr'], 'dbmode=blob')) {
+			$this->showProgressMessage('Going to convert blobs.');
+			$this->indexer->convertBlobs();
+		}
+	}
+
+	/**
 	 * Parses command line options.
 	 *
 	 * @return	void
@@ -114,6 +140,7 @@ class tx_mnogosearch_climain {
 	 * @return	void
 	 */
 	protected function createIndexer() {
+		$this->showProgressMessage('Going to create indexer.');
 		$this->indexer = t3lib_div::makeInstance('tx_mnogosearch_indexer');
 		$this->indexer->setCommandLineOptions($this->commandLineOptions);
 		$this->indexer->setConfigurationGenerator($this->getIndexerConfigurationGenerator());
@@ -126,6 +153,7 @@ class tx_mnogosearch_climain {
 	 */
 	protected function createWordStatistics() {
 		if ($this->commandLineOptions->hasOption(tx_mnogosearch_clioptions::SPELLSTATS)) {
+			$this->showProgressMessage('Going to create word statistics.');
 			$this->indexer->createWordStatistics();
 		}
 	}
@@ -136,6 +164,7 @@ class tx_mnogosearch_climain {
 	 * @return	void
 	 */
 	protected function displayConfiguration() {
+		$this->showProgressMessage('Going to retrieve indexing configurations.');
 		$generator = $this->getIndexerConfigurationGenerator();
 		echo $generator->getIndexerConfiguration() . chr(10);
 	}
@@ -149,7 +178,7 @@ class tx_mnogosearch_climain {
 		$content = '';
 		$allowedURLs = $this->indexer->getAllowedURLs();
 		$recordSet = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid,tx_mnogosearch_url',
-			'tx_mnogosearch_urllog');
+			'tx_mnogosearch_urllog', '');
 		$GLOBALS['TYPO3_DB']->sql_query('START TRANSACTION');
 		while (false !== ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($recordSet))) {
 			$addUrl = false;
@@ -205,7 +234,10 @@ class tx_mnogosearch_climain {
 		else {
 			$this->createIndexer();
 
-			if ($this->commandLineOptions->hasOption(tx_mnogosearch_clioptions::CREATEDB)) {
+			if ($this->commandLineOptions->hasOption(tx_mnogosearch_clioptions::CLEARDB)) {
+				$this->indexer->clearDatabase();
+			}
+			elseif ($this->commandLineOptions->hasOption(tx_mnogosearch_clioptions::CREATEDB)) {
 				$this->runDatabaseCheck();
 			}
 			else {
@@ -220,6 +252,7 @@ class tx_mnogosearch_climain {
 	 * @return	string
 	 */
 	protected function getIndexerConfigurationGenerator() {
+		$this->showProgressMessage('Going to get indexing configurations.');
 		$configGenerator = t3lib_div::makeInstance('tx_mnogosearch_configgenerator');
 		/* @var $configGenerator tx_mnogosearch_configgenerator */
 		$configGenerator->setCommandLineOptions($this->commandLineOptions);
@@ -232,6 +265,7 @@ class tx_mnogosearch_climain {
 	 * @return	void
 	 */
 	protected function index() {
+		$this->showProgressMessage('Going to index.');
 		$this->indexer->index();
 		$this->reindexNewURLs();
 		$this->convertBlobs();
@@ -262,9 +296,14 @@ class tx_mnogosearch_climain {
 	 */
 	protected function reindexNewURLs() {
 		if ($this->commandLineOptions->hasOption(tx_mnogosearch_clioptions::REINDEX)) {
+			$this->showProgressMessage('Going to reindex new URLs.');
 			$urlFileName = $this->generateURLListFile();
 			if ($urlFileName != '') {
 				$this->indexer->indexURLs($urlFileName);
+				@unlink($urlFileName);
+			}
+			else {
+				$this->showProgressMessage('No new URLs found.');
 			}
 		}
 	}
@@ -275,10 +314,30 @@ class tx_mnogosearch_climain {
 	 * @return	void
 	 */
 	protected function runDatabaseCheck() {
+		$this->showProgressMessage('Going to run database check.');
+
 		$dbOperations = t3lib_div::makeInstance('tx_mnogosearch_dboperations');
 		/* @var $dbOperations tx_mnogosearch_dboperations */
 		$dbOperations->setIndexer($this->indexer);
 		$dbOperations->checkAndCreate();
+	}
+
+	/**
+	 * Shows progress message in case of a dry-run mode. This function accepts
+	 * variable number of parameters and will format than sprintf-like.
+	 *
+	 * @param	string	$message
+	 * @return	void
+	 */
+	protected function showProgressMessage($message) {
+		if ($this->dryRun) {
+			$arguments = func_get_args();
+			if (count($arguments) > 1) {
+				array_shift($arguments);
+				$message = vsprintf($message, $arguments);
+			}
+			echo $message . chr(10);
+		}
 	}
 
 	/**
@@ -303,6 +362,7 @@ It accepts the following options:
 -h, --help, -?    Display this help message
 -x                Pass the argument to mnoGoSearch indexer
 -v level          Be verbose. Level is 0-5. Default is 0 (complete silence)
+-z                Remove all indexed data from the database
 ';
 			exit(1);
 	}
@@ -312,5 +372,9 @@ It accepts the following options:
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mnogosearch/cli/class.tx_mnogosearch_climain.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mnogosearch/cli/class.tx_mnogosearch_climain.php']);
 }
+
+$cli = t3lib_div::makeInstance('tx_mnogosearch_climain');
+/* @var $cli tx_mnogosearch_climain */
+$cli->run();
 
 ?>

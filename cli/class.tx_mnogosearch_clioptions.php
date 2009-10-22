@@ -38,6 +38,7 @@
  */
 class tx_mnogosearch_clioptions {
 
+	const CLEARDB = '-z';
 	const CREATEDB = '-c';
 	const DISPLAYCONFIG = '-d';
 	const DRYRUN = '--dry-run';
@@ -144,7 +145,7 @@ class tx_mnogosearch_clioptions {
 			return true;
 		}
 
-		return (strchr('?cdnpvwx', $option{1}) !== false);
+		return (strchr('?cdnpvwxz', $option{1}) !== false);
 	}
 }
 
