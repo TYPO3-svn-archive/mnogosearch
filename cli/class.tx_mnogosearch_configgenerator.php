@@ -43,6 +43,13 @@ require_once(t3lib_extMgm::extPath('mnogosearch', 'cli/class.tx_mnogosearch_reco
 class tx_mnogosearch_configgenerator {
 
 	/**
+	 * Allowed URLs for the processed configurations
+	 *
+	 * @var	array
+	 */
+	protected $allowedURLs = array();
+
+	/**
 	 * Command line options
 	 *
 	 * @var	tx_mnogosearch_clioptions
@@ -50,36 +57,18 @@ class tx_mnogosearch_configgenerator {
 	protected $commandLineOptions;
 
 	/**
+	 * A number of found indexing configurations
+	 *
+	 * @var int
+	 */
+	protected $configurationCount = 0;
+
+	/**
 	 * Generated configuration content
 	 *
 	 * @var	string
 	 */
 	protected $generatedContent = '';
-
-	/**
-	 * Sets command line options object. We have to use this function instead of
-	 * a constructor because of the stupid way TYPO3 4.3 deprecated
-	 * t3lib_div::makeInstanceClassName().
-	 *
-	 * @param	tx_mnogosearch_clioptions	$options
-	 * @return	void
-	 */
-	public function setCommandLineOptions(tx_mnogosearch_clioptions &$commandLineOptions) {
-		$this->commandLineOptions = $commandLineOptions;
-	}
-
-	/**
-	 * Obtains generated indexed configuration as a string
-	 *
-	 * @return	string
-	 */
-	public function getIndexerConfiguration() {
-		$this->generatedContent = '';
-		$this->createIndexerBasicConfig();
-		$this->processIndexingConfigurations();
-
-		return $this->generatedContent;
-	}
 
 	/**
 	 * Creates indexer configuration file
@@ -97,6 +86,49 @@ class tx_mnogosearch_configgenerator {
 		}
 
 		return $fileName;
+	}
+
+	/**
+	 * Obtains a list of allowed URLs
+	 *
+	 * @return	array
+	 */
+	public function getAllowedURLs() {
+		return $this->allowedURLs;
+	}
+
+	/**
+	 * Obtains a number of ound indexing configurations
+	 *
+	 * @return	void
+	 */
+	public function getConfigurationCount() {
+		return $this->configurationCount;
+	}
+
+	/**
+	 * Obtains generated indexed configuration as a string
+	 *
+	 * @return	string
+	 */
+	public function getIndexerConfiguration() {
+		$this->generatedContent = '';
+		$this->createIndexerBasicConfig();
+		$this->processIndexingConfigurations();
+
+		return $this->generatedContent;
+	}
+
+	/**
+	 * Sets command line options object. We have to use this function instead of
+	 * a constructor because of the stupid way TYPO3 4.3 deprecated
+	 * t3lib_div::makeInstanceClassName().
+	 *
+	 * @param	tx_mnogosearch_clioptions	$options
+	 * @return	void
+	 */
+	public function setCommandLineOptions(tx_mnogosearch_clioptions &$commandLineOptions) {
+		$this->commandLineOptions = $commandLineOptions;
 	}
 
 	/**
@@ -174,25 +206,6 @@ DefaultContentType "text/html' .
 		}
 
 		return $result;
-	}
-
-	/**
-	 * Obtains pid from the command line and generates WHERE condition accordingly.
-	 *
-	 * @return	string
-	 */
-	protected function getPidCondition() {
-		$pidCondition = '1=1';
-		if ($this->commandLineOptions->hasOption(tx_mnogosearch_clioptions::PID)) {
-			$pid = $this->commandLineOptions->getOptionParameter(tx_mnogosearch_clioptions::PID);
-			if (t3lib_div::testInt($pid)) {
-				$pidCondition = 'pid=' . $pid;
-			}
-			else {
-				throw new Exception('-p accepts only integer page id numbers');
-			}
-		}
-		return $pidCondition;
 	}
 
 	/**
@@ -278,18 +291,39 @@ DefaultContentType "text/html' .
 	}
 
 	/**
+	 * Obtains pid from the command line and generates WHERE condition accordingly.
+	 *
+	 * @return	string
+	 */
+	protected function getPidCondition() {
+		$pidCondition = '1=1';
+		if ($this->commandLineOptions->hasOption(tx_mnogosearch_clioptions::PID)) {
+			$pid = $this->commandLineOptions->getOptionParameter(tx_mnogosearch_clioptions::PID);
+			if (t3lib_div::testInt($pid)) {
+				$pidCondition = 'pid=' . $pid;
+			}
+			else {
+				throw new Exception('-p accepts only integer page id numbers');
+			}
+		}
+		return $pidCondition;
+	}
+
+	/**
 	 * Walks list of servers and generates indexer configuration for them
 	 *
 	 * @return	string	Configuration text
 	 */
 	protected function processIndexingConfigurations() {
 		$configurations = $this->getIndexingConfigurations();
+		$this->configurationCount = count($configurations);
 		$resetPeriod = true;
 		foreach ($configurations as $configuration) {
 			/* @var $configuration tx_mnogosearch_baseconfig */
 			$this->generatedContent .= sprintf('# uid=%d' . chr(10), $configuration->getId());
 			$this->generatedContent .= $this->getPeriod($configuration, $resetPeriod);
 			$this->generatedContent .= $configuration->getRawConfig();
+			$this->allowedURLs += $configuration->getAllowedServerURLs();
 		}
 	}
 }

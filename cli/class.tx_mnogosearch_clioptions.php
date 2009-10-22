@@ -42,7 +42,8 @@ class tx_mnogosearch_clioptions {
 	const DISPLAYCONFIG = '-d';
 	const DRYRUN = '--dry-run';
 	const EXTFLAGS = '-x';
-	const FORCEREINDEXING = '-n';
+	const HELP = '-?';
+	const REINDEX = '-n';
 	const PID = '-p';
 	const SPELLSTATS = '-w';
 	const VERBOSE = '-v';
@@ -143,7 +144,7 @@ class tx_mnogosearch_clioptions {
 			return true;
 		}
 
-		return (strchr('cdnpvwx', $option{1}) !== false);
+		return (strchr('?cdnpvwx', $option{1}) !== false);
 	}
 }
 

@@ -45,8 +45,9 @@ class tx_mnogosearch_recordconfig extends tx_mnogosearch_baseconfig {
 	 * @see tx_mnogosearch_baseconfig::getAllowedServerURLs()
 	 */
 	public function getAllowedServerURLs() {
+		// Notice: no slash in the end!
 		return array(
-			sprintf('htdb:/%s/%d/', $this->data['table'], $this->data['uid'])
+			sprintf('htdb:/%s/%d', $this->data['table'], $this->data['uid'])
 		);
 	}
 
