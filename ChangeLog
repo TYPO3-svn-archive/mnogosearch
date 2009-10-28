@@ -1,3 +1,7 @@
+2009-10-28  Dmitry Dulepov  <dmitry.dulepov@gmail.com>
+
+	* Added explicit cdon/cdoff to the indexer configuration
+
 2009-10-22  Dmitry Dulepov  <dmitry@typo3.org>
 
 	* Activate the new command line tool

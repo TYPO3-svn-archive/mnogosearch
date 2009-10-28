@@ -145,10 +145,10 @@ PopRankUseShowCnt yes
 PopRankUseTracking yes
 PopRankFeedBack yes
 PopRankSkipSameSite no
-Section body 1 8092 html
-Section title 2 256 text
-Section meta.keywords 3 64 text
-Section meta.description 4 64 text
+Section body 1 8092 html cdon
+Section title 2 256 text cdoff
+Section meta.keywords 3 64 text cdoff
+Section meta.description 4 64 text cdoff
 SaveSectionSize yes
 LocalCharset ' . ($sysconf['LocalCharset'] ? $sysconf['LocalCharset'] : 'UTF-8') . '
 BrowserCharset ' . ($sysconf['BrowserCharset'] ? $sysconf['BrowserCharset'] : 'UTF-8') . '
