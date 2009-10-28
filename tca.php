@@ -293,11 +293,6 @@ $TCA['tx_mnogosearch_indexconfig'] = array(
 			'config' => array (
 				'type' => 'select',
 				'foreign_table' => 'fe_groups',
-				'items' => array (
-					array('LLL:EXT:mnogosearch/locallang_db.xml:tx_mnogosearch_indexconfig.user_groups.anonymous', -1000),
-					array('LLL:EXT:mnogosearch/locallang_db.xml:tx_mnogosearch_indexconfig.user_groups.any', -2),
-					array('LLL:EXT:lang/locallang_general.xml:LGL.usergroups', '--div--')
-				),
 				'maxitems' => 100,
 				'size' => 5
 			)

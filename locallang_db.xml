@@ -40,10 +40,8 @@
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_url_parameters">Single view URL parameters:</label>
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_display_pid">Page to display these records:</label>
 			<label index="tx_mnogosearch_indexconfig.tx_mnogosearch_pid_only">Limit to records at:</label>
-			<label index="tx_mnogosearch_indexconfig.access_div">User restrictions</label>
-			<label index="tx_mnogosearch_indexconfig.user_groups">Allowed users:</label>
-			<label index="tx_mnogosearch_indexconfig.user_groups.any">Any logged in user</label>
-			<label index="tx_mnogosearch_indexconfig.user_groups.anonymous">Any anonymous user</label>
+			<label index="tx_mnogosearch_indexconfig.access_div">Access</label>
+			<label index="tx_mnogosearch_indexconfig.user_groups">Index also for these user groups:</label>
 			<label index="tx_mnogosearch_urllog">[mnoGoSearch] Modified records (for indexing)</label>
 			<label index="tx_mnogosearch_urllog.tx_mnogosearch_url">Address:</label>
 			<label index="ds_short_search_form">[mnoGoSearch] Short search form</label>
