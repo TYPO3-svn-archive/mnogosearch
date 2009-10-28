@@ -322,8 +322,7 @@ DefaultContentType "text/html' .
 			/* @var $configuration tx_mnogosearch_baseconfig */
 			$this->generatedContent .= sprintf('# uid=%d' . chr(10), $configuration->getId());
 			$this->generatedContent .= $this->getPeriod($configuration, $resetPeriod);
-			$this->generatedContent .= $configuration->getConfigurationLines();
-			$this->generatedContent .= $configuration->getRawConfig();
+			$this->generatedContent .= $configuration->generate();
 			$this->allowedURLs += $configuration->getAllowedServerURLs();
 		}
 	}

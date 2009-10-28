@@ -1,6 +1,7 @@
 2009-10-28  Dmitry Dulepov  <dmitry.dulepov@gmail.com>
 
 	* Added explicit cdon/cdoff to the indexer configuration
+	* Added a method to obtain configuration lines directly from configuration. This will be used when usergroup indexing is impemented.
 
 2009-10-22  Dmitry Dulepov  <dmitry@typo3.org>
 

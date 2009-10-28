@@ -102,6 +102,19 @@ abstract class tx_mnogosearch_baseconfig {
 	abstract public function getAllowedServerURLs();
 
 	/**
+	 * Generates the configuration.
+	 *
+	 * @return	string
+	 */
+	public function generate() {
+		$content = '';
+		$content .= $this->getConfigurationLines();
+		$content .= $this->getRawConfig();
+
+		return $content;
+	}
+
+	/**
 	 * Obtains configuration lines ending with chr(10).
 	 *
 	 * @return string
