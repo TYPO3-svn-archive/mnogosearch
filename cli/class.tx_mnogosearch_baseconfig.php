@@ -48,11 +48,25 @@ abstract class tx_mnogosearch_baseconfig {
 	const PAGE = 3;
 
 	/**
+	 * Current user groups
+	 *
+	 * @var int
+	 */
+	protected $currentUserGroup = 0;
+
+	/**
 	 * Data row from the database
 	 *
 	 * @var	array
 	 */
 	protected $data;
+
+	/**
+	 * User groups for this configuration.
+	 *
+	 * @var	array
+	 */
+	protected $userGroups = array();
 
 	/**
 	 * "Server" directive methods. Keys correspond to values in the
@@ -92,6 +106,7 @@ abstract class tx_mnogosearch_baseconfig {
 			}
 			$this->data[$key] = $value;
 		}
+		$this->userGroups = $this->getUserGroups();
 	}
 
 	/**
@@ -107,9 +122,21 @@ abstract class tx_mnogosearch_baseconfig {
 	 * @return	string
 	 */
 	public function generate() {
-		$content = '';
-		$content .= $this->getConfigurationLines();
-		$content .= $this->getRawConfig();
+		if (!$this->isTagAllowed()) {
+			$content = 'Tag ""' . chr(10);
+			$this->currentUserGroup = 0;
+			$content .= $this->doGenerate();
+		}
+		else {
+			$tagLineFormat = 'Tag "T3UG_%d"';
+
+			$content = '';
+			foreach ($this->userGroups as $userGroup) {
+				$this->currentUserGroup = $userGroup;
+				$content .= sprintf($tagLineFormat, $userGroup) . chr(10);
+				$content .= $this->doGenerate();
+			}
+		}
 
 		return $content;
 	}
@@ -128,6 +155,27 @@ abstract class tx_mnogosearch_baseconfig {
 	 */
 	public function getId() {
 		return $this->data['uid'];
+	}
+
+	/**
+	 * Checks if group tags are allowed
+	 *
+	 * @return	void
+	 */
+	public function isTagAllowed() {
+		return (count($this->userGroups) > 1);
+	}
+
+	/**
+	 * Creates a set of configuration lines.
+	 *
+	 * @return	string
+	 */
+	protected function doGenerate() {
+		$content .= $this->getConfigurationLines();
+		$content .= $this->getRawConfig();
+
+		return $content;
 	}
 
 	/**
@@ -184,6 +232,22 @@ abstract class tx_mnogosearch_baseconfig {
 	protected function getSubSection() {
 		$value = $this->data['subsection'];
 		return isset(self::$subsections[$value]) ? self::$subsections[$value] . ' ' : '';
+	}
+
+	/**
+	 * Obtains a list of user groups for indexing. The first element is always 0.
+	 *
+	 * @return	array
+	 */
+	protected function getUserGroups() {
+		$list = t3lib_div::intExplode(',', $this->data['user_groups']);
+		$list = array_unique($list);
+		sort($list, SORT_NUMERIC);
+		if (count($list) == 0 || $list[0] != 0) {
+			array_unshift($list, 0);
+		}
+
+		return $list;
 	}
 }
 

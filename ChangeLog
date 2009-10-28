@@ -4,6 +4,7 @@
 	* Added a method to obtain configuration lines directly from configuration. This will be used when usergroup indexing is impemented.
 	* Removed anonymous and "any" items from user groups; clarified some form titles
 	* Temporarily removed user group configuration for the realm
+	* Added tag generation for user groups. No group parameter injection yet.
 
 2009-10-22  Dmitry Dulepov  <dmitry@typo3.org>
 
