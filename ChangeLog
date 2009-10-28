@@ -5,6 +5,7 @@
 	* Removed anonymous and "any" items from user groups; clarified some form titles
 	* Temporarily removed user group configuration for the realm
 	* Added tag generation for user groups. No group parameter injection yet.
+	* Added group parameter injection to server configuration
 
 2009-10-22  Dmitry Dulepov  <dmitry@typo3.org>
 

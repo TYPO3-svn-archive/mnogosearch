@@ -46,7 +46,8 @@ class tx_mnogosearch_serverconfig extends tx_mnogosearch_baseconfig {
 		$result = 'Server ';
 		$result .= $this->getMethodAsString();
 		$result .= $this->getSubSection();
-		$result .= $this->data['url'] . chr(10);
+		$result .= $this->injectURLParameter($this->data['url']);
+		$result .= chr(10);
 
 		return $result;
 	}
@@ -63,6 +64,30 @@ class tx_mnogosearch_serverconfig extends tx_mnogosearch_baseconfig {
 			$result[] = $this->data['url'];
 		}
 		return $result;
+	}
+
+	/**
+	 * Injects mnoGoSearch group parameter into the URL.
+	 *
+	 * @param	string	$url	URL
+	 * @return	string	Modified URL
+	 */
+	protected function injectURLParameter($url) {
+		if ($this->currentUserGroup != 0) {
+			$groupParameter = 'tx_mnogosearch_gid=' . $this->currentUserGroup;
+
+			if (($pos = strpos($url, '?')) === false) {
+				$url .= '?' . $groupParameter;
+			}
+			elseif ($pos == strlen($url) - 1) {
+				$url .= $groupParameter;
+			}
+			else {
+				$url = substr($url, 0, $pos + 1) . $groupParameter .
+					'&' . substr($url, $pos + 1);
+			}
+		}
+		return $url;
 	}
 }
 
