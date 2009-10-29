@@ -18,6 +18,7 @@ if (!function_exists('tx_mnogosearch_isIndexerRunning')) {
 if (TYPO3_MODE == 'FE' && tx_mnogosearch_isIndexerRunning()) {
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-output']['mnogosearch'] = 'EXT:mnogosearch/hooks/class.tx_mnogosearch_tsfepostproc.php:tx_mnogosearch_tsfepostproc->contentPostProcOutput';
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['initFEuser']['mnogosearch'] = 'EXT:mnogosearch/hooks/class.tx_mnogosearch_fegroups.php:tx_mnogosearch_fegroups->setFEGroups';
+	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['checkDataSubmission']['mnogosearch'] = 'EXT:mnogosearch/hooks/class.tx_mnogosearch_tsfeconfig.php:tx_mnogosearch_tsfeconfig';
 }
 
 // This hook is included always because we never ever want our parameter in cHash
