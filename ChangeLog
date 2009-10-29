@@ -1,6 +1,7 @@
 2009-10-29  Dmitry Dulepov  <dmitry.dulepov@gmail.com>
 
 	* Changed parameter name in the user initialization hook
+	* Move code to inject tags into <head> into the separate function
 
 2009-10-28  Dmitry Dulepov  <dmitry.dulepov@gmail.com>
 

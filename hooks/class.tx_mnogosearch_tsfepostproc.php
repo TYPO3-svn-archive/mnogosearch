@@ -77,13 +77,23 @@ class tx_mnogosearch_tsfepostproc {
 				$pObj->content = preg_replace('/<meta\s[^>]*name="robots"[^>]*>/ims', $metaTag, $pObj->content);
 			}
 			else {
-				$pos = stripos($pObj->content, '</head>');
-				if ($pos > 0) {
-					$pObj->content = substr_replace($pObj->content, $metaTag . chr(10), $pos, 0);
-				}
+				$this->insertIntoHead($metaTag);
 			}
 			// Remove mnoGoSearch tags
 			$pObj->content = preg_replace('/<!--\/?UdmComment-->/ims', '', $pObj->content);
+		}
+	}
+
+	/**
+	 * Inserts data into the <head> part of the content (just before the closing tag)
+	 *
+	 * @param string	$data	Data to insert
+	 * @return	void
+	 */
+	protected function insertIntoHead($data) {
+		$pos = stripos($pObj->content, '</head>');
+		if ($pos > 0) {
+			$pObj->content = substr_replace($pObj->content, $data . chr(10), $pos, 0);
 		}
 	}
 
