@@ -3,8 +3,19 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 
 t3lib_extMgm::addPItoST43($_EXTKEY,'pi1/class.tx_mnogosearch_pi1.php', '_pi1', 'list_type', 0);
 
+if (!function_exists('tx_mnogosearch_isIndexerRunning')) {
+	/**
+	 * Checks if mnogosearch indexer is running.
+	 *
+	 * @return	boolean
+	 */
+	function tx_mnogosearch_isIndexerRunning() {
+		return $_SERVER['HTTP_X_TYPO3_MNOGOSEARCH'] == md5('mnogosearch' . $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey']);
+	}
+}
+
 // Register hook only if our header is present
-if (TYPO3_MODE == 'FE' && $_SERVER['HTTP_X_TYPO3_MNOGOSEARCH'] == md5('mnogosearch' . $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey'])) {
+if (TYPO3_MODE == 'FE' && tx_mnogosearch_isIndexerRunning()) {
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-output']['mnogosearch'] = 'EXT:mnogosearch/hooks/class.tx_mnogosearch_tsfepostproc.php:tx_mnogosearch_tsfepostproc->contentPostProcOutput';
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['initFEuser']['mnogosearch'] = 'EXT:mnogosearch/hooks/class.tx_mnogosearch_fegroups.php:tx_mnogosearch_fegroups->setFEGroups';
 }

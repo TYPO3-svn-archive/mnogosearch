@@ -39,17 +39,19 @@
 class tx_mnogosearch_fegroups {
 
 	/**
-	 * Sets user groups to TSFE if necessary.
+	 * Sets user groups to TSFE if necessary and if mnogosearch indexer is running.
 	 *
 	 * @return	void
 	 */
 	public function setFEGroups() {
-		$group = t3lib_div::_GET('tx_mnogosearch_gid');
-		if (!empty($group)) {
-			if (!is_array($GLOBALS['TSFE']->fe_user->user))	{
-				$GLOBALS['TSFE']->fe_user->user = array();
+		if (tx_mnogosearch_isIndexerRunning()) {
+			$group = t3lib_div::_GET('tx_mnogosearch_gid');
+			if (!empty($group)) {
+				if (!is_array($GLOBALS['TSFE']->fe_user->user))	{
+					$GLOBALS['TSFE']->fe_user->user = array();
+				}
+				$GLOBALS['TSFE']->fe_user->user['usergroup'] = $group;
 			}
-			$GLOBALS['TSFE']->fe_user->user['usergroup'] = $group;
 		}
 	}
 }
