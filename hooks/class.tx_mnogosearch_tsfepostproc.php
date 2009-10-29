@@ -77,6 +77,7 @@ class tx_mnogosearch_tsfepostproc {
 			}
 			$this->replaceTitleIfNecessary();
 			$this->addLastModified();
+			$this->addUserGroupMeta();
 		}
 	}
 
@@ -235,6 +236,18 @@ class tx_mnogosearch_tsfepostproc {
 		$time = (($GLOBALS['TSFE']->register['SYS_LASTCHANGED'] < time() - 300) ?
 			$GLOBALS['TSFE']->register['SYS_LASTCHANGED'] : $GLOBALS['TSFE']->page['tstamp']);
 		header('Last-modified: ' . gmdate('D, d M Y H:i:s T', $time));
+	}
+
+	/**
+	 * Adds a special meta tag for the indexer with the user group content. This
+	 * tag is always added to allow filtering by group during search.
+	 *
+	 * @return	void
+	 */
+	protected function addUserGroupMeta() {
+		$userGroup = intval(t3lib_div::_GET('tx_mnogosearch_gid'));
+		$metaTag = '<meta name="usergroup" content="' . $userGroup . '" />';
+		$this->insertIntoHead($metaTag);
 	}
 }
 
