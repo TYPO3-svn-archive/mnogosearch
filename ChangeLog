@@ -7,6 +7,7 @@
 	* Add a security measure: use URL parameter for groups only if the indexer is running
 	* Added a hook to set mnogosearch variables to config
 	* Allow indexing restricted pages in the postproc hook
+	* Changed recommended mnogosearh version to 3.3.8 in the manual
 
 2009-10-28  Dmitry Dulepov  <dmitry.dulepov@gmail.com>
 
