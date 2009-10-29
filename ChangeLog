@@ -2,6 +2,7 @@
 
 	* Changed parameter name in the user initialization hook
 	* Move code to inject tags into <head> into the separate function
+	* Refactored TSFE postproc hook to use smaller functions
 
 2009-10-28  Dmitry Dulepov  <dmitry.dulepov@gmail.com>
 

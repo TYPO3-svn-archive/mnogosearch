@@ -38,50 +38,111 @@
 class tx_mnogosearch_tsfepostproc {
 
 	/**
-	 * Check for <code>If-modified-since</code> header and creates <code>304 Not Modified</code> response of necessary
+	 * Called by TSFE when the content is ready for output. Updates the
+	 * content for the indexer. Note: this hook runs only if TYPO3 is
+	 * called from the indexer! See ext_localconf.php for the hook definition.
 	 *
-	 * @param	array	$params	Unused
-	 * @param	object	$pObj	Reference to TSFE
+	 * @return	void
 	 */
-	function contentPostProcOutput(&$params, &$pObj) {
-		/* @var $pObj tslib_fe */
-		if (!intval($pObj->config['config']['tx_mnogosearch_enable']) || $pObj->type != 0) {
-			return;
-		}
-
-		// Only if no login user and page is searchable!
-		if (!$pObj->page['no_search'] && !is_array($pObj->fe_user->user) && !count($pObj->fe_user->groupData['uid'])) {
-
-			if ($pObj->content) {
-				if (strpos($pObj->content, '<!--TYPO3SEARCH_begin-->')) {
-					// Remove parts that should not be indexed
-					$pObj->content = $this->processContent($pObj->content);
-				}
-				// Replace title if necessary
-				if (!$pObj->config['config']['tx_mnogosearch_keepSiteTitle']) {
-					$title = ($pObj->indexedDocTitle ? $pObj->indexedDocTitle :
-								($pObj->altPageTitle ? $pObj->altPageTitle : $pObj->page['title']));
-					$pObj->content = preg_replace('/<title>[^<]*<\/title>/', '<title>' . htmlspecialchars($title) . '</title>', $pObj->content);
-				}
-				// Last-modified is necessary to show it in search results. TYPO3
-				// never sends "Not modified" response, so we are safe for
-				// "If-modified-since" requests.
-				$this->addLastModified($pObj);
-			}
-		}
-		else {
-			// No search!
-			$metaTag = '<meta name="robots" content="noindex,nofollow" />';
-			// Check for <meta> tags
-			if (preg_match('/<meta\s[^>]*name="robots"[^>]*>/ims', $pObj->content)) {
-				$pObj->content = preg_replace('/<meta\s[^>]*name="robots"[^>]*>/ims', $metaTag, $pObj->content);
+	public function contentPostProcOutput() {
+		if ($this->isMnogosearchEnabled()) {
+			if ($this->canIndex()) {
+				$this->updateContentForIndexer();
 			}
 			else {
-				$this->insertIntoHead($metaTag);
+				$this->disallowIndexing();
 			}
-			// Remove mnoGoSearch tags
-			$pObj->content = preg_replace('/<!--\/?UdmComment-->/ims', '', $pObj->content);
 		}
+	}
+
+	/**
+	 * Checkes if mnogosearch extension is enabled.
+	 *
+	 * @return	boolean
+	 */
+	protected function isMnogosearchEnabled() {
+		return !intval($GLOBALS['TSFE']->config['config']['tx_mnogosearch_enable']) || $GLOBALS['TSFE']->type != 0;
+	}
+
+	/**
+	 * Updates current content for the indexer
+	 *
+	 * @return	void
+	 */
+	protected function updateContentForIndexer() {
+		if ($GLOBALS['TSFE']->content) {
+			if (strpos($GLOBALS['TSFE']->content, '<!--TYPO3SEARCH_begin-->')) {
+				// Remove parts that should not be indexed
+				$GLOBALS['TSFE']->content = $this->processContent($GLOBALS['TSFE']->content);
+			}
+			$this->replaceTitleIfNecessary();
+			$this->addLastModified();
+		}
+	}
+
+	/**
+	 * Checks if the page can be indexed.
+	 *
+	 * @return	boolean
+	 */
+	protected function canIndex() {
+		return !$GLOBALS['TSFE']->page['no_search'] && !is_array($GLOBALS['TSFE']->fe_user->user) && !count($GLOBALS['TSFE']->fe_user->groupData['uid']);
+	}
+
+	/**
+	 * Replaces title tag if necessary
+	 *
+	 * @return	void
+	 */
+	protected function replaceTitleIfNecessary() {
+		if (!$GLOBALS['TSFE']->config['config']['tx_mnogosearch_keepSiteTitle']) {
+			$title = ($GLOBALS['TSFE']->indexedDocTitle ? $GLOBALS['TSFE']->indexedDocTitle :
+						($GLOBALS['TSFE']->altPageTitle ? $GLOBALS['TSFE']->altPageTitle : $GLOBALS['TSFE']->page['title']));
+			$GLOBALS['TSFE']->content = preg_replace('/<title>[^<]*<\/title>/', '<title>' . htmlspecialchars($title) . '</title>', $GLOBALS['TSFE']->content);
+		}
+	}
+
+	/**
+	 * Disallows indexing for the current content
+	 *
+	 * @return	void
+	 */
+	protected function disallowIndexing() {
+		$this->disallowIndexingThroughMeta();
+		$this->removeMnogosearchTags();
+	}
+
+	/**
+	 * Removes mnogosearch tags from the content
+	 *
+	 * @return	void
+	 */
+	protected function removeMnogosearchTags() {
+		$GLOBALS['TSFE']->content = preg_replace('/<!--\/?UdmComment-->/ims', '', $GLOBALS['TSFE']->content);
+	}
+
+	/**
+	 * Disallows indexing by setting the <meta> tag no "noindex,nofollow"
+	 *
+	 * @return	void
+	 */
+	protected function disallowIndexingThroughMeta() {
+		$metaTag = '<meta name="robots" content="noindex,nofollow" />';
+		if ($this->hasRobotsTag()) {
+			$GLOBALS['TSFE']->content = preg_replace('/<meta\s[^>]*name="robots"[^>]*>/ims', $metaTag, $GLOBALS['TSFE']->content);
+		}
+		else {
+			$this->insertIntoHead($metaTag);
+		}
+	}
+
+	/**
+	 * Checks if content has robots tag
+	 *
+	 * @return	boolean
+	 */
+	protected function hasRobotsTag() {
+		return preg_match('/<meta\s[^>]*name="robots"[^>]*>/ims', $GLOBALS['TSFE']->content);
 	}
 
 	/**
@@ -91,9 +152,9 @@ class tx_mnogosearch_tsfepostproc {
 	 * @return	void
 	 */
 	protected function insertIntoHead($data) {
-		$pos = stripos($pObj->content, '</head>');
+		$pos = stripos($GLOBALS['TSFE']->content, '</head>');
 		if ($pos > 0) {
-			$pObj->content = substr_replace($pObj->content, $data . chr(10), $pos, 0);
+			$GLOBALS['TSFE']->content = substr_replace($GLOBALS['TSFE']->content, $data . chr(10), $pos, 0);
 		}
 	}
 
@@ -148,12 +209,14 @@ class tx_mnogosearch_tsfepostproc {
 	}
 
 	/**
-	 * Adds the "Last-modified" header to the page
+	 * Adds the "Last-modified" header to the page. Last-modified is necessary
+	 * to show it in search results. TYPO3 never sends "Not modified" response,
+	 * so we are safe for "If-modified-since" requests.
 	 *
-	 * @param	tslib_fe $pObj	Parent object
+	 * @param	tslib_fe $GLOBALS['TSFE']	Parent object
 	 * @return 	void
 	 */
-	protected function addLastModified(tslib_fe $pObj) {
+	protected function addLastModified() {
 		// See if we have this header already
 		$headers = headers_list();
 		foreach ($headers as $header) {
@@ -169,8 +232,8 @@ class tx_mnogosearch_tsfepostproc {
 				return;
 			}
 		}
-		$time = (($pObj->register['SYS_LASTCHANGED'] < time() - 300) ?
-			$pObj->register['SYS_LASTCHANGED'] : $GLOBALS['TSFE']->page['tstamp']);
+		$time = (($GLOBALS['TSFE']->register['SYS_LASTCHANGED'] < time() - 300) ?
+			$GLOBALS['TSFE']->register['SYS_LASTCHANGED'] : $GLOBALS['TSFE']->page['tstamp']);
 		header('Last-modified: ' . gmdate('D, d M Y H:i:s T', $time));
 	}
 }
