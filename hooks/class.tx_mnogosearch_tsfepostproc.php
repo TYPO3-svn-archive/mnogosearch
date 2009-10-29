@@ -87,7 +87,7 @@ class tx_mnogosearch_tsfepostproc {
 	 * @return	boolean
 	 */
 	protected function canIndex() {
-		return !$GLOBALS['TSFE']->page['no_search'] && !is_array($GLOBALS['TSFE']->fe_user->user) && !count($GLOBALS['TSFE']->fe_user->groupData['uid']);
+		return !$GLOBALS['TSFE']->page['no_search'];
 	}
 
 	/**

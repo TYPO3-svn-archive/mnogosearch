@@ -6,6 +6,7 @@
 	* Now adding a special <meta> tag with a usergroup id to the indexed output to create a mnogosearch section for filtering
 	* Add a security measure: use URL parameter for groups only if the indexer is running
 	* Added a hook to set mnogosearch variables to config
+	* Allow indexing restricted pages in the postproc hook
 
 2009-10-28  Dmitry Dulepov  <dmitry.dulepov@gmail.com>
 
