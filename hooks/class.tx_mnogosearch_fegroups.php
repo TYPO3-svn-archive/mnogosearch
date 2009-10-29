@@ -44,12 +44,12 @@ class tx_mnogosearch_fegroups {
 	 * @return	void
 	 */
 	public function setFEGroups() {
-		$groups = t3lib_div::_GET('tx_mnogosearch_groups');
-		if (!empty($groups)) {
+		$group = t3lib_div::_GET('tx_mnogosearch_gid');
+		if (!empty($group)) {
 			if (!is_array($GLOBALS['TSFE']->fe_user->user))	{
 				$GLOBALS['TSFE']->fe_user->user = array();
 			}
-			$GLOBALS['TSFE']->fe_user->user['usergroup'] = $groups;
+			$GLOBALS['TSFE']->fe_user->user['usergroup'] = $group;
 		}
 	}
 }

@@ -1,3 +1,7 @@
+2009-10-29  Dmitry Dulepov  <dmitry.dulepov@gmail.com>
+
+	* Changed parameter name in the user initialization hook
+
 2009-10-28  Dmitry Dulepov  <dmitry.dulepov@gmail.com>
 
 	* Added explicit cdon/cdoff to the indexer configuration
