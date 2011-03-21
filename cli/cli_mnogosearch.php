@@ -121,9 +121,10 @@ class tx_mnogosearch_cli {
 	 */
 	protected function checkAndCreateDatabase() {
 		$parts = parse_url($this->sysconf['dbaddr']);
+		$new_link = true;
 		$hasTables = false;
 		if ($parts['scheme'] == 'mysql') {
-			$conn = mysql_connect($parts['host'], $parts['user'], $parts['pass']);
+			$conn = mysql_connect($parts['host'], $parts['user'], $parts['pass'], $new_link);
 			if (mysql_errno() == 0) {
 				$dbname = trim($parts['path'], '/');
 				$rs = mysql_query('SHOW TABLES FROM `' . mysql_real_escape_string($dbname, $conn) . '` LIKE \'qcache\'', $conn);
