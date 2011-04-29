@@ -316,6 +316,16 @@ class tx_mnogosearch_pi1 extends tslib_pibase {
 		foreach ($this->conf['search.']['extendedConfiguration.'] as $param => $value) {
 			Udm_Set_Agent_Param_Ex($udmAgent, $param, $value);
 		}
+		
+		// Custom hooks to define custom dynamic session parameters 
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mnogosearch']['setUpAgentExtended'])) {
+			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mnogosearch']['setUpAgentExtended'] as $userFunc) {
+				$params = array(
+					'udmAgent' => &$udmAgent
+				);
+				t3lib_div::callUserFunction($userFunc, $params, $this);
+			}
+		}
 
 		$error = Udm_Error($udmAgent);
 		return $error ? sprintf($this->pi_getLL('mnogosearch.error'), Udm_ErrNo($udmAgent), $error) : '';
