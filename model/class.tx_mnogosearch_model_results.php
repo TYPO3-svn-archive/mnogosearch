@@ -109,6 +109,19 @@ class tx_mnogosearch_model_results {
 				$result->charset = Udm_Get_Res_Field($res, $i, UDM_FIELD_CHARSET);
 				$result->category = Udm_Get_Res_Field($res,$i,UDM_FIELD_CATEGORY);
 				$result->lastModified = $this->convertDateTime(strval(Udm_Get_Res_Field($res, $i, UDM_FIELD_MODIFIED)));
+				
+				// Call hooks to post process a search result
+				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mnogosearch']['postProcessSearchResult'])) {
+					foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mnogosearch']['postProcessSearchResult'] as $userFunc) {
+						$params = array(
+							'result' => &$result,
+							'res' => &$res,
+							'i' => &$i,
+							'udmAgent' => &$udmAgent
+						);
+						t3lib_div::callUserFunction($userFunc, $params, $this);
+					}
+				}
 
 				// Check clones if necessary
 				if ($pObj->conf['search.']['options.']['detect_clones']) {
