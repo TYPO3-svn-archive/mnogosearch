@@ -107,6 +107,17 @@ class tx_mnogosearch_view {
 		// Site selector
 		$result = $this->render_searchForm_siteSelector($result);
 
+		// Custom hooks to fill extra markers
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mnogosearch']['searchFormExtraMarkers'])) {
+			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mnogosearch']['searchFormExtraMarkers'] as $userFunc) {
+				$params = array(
+					'result' => &$result,
+					'template' => &$template
+				);
+				t3lib_div::callUserFunction($userFunc, $params, $this);
+			}
+		}
+
 		return $result;
 	}
 
