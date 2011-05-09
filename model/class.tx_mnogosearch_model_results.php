@@ -145,6 +145,19 @@ class tx_mnogosearch_model_results {
 				$this->results[] = $result;
 			}
 		}
+		
+		// Call hooks to post process the formed object of search results
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mnogosearch']['postProcessSearchResults'])) {
+			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mnogosearch']['postProcessSearchResults'] as $userFunc) {
+				$params = array(
+					'udmAgent' => &$udmAgent,
+					'res' => &$res,
+					'pObj' => &$pObj
+				);
+				t3lib_div::callUserFunction($userFunc, $params, $this);
+			}
+		}
+		
 		Udm_Free_Res($res);
 	}
 
