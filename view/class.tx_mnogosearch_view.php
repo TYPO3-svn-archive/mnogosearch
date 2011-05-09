@@ -87,6 +87,18 @@ class tx_mnogosearch_view {
 			'###SHORT_SEARCH_FORM_VALUE###' => htmlspecialchars($this->pObj->piVars['q']),
 			'###TEXT_SEARCH###' => $this->pObj->pi_getLL('text_submit_short', '', true),
 			));
+
+		// Custom hooks to fill extra markers
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mnogosearch']['simpleSearchFormExtraMarkers'])) {
+			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mnogosearch']['simpleSearchFormExtraMarkers'] as $userFunc) {
+				$params = array(
+					'result' => &$result,
+					'template' => &$template
+				);
+				t3lib_div::callUserFunction($userFunc, $params, $this);
+			}
+		}
+
 		return $result;
 	}
 
